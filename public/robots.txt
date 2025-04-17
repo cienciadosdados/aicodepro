@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ai-labs.cienciadosdados.com/sitemap.xml

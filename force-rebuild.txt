@@ -1,0 +1,3 @@
+Este arquivo foi criado em 04/03/2025 às 11:00 para forçar o Vercel a reconstruir o projeto.
+Versão: 2025.03.04.1100
+Timestamp: 1709560800000

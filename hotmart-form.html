@@ -1,0 +1,82 @@
+<style>
+  /* Adicione seus estilos aqui */
+  form {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  input, button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+  }
+  
+  button {
+    background-color: #0c83fe;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0a6fd8;
+  }
+  
+  div[klicksend-gdpr-text] {
+    font-size: 10px;
+    color: #86919a;
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  div[style='width: 100%; display: flex'] {
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  div[style='width: 100%; display: flex'] input {
+    width: auto;
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
+</style>
+
+<form klicksend-form-id='RxuyBWA' autocomplete='off' method="post" action="//handler.send.hotmart.com/subscription/RxuyBWA">
+  <input type="email" autocomplete="off" name="email" id="email" placeholder="Email" value="" required>
+  <input type="text" autocomplete="off" name="first_name" id="first_name" placeholder="Primeiro Nome" value="" >
+  <input type="text" autocomplete="off" name="phone" id="phone" placeholder="Whatsapp" value="" >
+  
+  <div klicksend-gdpr-text style="font-size: 10px; color: #86919a; margin-bottom: 5px; text-align: left;">
+    <p>Esses dados serão utilizados para entrarmos em contato com você e disponibilizarmos mais conteúdos e ofertas. Caso você não queira mais receber os nosso emails, cada email que você receber, incluirá ao final, um link que poderá ser usado para remover o seu email da nossa lista de distribuição.</p>
+    <p>Para mais informações, acesse: <a href="https://hotmart.com/pt-br/legal/privacidade-de-dados/" target="_blank" rel="noopener">https://hotmart.com/pt-br/legal/privacidade-de-dados/</a></p>
+  </div>
+  
+  <div style='width: 100%; display: flex'>
+    <input type="checkbox" autocomplete="off" name="gdpr" id="gdpr" placeholder="Concordo em receber os e-mails" value="Concordo em receber os e-mails" required>
+    <label for="gdpr">Concordo em receber os e-mails</label>
+  </div>
+  
+  <div style="position: absolute; left: -5000px;" aria-hidden="true">
+    <input type="text" autocomplete='new-password' name="b_RxuyBWA" tabindex="-1" value="">
+  </div>
+  
+  <!-- Campo oculto para o redirecionamento -->
+  <input type="hidden" name="redirect_to" value="https://ai-lab-amber.vercel.app/obrigado?email={{email}}">
+  
+  <button klicksend-form-submit-id='RxuyBWA'>Enviar</button>
+  
+  <script>
+    // Preserva os parâmetros UTM e outros da URL
+    var pageParams = new URLSearchParams(window.location.search);
+    var form = document.querySelector('form[klicksend-form-id="RxuyBWA"]');
+    var formActionUrl = new URL(form.action);
+    var formActionSearchParams = formActionUrl.searchParams.size > 0 ? formActionUrl.searchParams.toString() + '&' : '';
+    var combinedParams = formActionSearchParams + pageParams.toString();
+
+    form.action = formActionUrl.origin + formActionUrl.pathname + '?' + combinedParams;
+  </script>
+</form>
