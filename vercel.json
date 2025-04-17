@@ -6,6 +6,7 @@
   "buildCommand": "next build",
   "devCommand": "next dev",
   "installCommand": "npm install",
+
   "headers": [
     {
       "source": "/(.*)",
@@ -72,6 +73,16 @@
   "redirects": [
     {
       "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/thankyou",
+      "destination": "/obrigado",
+      "permanent": true
+    },
+    {
+      "source": "/ai-lab",
       "destination": "/",
       "permanent": true
     }

@@ -80,7 +80,7 @@ const LeadForm = memo(function LeadForm() {
         klicksend-form-id='4puEQny' 
         autoComplete='off' 
         method="post" 
-        action="//handler.send.hotmart.com/subscription/4puEQny"
+        action="//handler.send.hotmart.com/subscription/4puEQny?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado"
         className="space-y-4"
       >
         <div>
@@ -127,6 +127,12 @@ const LeadForm = memo(function LeadForm() {
         var pageParams = new URLSearchParams(window.location.search);
         var form = document.querySelector('form[klicksend-form-id="4puEQny"]');
         var formActionUrl = new URL(form.action);
+        
+        // Garantir que o redirecionamento para a página de obrigado esteja presente
+        if (!formActionUrl.searchParams.has('redirectTo')) {
+          formActionUrl.searchParams.set('redirectTo', 'https://ai-code-pro.cienciadosdados.com/obrigado');
+        }
+        
         var formActionSearchParams = formActionUrl.searchParams.size > 0 ? formActionUrl.searchParams.toString() + '&' : '';
         var combinedParams = formActionSearchParams + pageParams.toString();
 
