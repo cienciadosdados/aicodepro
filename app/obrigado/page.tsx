@@ -14,7 +14,7 @@ function ThankYouContent() {
   
   useEffect(() => {
     const timer = setTimeout(() => {
-      window.location.href = 'https://sendflow.pro/i/ai-lab';
+      window.location.href = 'https://sendflow.pro/i/ai-code-pro';
     }, 12000);
     
     return () => clearTimeout(timer);
@@ -33,7 +33,7 @@ function ThankYouContent() {
               <div className="absolute inset-0 bg-[#0c83fe]/20 rounded-xl blur-xl"></div>
               <div className="relative px-6 py-3 rounded-xl bg-black/40 border border-[#0c83fe] backdrop-blur-sm">
                 <h1 className="text-4xl md:text-5xl font-bold text-[#0c83fe]">
-                  AI Lab
+                  AI Code Pro
                 </h1>
               </div>
             </div>
@@ -88,7 +88,7 @@ function ThankYouContent() {
               {
                 title: "Entre no Grupo do WhatsApp",
                 description: "Para garantir que você receberá todos os scripts dos projetos, é importante que esteja no grupo EXCLUSIVO, pois será nosso REPO oficial.",
-                link: "https://sendflow.pro/i/ai-lab",
+                link: "https://sendflow.pro/i/ai-code-pro",
                 buttonText: "PARTICIPAR DO GRUPO EXCLUSIVO"
               },
               {
