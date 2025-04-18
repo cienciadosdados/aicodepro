@@ -107,6 +107,11 @@
       ],
       "destination": "https://ai-code-pro.cienciadosdados.com/:path*",
       "permanent": true
+    },
+    {
+      "source": "/obrigado",
+      "destination": "https://ai-code-pro.cienciadosdados.com/obrigado",
+      "permanent": true
     }
   ],
   "rewrites": [
