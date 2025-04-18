@@ -13,15 +13,7 @@ function ThankYouContent() {
   const email = searchParams.get('email') || '';
   
   useEffect(() => {
-    // Verificar se estamos no domínio antigo e redirecionar para o novo
-    if (typeof window !== 'undefined' && window.location.hostname.includes('ai-labs')) {
-      const currentPath = window.location.pathname;
-      const queryString = window.location.search;
-      window.location.href = `https://ai-code-pro.cienciadosdados.com${currentPath}${queryString}`;
-      return;
-    }
-    
-    // Redirecionamento normal para o grupo após 12 segundos
+    // Redirecionamento para o grupo após 12 segundos
     const timer = setTimeout(() => {
       window.location.href = 'https://sendflow.pro/i/ai-code-pro';
     }, 12000);
