@@ -85,33 +85,6 @@
       "source": "/ai-lab",
       "destination": "/",
       "permanent": true
-    },
-    {
-      "source": "/obrigado",
-      "has": [
-        {
-          "type": "host",
-          "value": "ai-labs.cienciadosdados.com"
-        }
-      ],
-      "destination": "https://ai-code-pro.cienciadosdados.com/obrigado",
-      "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "ai-labs.cienciadosdados.com"
-        }
-      ],
-      "destination": "https://ai-code-pro.cienciadosdados.com/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/obrigado",
-      "destination": "https://ai-code-pro.cienciadosdados.com/obrigado",
-      "permanent": true
     }
   ],
   "rewrites": [

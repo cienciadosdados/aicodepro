@@ -126,27 +126,9 @@ const LeadForm = memo(function LeadForm() {
         klicksend-form-id='4puEQny' 
         autoComplete='off' 
         method="post" 
-        action="javascript:void(0);"
+        action="//handler.send.hotmart.com/subscription/4puEQny?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado"
         className="space-y-4"
         id="lead-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const form = e.currentTarget;
-          const email = (form.elements.namedItem('email') as HTMLInputElement).value;
-          const phone = (form.elements.namedItem('phone') as HTMLInputElement).value;
-          
-          // Enviar dados para o webhook
-          sendToWebhook(email, phone);
-          
-          // Redirecionar diretamente para a página de obrigado no domínio correto
-          window.location.href = 'https://ai-code-pro.cienciadosdados.com/obrigado?email=' + encodeURIComponent(email);
-          
-          // Enviar dados para o Hotmart em segundo plano
-          const formData = new FormData(form);
-          const xhr = new XMLHttpRequest();
-          xhr.open('POST', '//handler.send.hotmart.com/subscription/4puEQny', true);
-          xhr.send(formData);
-        }}
       >
         <div>
           <input
