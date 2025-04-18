@@ -94,7 +94,7 @@ function ThankYouContent() {
               {
                 title: "Responda à Pesquisa",
                 description: "O nosso objetivo é fazer com que você aproveite ao máximo esse evento! Queremos ouvir suas principais necessidades para garantir que o evento agregue em seus conhecimentos.",
-                link: "https://forms.gle/fPz7UkdfnjzcBexX6",
+                link: "https://forms.gle/WUCqsWmPq9MB1frt6",
                 buttonText: "RESPONDER À PESQUISA"
               },
               {

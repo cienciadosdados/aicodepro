@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 interface WebhookData {
   email: string;
@@ -13,6 +13,8 @@ interface WebhookData {
 }
 
 const LeadForm = memo(function LeadForm() {
+  // Referência para o campo de telefone
+  const phoneInputRef = useRef<HTMLInputElement>(null);
   // Função para enviar dados ao webhook do n8n de forma silenciosa
   const sendToWebhook = (email: string, phone: string): void => {
     try {
@@ -47,6 +49,42 @@ const LeadForm = memo(function LeadForm() {
       // Não interferir no fluxo principal mesmo se houver erro
     }
   };
+  
+  // Função para formatar o número de telefone automaticamente
+  const formatPhoneNumber = (value: string) => {
+    // Remove todos os caracteres não numéricos
+    const numbers = value.replace(/\D/g, '');
+    
+    // Formata o número de acordo com o padrão brasileiro
+    if (numbers.length <= 2) {
+      return numbers;
+    } else if (numbers.length <= 6) {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+    } else if (numbers.length <= 10) {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 6)}-${numbers.slice(6)}`;
+    } else {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
+    }
+  };
+
+  // Hook para aplicar a máscara de telefone
+  useEffect(() => {
+    const phoneInput = phoneInputRef.current;
+    
+    if (phoneInput) {
+      const handleInput = (e: Event) => {
+        const input = e.target as HTMLInputElement;
+        const formattedValue = formatPhoneNumber(input.value);
+        input.value = formattedValue;
+      };
+      
+      phoneInput.addEventListener('input', handleInput);
+      
+      return () => {
+        phoneInput.removeEventListener('input', handleInput);
+      };
+    }
+  }, []);
   
   // Hook para capturar a submissão do formulário sem interferir no fluxo original
   useEffect(() => {
@@ -97,12 +135,14 @@ const LeadForm = memo(function LeadForm() {
 
         <div>
           <input
-            type="text"
-            autoComplete="off"
+            type="tel"
+            autoComplete="tel"
             name="phone"
             id="phone"
-            placeholder="DDD+Whatsapp"
+            ref={phoneInputRef}
+            placeholder="(00) 00000-0000"
             required
+            pattern="\([0-9]{2}\) [0-9]{4,5}-[0-9]{4}"
             className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
           />
         </div>
