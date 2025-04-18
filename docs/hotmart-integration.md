@@ -1,6 +1,6 @@
 # Guia de Integração com Hotmart Send
 
-Este documento explica como configurar a integração entre o site AI Lab e o Hotmart Send para captura e gerenciamento de leads.
+Este documento explica como configurar a integração entre o site AI Code Pro e o Hotmart Send para captura e gerenciamento de leads.
 
 ## Método de Integração com Automação Personalizada
 

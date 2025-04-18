@@ -1,7 +1,7 @@
 {
-  "name": "AI Lab",
-  "short_name": "AI Lab",
-  "description": "Aplicações de IA Avançadas",
+  "name": "AI Code Pro",
+  "short_name": "AI Code Pro",
+  "description": "IA de Verdade. Para Quem Já Programa.",
   "start_url": "/?source=pwa",
   "display": "standalone",
   "background_color": "#000000",
