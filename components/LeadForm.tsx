@@ -126,9 +126,16 @@ const LeadForm = memo(function LeadForm() {
         klicksend-form-id='4puEQny' 
         autoComplete='off' 
         method="post" 
-        action="//handler.send.hotmart.com/subscription/4puEQny"
+        action="//handler.send.hotmart.com/subscription/4puEQny?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado"
         className="space-y-4"
         id="lead-form"
+        onSubmit={(e) => {
+          // Garantir que o redirecionamento seja para o domínio correto
+          const form = e.currentTarget;
+          if (!form.action.includes('redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado')) {
+            form.action = form.action + (form.action.includes('?') ? '&' : '?') + 'redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado';
+          }
+        }}
       >
         <div>
           <input
@@ -171,14 +178,30 @@ const LeadForm = memo(function LeadForm() {
         </button>
       </form>
 
-      {/* Script para capturar UTMs - Código padrão do Hotmart Send */}
+      {/* Script para capturar UTMs e garantir o redirecionamento correto */}
       <script dangerouslySetInnerHTML={{ __html: `
-        var pageParams = new URLSearchParams(window.location.search);
-        var form = document.querySelector('form[klicksend-form-id="4puEQny"]');
-        var formActionUrl = new URL(form.action);
-        var formActionSearchParams = formActionUrl.searchParams.size > 0 ? formActionUrl.searchParams.toString() + '&' : '';
-        var combinedParams = formActionSearchParams + pageParams.toString();
-        form.action = formActionUrl.origin + formActionUrl.pathname + '?' + combinedParams + '&redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado';
+        // Forçar o redirecionamento para o domínio correto
+        document.addEventListener('DOMContentLoaded', function() {
+          var form = document.querySelector('form[klicksend-form-id="4puEQny"]');
+          var pageParams = new URLSearchParams(window.location.search);
+          
+          // Garantir que o redirecionamento seja para o domínio correto
+          form.action = "//handler.send.hotmart.com/subscription/4puEQny?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado";
+          
+          // Adicionar UTMs e outros parâmetros da URL
+          if (pageParams.toString()) {
+            form.action += "&" + pageParams.toString();
+          }
+          
+          // Adicionar listener para garantir o redirecionamento correto
+          form.addEventListener('submit', function(e) {
+            if (!form.action.includes('redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado')) {
+              e.preventDefault();
+              form.action = form.action + (form.action.includes('?') ? '&' : '?') + 'redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado';
+              setTimeout(function() { form.submit(); }, 10);
+            }
+          });
+        });
       `}} />
     </div>
   );
