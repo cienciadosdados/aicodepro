@@ -5,14 +5,44 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FloatingGrid } from '@/components/ui/floating-grid';
 import { SonarBadge } from '@/components/ui/sonar-badge';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import Head from 'next/head';
 
 // Componente que usa useSearchParams
 function ThankYouContent() {
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || '';
+  const [isAILabDomain, setIsAILabDomain] = useState(false);
   
   useEffect(() => {
+    // Verificar se estamos no domínio antigo
+    if (typeof window !== 'undefined') {
+      // Forçar o domínio correto
+      const currentUrl = window.location.href;
+      const currentHost = window.location.hostname;
+      
+      if (currentHost.includes('ai-labs')) {
+        setIsAILabDomain(true);
+        // Redirecionar para o novo domínio mantendo os parâmetros da URL
+        const newUrl = currentUrl.replace('ai-labs.cienciadosdados.com', 'ai-code-pro.cienciadosdados.com');
+        window.location.href = newUrl;
+        return;
+      }
+      
+      // Remover qualquer referência ao domínio antigo na URL
+      if (currentUrl.includes('ai-labs.cienciadosdados.com')) {
+        const cleanUrl = new URL(window.location.href);
+        // Limpar parâmetros que contenham referências ao domínio antigo
+        cleanUrl.searchParams.forEach((value, key) => {
+          if (value.includes('ai-labs.cienciadosdados.com')) {
+            const newValue = value.replace('ai-labs.cienciadosdados.com', 'ai-code-pro.cienciadosdados.com');
+            cleanUrl.searchParams.set(key, newValue);
+          }
+        });
+        window.history.replaceState({}, '', cleanUrl);
+      }
+    }
+    
     // Redirecionamento para o grupo após 12 segundos
     const timer = setTimeout(() => {
       window.location.href = 'https://sendflow.pro/i/ai-code-pro';
@@ -36,6 +66,11 @@ function ThankYouContent() {
                 <h1 className="text-4xl md:text-5xl font-bold text-[#0c83fe]">
                   AI Code Pro
                 </h1>
+                {isAILabDomain && (
+                  <div className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 text-xs rounded">
+                    Redirecionando...
+                  </div>
+                )}
               </div>
             </div>
             
@@ -164,8 +199,45 @@ function ThankYouContent() {
 
 // Componente principal que envolve o conteúdo com Suspense
 export default function ThankYouPage() {
+  // Força a atualização do título da página para garantir que não mostre AI Lab
+  useEffect(() => {
+    // Forçar o título da página para AI Code Pro
+    document.title = 'AI Code Pro - Inscrição Confirmada';
+    
+    // Remover qualquer meta tag que possa conter referências ao AI Lab
+    const metaTags = document.getElementsByTagName('meta');
+    for (let i = 0; i < metaTags.length; i++) {
+      const tag = metaTags[i];
+      if (tag.content && tag.content.includes('AI Lab')) {
+        tag.content = tag.content.replace('AI Lab', 'AI Code Pro');
+      }
+    }
+    
+    // Verificar se há algum texto no DOM que contenha 'AI Lab' e substituir
+    const replaceText = (node: Node): void => {
+      if (node.nodeType === 3) { // Text node
+        if (node.nodeValue && node.nodeValue.includes('AI Lab')) {
+          node.nodeValue = node.nodeValue.replace(/AI Lab/g, 'AI Code Pro');
+        }
+      } else if (node.nodeType === 1) { // Element node
+        Array.from(node.childNodes).forEach(replaceText);
+      }
+    };
+    
+    // Aplicar a substituição em todo o documento
+    setTimeout(() => {
+      replaceText(document.body);
+    }, 100);
+  }, []);
+  
   return (
     <main className="min-h-screen bg-black text-white relative overflow-hidden">
+      <head>
+        <title>AI Code Pro - Inscrição Confirmada</title>
+        <meta name="description" content="Sua inscrição no AI Code Pro foi confirmada com sucesso!" />
+        <meta property="og:title" content="AI Code Pro - Inscrição Confirmada" />
+        <meta property="og:description" content="Sua inscrição no AI Code Pro foi confirmada com sucesso!" />
+      </head>
       <FloatingGrid />
       <Suspense fallback={
         <div className="container mx-auto px-4 py-16 flex items-center justify-center">
