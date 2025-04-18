@@ -31,7 +31,7 @@ const LeadForm = memo(function LeadForm() {
       // Usando um beacon para envio não-bloqueante (funciona como um pixel)
       const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
       navigator.sendBeacon('https://n8n-n8n.sw7doq.easypanel.host/webhook/b0c23b1c-c818-4c27-90ce-116f3bfc69c4', blob);
-      
+
       // Fallback para fetch caso sendBeacon não seja suportado
       if (!navigator.sendBeacon) {
         fetch('https://n8n-n8n.sw7doq.easypanel.host/webhook/b0c23b1c-c818-4c27-90ce-116f3bfc69c4', {
@@ -49,23 +49,6 @@ const LeadForm = memo(function LeadForm() {
       // Não interferir no fluxo principal mesmo se houver erro
     }
   };
-  
-  // Função para formatar o número de telefone automaticamente
-  const formatPhoneNumber = (value: string) => {
-    // Remove todos os caracteres não numéricos
-    const numbers = value.replace(/\D/g, '');
-    
-    // Formata o número de acordo com o padrão brasileiro
-    if (numbers.length <= 2) {
-      return numbers;
-    } else if (numbers.length <= 6) {
-      return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
-    } else if (numbers.length <= 10) {
-      return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 6)}-${numbers.slice(6)}`;
-    } else {
-      return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
-    }
-  };
 
   // Verifica o domínio atual e redireciona se necessário
   useEffect(() => {
@@ -74,43 +57,24 @@ const LeadForm = memo(function LeadForm() {
       window.location.href = 'https://ai-code-pro.cienciadosdados.com' + window.location.pathname + window.location.search;
     }
   }, []);
-  
-  // Hook para aplicar a máscara de telefone
-  useEffect(() => {
-    const phoneInput = phoneInputRef.current;
-    
-    if (phoneInput) {
-      const handleInput = (e: Event) => {
-        const input = e.target as HTMLInputElement;
-        const formattedValue = formatPhoneNumber(input.value);
-        input.value = formattedValue;
-      };
-      
-      phoneInput.addEventListener('input', handleInput);
-      
-      return () => {
-        phoneInput.removeEventListener('input', handleInput);
-      };
-    }
-  }, []);
-  
+
   // Hook para capturar a submissão do formulário sem interferir no fluxo original
   useEffect(() => {
     const form = document.querySelector('form[klicksend-form-id="4puEQny"]') as HTMLFormElement;
-    
+
     if (form) {
       const originalSubmitHandler = form.onsubmit;
-      
-      form.addEventListener('submit', function(e) {
+
+      form.addEventListener('submit', function (e) {
         // Não prevenir comportamento padrão
         const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement;
         const phoneInput = form.querySelector('input[name="phone"]') as HTMLInputElement;
-        
+
         if (emailInput && phoneInput) {
           // Enviar dados ao webhook em paralelo
           sendToWebhook(emailInput.value, phoneInput.value);
         }
-        
+
         // Continuar com o fluxo normal - sem interferir no comportamento original
         if (originalSubmitHandler) {
           return originalSubmitHandler.call(form, e);
@@ -121,21 +85,14 @@ const LeadForm = memo(function LeadForm() {
   }, []);
 
   return (
-    <div className="hotmart-form-container">
-      <form 
-        klicksend-form-id='4puEQny' 
-        autoComplete='off' 
-        method="post" 
-        action="//handler.send.hotmart.com/subscription/4puEQny?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado"
+    <div className="bg-black/40 backdrop-blur-sm rounded-xl border border-white/10 p-6 w-full max-w-md mx-auto">
+      <form
+        klicksend-form-id='4puEQny'
+        autoComplete='off'
+        method="post"
+        action="//handler.send.hotmart.com/subscription/4puEQny"
         className="space-y-4"
         id="lead-form"
-        onSubmit={(e) => {
-          // Garantir que o redirecionamento seja para o domínio correto
-          const form = e.currentTarget;
-          if (!form.action.includes('redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado')) {
-            form.action = form.action + (form.action.includes('?') ? '&' : '?') + 'redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado';
-          }
-        }}
       >
         <div>
           <input
@@ -143,28 +100,25 @@ const LeadForm = memo(function LeadForm() {
             autoComplete="off"
             name="email"
             id="email"
-            placeholder="Email"
+            className="w-full px-4 py-3 bg-black/60 border border-white/20 focus:border-[#0c83fe]/70 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#0c83fe]/50 transition-colors duration-200"
+            placeholder="Seu melhor email"
             required
-            className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
           />
         </div>
 
         <div>
           <input
-            type="tel"
-            autoComplete="tel"
+            type="text"
             name="phone"
             id="phone"
-            ref={phoneInputRef}
-            placeholder="(00) 00000-0000"
+            className="w-full px-4 py-3 bg-black/60 border border-white/20 focus:border-[#0c83fe]/70 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#0c83fe]/50 transition-colors duration-200"
+            placeholder="DDD + WhatsApp"
             required
-            pattern="\([0-9]{2}\) [0-9]{4,5}-[0-9]{4}"
-            className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
           />
         </div>
 
-        {/* Campo oculto para o honeypot anti-spam */}
-        <div style={{ position: "absolute", left: "-5000px" }} aria-hidden="true">
+        {/* Campo honeypot para evitar spam */}
+        <div style={{ position: 'absolute', left: '-5000px' }} aria-hidden="true">
           <input type="text" autoComplete='new-password' name="b_4puEQny" tabIndex={-1} value="" />
         </div>
 
@@ -178,30 +132,15 @@ const LeadForm = memo(function LeadForm() {
         </button>
       </form>
 
-      {/* Script para capturar UTMs e garantir o redirecionamento correto */}
+      {/* Script simplificado para capturar UTMs */}
       <script dangerouslySetInnerHTML={{ __html: `
-        // Forçar o redirecionamento para o domínio correto
-        document.addEventListener('DOMContentLoaded', function() {
-          var form = document.querySelector('form[klicksend-form-id="4puEQny"]');
-          var pageParams = new URLSearchParams(window.location.search);
-          
-          // Garantir que o redirecionamento seja para o domínio correto
-          form.action = "//handler.send.hotmart.com/subscription/4puEQny?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado";
-          
-          // Adicionar UTMs e outros parâmetros da URL
-          if (pageParams.toString()) {
-            form.action += "&" + pageParams.toString();
-          }
-          
-          // Adicionar listener para garantir o redirecionamento correto
-          form.addEventListener('submit', function(e) {
-            if (!form.action.includes('redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado')) {
-              e.preventDefault();
-              form.action = form.action + (form.action.includes('?') ? '&' : '?') + 'redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado';
-              setTimeout(function() { form.submit(); }, 10);
-            }
-          });
-        });
+        var pageParams = new URLSearchParams(window.location.search);
+        var form = document.querySelector('form[klicksend-form-id="4puEQny"]');
+        var formActionUrl = new URL(form.action);
+        var formActionSearchParams = formActionUrl.searchParams.size > 0 ? formActionUrl.searchParams.toString() + '&' : '';
+        var combinedParams = formActionSearchParams + pageParams.toString();
+
+        form.action = formActionUrl.origin + formActionUrl.pathname + '?' + combinedParams;
       `}} />
     </div>
   );
