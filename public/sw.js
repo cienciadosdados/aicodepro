@@ -1,5 +1,5 @@
-// Service Worker para AI Lab
-const CACHE_NAME = 'ai-lab-cache-v2025-03-04-2';
+// Service Worker para AI Code Pro
+const CACHE_NAME = 'ai-code-pro-cache-v2025-04-18-1';
 
 // Recursos para pré-cache (críticos para o LCP)
 const PRECACHE_URLS = [

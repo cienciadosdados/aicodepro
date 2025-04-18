@@ -13,7 +13,7 @@ export function TitleWithHighlight({ className = "" }: TitleWithHighlightProps) 
           animate={{ opacity: 1, y: 0 }}
           className="inline-block bg-gradient-to-r from-[#0c83fe] via-[#4ca0ff] to-[#0c83fe] bg-clip-text text-transparent"
         >
-          AI Lab:
+          AI Code Pro:
         </motion.span>
       </h1>
       <motion.p
@@ -22,7 +22,7 @@ export function TitleWithHighlight({ className = "" }: TitleWithHighlightProps) 
         transition={{ delay: 0.1 }}
         className="mt-6 text-lg leading-8 text-gray-300"
       >
-        Aplicações de IA Avançadas
+        IA de Verdade. Para Quem Já Programa.
       </motion.p>
     </div>
   );
