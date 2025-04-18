@@ -67,6 +67,23 @@ const LeadForm = memo(function LeadForm() {
     }
   };
 
+  // Hook para configurar o redirecionamento com base no domínio atual
+  useEffect(() => {
+    // Configura o redirecionamento com base no domínio atual
+    const redirectInput = document.getElementById('redirect-url') as HTMLInputElement;
+    if (redirectInput && typeof window !== 'undefined') {
+      // Usa o domínio atual para o redirecionamento
+      const currentDomain = window.location.origin;
+      redirectInput.value = `${currentDomain}/obrigado`;
+      
+      // Atualiza a ação do formulário para incluir o redirecionamento
+      const form = document.getElementById('lead-form') as HTMLFormElement;
+      if (form) {
+        form.action = `//handler.send.hotmart.com/subscription/4puEQny?redirectTo=${encodeURIComponent(redirectInput.value)}`;
+      }
+    }
+  }, []);
+  
   // Hook para aplicar a máscara de telefone
   useEffect(() => {
     const phoneInput = phoneInputRef.current;
@@ -118,9 +135,12 @@ const LeadForm = memo(function LeadForm() {
         klicksend-form-id='4puEQny' 
         autoComplete='off' 
         method="post" 
-        action="//handler.send.hotmart.com/subscription/4puEQny?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado"
+        action="//handler.send.hotmart.com/subscription/4puEQny"
         className="space-y-4"
+        id="lead-form"
       >
+        {/* Campo oculto para o redirecionamento que será preenchido via JavaScript */}
+        <input type="hidden" name="redirectTo" id="redirect-url" value="https://ai-code-pro.cienciadosdados.com/obrigado" />
         <div>
           <input
             type="email"
