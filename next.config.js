@@ -31,6 +31,14 @@ const nextConfig = {
     optimizePackageImports: ['framer-motion'],
   },
   
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = Array.isArray(config.externals) ? config.externals : [config.externals];
+      config.externals.push('pg');
+    }
+    return config;
+  },
+  
   // Otimizações de cache e headers
   async headers() {
     return [
