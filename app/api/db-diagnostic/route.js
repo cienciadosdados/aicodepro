@@ -1,8 +1,11 @@
 /**
  * API endpoint para diagnóstico de conexão com o banco de dados
  * Ferramenta para ajudar a identificar problemas de conexão
- * Usa import dinâmico para evitar problemas durante o build
+ * Força o uso do runtime Node.js para compatibilidade com o módulo pg
  */
+
+// Definir explicitamente o runtime como Node.js
+export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
 

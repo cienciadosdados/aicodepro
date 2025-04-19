@@ -1,8 +1,11 @@
 /**
  * API endpoint para salvar leads qualificados
  * Implementação robusta com tratamento de erros e logs detalhados
- * Usa import dinâmico para evitar problemas durante o build
+ * Força o uso do runtime Node.js para compatibilidade com o módulo pg
  */
+
+// Definir explicitamente o runtime como Node.js
+export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
 
