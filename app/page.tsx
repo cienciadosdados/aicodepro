@@ -193,6 +193,168 @@ export default function HomePage() { // Nome diferente da função para forçar 
         </div>
       </section>
 
+      {/* O Que Você Vai Aprender Section */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="container mx-auto px-4">
+          {/* Section Title */}
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-6">O Que Você Vai Aprender</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Domine as tecnologias mais avançadas de IA através de projetos práticos e hands-on.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* LLMs e RAG */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8"
+            >
+              <h3 className="text-2xl font-bold mb-4 text-[#0c83fe]">LLMs e RAG</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>Claude, Openai, DeepSeek e muito mais</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>Implementação de RAG</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>Vector Databases</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>Fine-tuning e Otimização</span>
+                </li>
+              </ul>
+            </motion.div>
+
+            {/* Agentes Autônomos */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8"
+            >
+              <h3 className="text-2xl font-bold mb-4 text-[#0c83fe]">Agentes Autônomos</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>Arquitetura de Agentes</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>CrewAI e langgraph</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>Integração de Tools</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>Automação de Tarefas</span>
+                </li>
+              </ul>
+            </motion.div>
+
+            {/* Projetos Práticos */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8"
+            >
+              <h3 className="text-2xl font-bold mb-4 text-[#0c83fe]">Projetos Práticos</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>RAG e Deep Search avançado</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>Agentes de Busca</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>Automação com IA</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span>Deploy em Produção</span>
+                </li>
+              </ul>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* O Que Dizem Nossos Alunos Section */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="container mx-auto px-4">
+          {/* Section Title */}
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-6">O Que Dizem Nossos Alunos</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Histórias de sucesso de quem já participou dos treinamentos.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Testimonial 1 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8"
+            >
+              <div className="mb-6">
+                <p className="italic text-gray-300">"A Ciência dos Dados me deu as ferramentas práticas que eu precisava para implementar soluções de IA no mundo real."</p>
+              </div>
+              <div>
+                <p className="font-bold">Aparecido Diniz</p>
+                <p className="text-sm text-gray-400">Consultor @ Dinizq Consultores Associados</p>
+              </div>
+            </motion.div>
+
+            {/* Testimonial 2 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8"
+            >
+              <div className="mb-6">
+                <p className="italic text-gray-300">"A abordagem hands-on do curso do Eduardo é fantástica. Consegui implementar um agente de IA logo na primeira semana."</p>
+              </div>
+              <div>
+                <p className="font-bold">Claudiomir José</p>
+                <p className="text-sm text-gray-400">Tech @ cjs@agent Crypto</p>
+              </div>
+            </motion.div>
+
+            {/* Testimonial 3 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8"
+            >
+              <div className="mb-6">
+                <p className="italic text-gray-300">"O conhecimento em RAG e LLMs que adquiri com a Ciência dos Dados transformou a maneira como construir aplicações."</p>
+              </div>
+              <div>
+                <p className="font-bold">Paulo Mazzia</p>
+                <p className="text-sm text-gray-400">Head de Inteligência de Negócios @ Paipe</p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Final */}
       <section className="relative py-20">
         <div className="container mx-auto px-4">
