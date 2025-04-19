@@ -6,8 +6,9 @@
 
 import { NextResponse } from 'next/server';
 
-// Importar serviço de armazenamento de leads
-// Usando import() dinâmico para evitar problemas durante o build
+// Importar serviço híbrido de armazenamento de leads
+// Este serviço tenta primeiro o método direto e, se falhar, usa o método via API externa
+import { saveQualifiedLeadHybrid } from '@/lib/external-lead-storage';
 import { saveQualifiedLead, testDatabaseConnection } from '@/lib/lead-storage';
 
 // Função para validar email
@@ -90,9 +91,9 @@ export async function POST(request) {
     
     // Salvar lead no banco de dados
     try {
-      console.log('Tentando salvar lead no banco de dados...');
+      console.log('Tentando salvar lead usando método híbrido...');
       
-      const savedLead = await saveQualifiedLead({
+      const savedLead = await saveQualifiedLeadHybrid({
         email,
         phone,
         isProgrammer: normalizedIsProgrammer,
