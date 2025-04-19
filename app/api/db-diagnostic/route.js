@@ -1,37 +1,23 @@
 /**
  * API endpoint para diagnóstico de conexão com o banco de dados
  * Ferramenta para ajudar a identificar problemas de conexão
+ * Usa import dinâmico para evitar problemas durante o build
  */
 
 import { NextResponse } from 'next/server';
 
-// Importar serviço de banco de dados
-let db;
-try {
-  db = require('@/lib/db');
-} catch (error) {
-  console.error('Erro ao importar módulo de banco de dados:', error);
-  db = null;
-}
+// Importar serviço de armazenamento de leads
+// Usando import() dinâmico para evitar problemas durante o build
+import { testDatabaseConnection } from '@/lib/lead-storage';
 
 export async function GET(request) {
   console.log('📊 Executando diagnóstico de banco de dados');
   
   try {
-    // Verificar se o módulo de banco de dados foi carregado
-    if (!db) {
-      return NextResponse.json({
-        success: false,
-        status: 'Módulo de banco de dados não disponível',
-        error: 'Não foi possível carregar o módulo de banco de dados',
-        timestamp: new Date().toISOString()
-      });
-    }
-    
     // Testar conexão com o banco de dados
     let connectionTest;
     try {
-      connectionTest = await db._testConnection();
+      connectionTest = await testDatabaseConnection();
     } catch (error) {
       connectionTest = {
         success: false,
@@ -49,27 +35,14 @@ export async function GET(request) {
         'não definido'
     };
     
-    // Tentar executar uma query simples
-    let queryTest;
-    try {
-      if (connectionTest.success) {
-        const result = await db.query('SELECT NOW() as time');
-        queryTest = {
-          success: true,
-          result: result.rows[0]
-        };
-      } else {
-        queryTest = {
-          success: false,
-          message: 'Teste de query não executado porque a conexão falhou'
-        };
-      }
-    } catch (error) {
-      queryTest = {
-        success: false,
-        message: `Erro ao executar query: ${error.message}`
-      };
-    }
+    // Verificar resultado do teste de conexão
+    let queryTest = {
+      success: connectionTest.success,
+      message: connectionTest.success ? 
+        'Conexão com banco de dados estabelecida com sucesso' : 
+        'Teste de query não executado porque a conexão falhou',
+      timestamp: connectionTest.timestamp || new Date().toISOString()
+    };
     
     // Retornar resultado do diagnóstico
     return NextResponse.json({

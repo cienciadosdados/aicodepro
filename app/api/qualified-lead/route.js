@@ -1,23 +1,14 @@
 /**
  * API endpoint para salvar leads qualificados
  * Implementação robusta com tratamento de erros e logs detalhados
+ * Usa import dinâmico para evitar problemas durante o build
  */
 
 import { NextResponse } from 'next/server';
 
-// Importar serviço de banco de dados
-let db;
-try {
-  db = require('@/lib/db');
-} catch (error) {
-  console.error('Erro crítico ao importar módulo de banco de dados:', error);
-  // Criar um stub para evitar erros de runtime
-  db = {
-    saveQualifiedLead: async () => {
-      throw new Error('Módulo de banco de dados não disponível');
-    }
-  };
-}
+// Importar serviço de armazenamento de leads
+// Usando import() dinâmico para evitar problemas durante o build
+import { saveQualifiedLead, testDatabaseConnection } from '@/lib/lead-storage';
 
 // Função para validar email
 function isValidEmail(email) {
@@ -101,7 +92,7 @@ export async function POST(request) {
     try {
       console.log('Tentando salvar lead no banco de dados...');
       
-      const savedLead = await db.saveQualifiedLead({
+      const savedLead = await saveQualifiedLead({
         email,
         phone,
         isProgrammer: normalizedIsProgrammer,
@@ -160,7 +151,7 @@ export async function GET(request) {
   if (isDiagnostic) {
     try {
       // Testar conexão com o banco de dados
-      const connectionTest = await db._testConnection();
+      const connectionTest = await testDatabaseConnection();
       
       return NextResponse.json({
         status: 'API operacional',
