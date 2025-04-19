@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-const { saveQualifiedLead } = require('../../lib/db');
+import { saveQualifiedLead } from '@/lib/db.js';
 
 export async function POST(req: Request) {
   try {
