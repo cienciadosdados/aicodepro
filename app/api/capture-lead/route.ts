@@ -1,39 +1,72 @@
 import { NextResponse } from 'next/server';
+const { saveQualifiedLead } = require('../../lib/db');
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    console.log(' recebido no corpo da requisição da API');
+    console.log(body);
     
-    // Aqui você vai configurar a URL do webhook do Hotmart Send
+    const { email, phone, isProgrammer, utm_source, utm_medium, utm_campaign } = body;
+
     const HOTMART_WEBHOOK_URL = process.env.HOTMART_WEBHOOK_URL;
-    
     if (!HOTMART_WEBHOOK_URL) {
-      throw new Error('HOTMART_WEBHOOK_URL não configurada');
+      console.error('HOTMART_WEBHOOK_URL não configurada');
     }
 
-    // Enviar dados para o Hotmart Send
-    const response = await fetch(HOTMART_WEBHOOK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: body.name,
-        email: body.email,
-        phone: body.phone,
-        // Adicione outros campos conforme necessário
-      }),
-    });
+    if (HOTMART_WEBHOOK_URL) {
+      console.log('Enviando para Hotmart...');
+      const hotmartPayload = {
+        name: body.name || email,
+        email: email,
+        phone: phone,
+      };
+      console.log('Payload Hotmart:', hotmartPayload);
 
-    if (!response.ok) {
-      throw new Error('Erro ao enviar para Hotmart');
+      const response = await fetch(HOTMART_WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(hotmartPayload),
+      });
+
+      if (!response.ok) {
+        console.error('Erro ao enviar para Hotmart. Status:', response.status);
+        const errorBody = await response.text();
+        console.error('Corpo do erro Hotmart:', errorBody);
+      } else {
+        console.log('✅ Enviado para Hotmart com sucesso!');
+      }
+    } else {
+      console.warn('URL do webhook Hotmart não configurada. Pulando envio.');
     }
 
-    return NextResponse.json({ success: true });
+    console.log('Tentando salvar lead qualificado no Neon...');
+    const leadData = {
+      email,
+      phone,
+      isProgrammer,
+      utmSource: utm_source,
+      utmMedium: utm_medium,
+      utmCampaign: utm_campaign,
+    };
+    console.log('Dados para salvar no Neon:', leadData);
+
+    try {
+      const savedLead = await saveQualifiedLead(leadData);
+      console.log('✅ Lead salvo no Neon com sucesso:', savedLead.email);
+    } catch (dbError) {
+      console.error('❌ Erro ao salvar lead no Neon:', dbError);
+    }
+
+    return NextResponse.json({ success: true, message: 'Lead processado.' });
+
   } catch (error) {
-    console.error('Erro ao processar lead:', error);
+    console.error('Erro GERAL ao processar lead:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
     return NextResponse.json(
-      { error: 'Erro ao processar inscrição' },
+      { success: false, error: 'Erro interno ao processar inscrição', details: errorMessage },
       { status: 500 }
     );
   }
