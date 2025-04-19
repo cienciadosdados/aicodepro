@@ -78,12 +78,16 @@ const LeadForm = memo(function LeadForm() {
     };
   };
 
-  // Função para formatar o número de telefone
+  // Função para formatar o número de telefone - versão mais robusta
   const formatPhoneNumber = (value: string) => {
     // Remover tudo que não for número
     const numbers = value.replace(/\D/g, '');
     
+    // Garantir que temos pelo menos alguns dígitos
+    if (numbers.length === 0) return '';
+    
     // Aplicar a máscara conforme a quantidade de dígitos
+    // Formato internacional para compatibilidade
     if (numbers.length <= 2) {
       return numbers;
     } else if (numbers.length <= 6) {
@@ -91,7 +95,7 @@ const LeadForm = memo(function LeadForm() {
     } else if (numbers.length <= 10) {
       return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 6)}-${numbers.slice(6)}`;
     } else {
-      // Limitar a 11 dígitos (DDD + 9 dígitos)
+      // Limitar a 11 dígitos (DDD + 9 dígitos) para celulares brasileiros
       return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
     }
   };
@@ -103,29 +107,38 @@ const LeadForm = memo(function LeadForm() {
     }
   }, []);
 
-  // Aplicar máscara de telefone
+  // Aplicar máscara de telefone com tratamento de erros
   useEffect(() => {
     const phoneInput = phoneInputRef.current;
     
     if (phoneInput) {
       const handleInput = (e: Event) => {
-        const input = e.target as HTMLInputElement;
-        const formattedValue = formatPhoneNumber(input.value);
-        
-        // Só atualizar se o valor formatado for diferente
-        if (input.value !== formattedValue) {
-          // Preservar a posição do cursor
-          const start = input.selectionStart;
-          const end = input.selectionEnd;
-          const oldLength = input.value.length;
+        try {
+          const input = e.target as HTMLInputElement;
+          const formattedValue = formatPhoneNumber(input.value);
           
-          input.value = formattedValue;
-          
-          // Ajustar a posição do cursor após a formatação
-          const newLength = input.value.length;
-          const cursorPos = start && start + (newLength - oldLength) > 0 ? start + (newLength - oldLength) : newLength;
-          
-          input.setSelectionRange(cursorPos, cursorPos);
+          // Só atualizar se o valor formatado for diferente
+          if (input.value !== formattedValue) {
+            // Preservar a posição do cursor
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+            const oldLength = input.value.length;
+            
+            input.value = formattedValue;
+            
+            // Ajustar a posição do cursor após a formatação
+            const newLength = input.value.length;
+            const cursorPos = start && start + (newLength - oldLength) > 0 ? start + (newLength - oldLength) : newLength;
+            
+            try {
+              input.setSelectionRange(cursorPos, cursorPos);
+            } catch (err) {
+              console.warn('Erro ao ajustar cursor:', err);
+            }
+          }
+        } catch (error) {
+          console.error('Erro na formatação do telefone:', error);
+          // Não fazer nada em caso de erro para não bloquear o usuário
         }
       };
       
@@ -279,7 +292,7 @@ const LeadForm = memo(function LeadForm() {
                 ref={phoneInputRef}
                 placeholder="(00) 00000-0000"
                 required
-                pattern="\([0-9]{2}\) [0-9]{5}-[0-9]{4}"
+                pattern=".*[0-9]{8,}.*"
                 className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
               />
             </div>
