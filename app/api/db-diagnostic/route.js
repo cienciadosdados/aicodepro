@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server';
 
 // Importar serviço de armazenamento de leads
 // Usando import() dinâmico para evitar problemas durante o build
-import { testDatabaseConnection } from '@/lib/lead-storage';
+import { testDatabaseConnection } from '@/lib/simple-lead-storage';
 
 export async function GET(request) {
   console.log('📊 Executando diagnóstico de banco de dados');

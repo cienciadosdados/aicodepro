@@ -6,10 +6,9 @@
 
 import { NextResponse } from 'next/server';
 
-// Importar serviço híbrido de armazenamento de leads
-// Este serviço tenta primeiro o método direto e, se falhar, usa o método via API externa
-import { saveQualifiedLeadHybrid } from '@/lib/external-lead-storage';
-import { saveQualifiedLead, testDatabaseConnection } from '@/lib/lead-storage';
+// Importar serviço simples de armazenamento de leads
+// Esta solução não depende do módulo pg e usa fetch nativo
+import { saveQualifiedLead, testDatabaseConnection } from '@/lib/simple-lead-storage';
 
 // Função para validar email
 function isValidEmail(email) {
@@ -91,9 +90,9 @@ export async function POST(request) {
     
     // Salvar lead no banco de dados
     try {
-      console.log('Tentando salvar lead usando método híbrido...');
+      console.log('Salvando lead usando método simples e robusto...');
       
-      const savedLead = await saveQualifiedLeadHybrid({
+      const savedLead = await saveQualifiedLead({
         email,
         phone,
         isProgrammer: normalizedIsProgrammer,
