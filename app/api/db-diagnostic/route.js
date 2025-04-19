@@ -9,9 +9,9 @@ export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
 
-// Importar serviço de armazenamento de leads via API HTTP do Neon
-// Esta solução não depende do módulo pg, usando fetch diretamente
-import { testDatabaseConnection } from '@/lib/neon-http-storage';
+// Importar serviço de armazenamento de leads via Google Sheets
+// Esta solução não depende de banco de dados, usando a API do Google Sheets
+import { testDatabaseConnection } from '@/lib/google-sheets-storage';
 
 export async function GET(request) {
   console.log('📊 Executando diagnóstico de banco de dados');

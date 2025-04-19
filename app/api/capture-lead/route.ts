@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { saveQualifiedLead } from '@/lib/db.js';
+import { saveQualifiedLead } from '@/lib/supabase-storage';
 
 export async function POST(req: Request) {
   try {
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
       console.warn('URL do webhook Hotmart não configurada. Pulando envio.');
     }
 
-    console.log('Tentando salvar lead qualificado no Neon...');
+    console.log('Tentando salvar lead qualificado no Supabase...');
     const leadData = {
       email,
       phone,
@@ -55,9 +55,9 @@ export async function POST(req: Request) {
 
     try {
       const savedLead = await saveQualifiedLead(leadData);
-      console.log('✅ Lead salvo no Neon com sucesso:', savedLead.email);
+      console.log('✅ Lead salvo no Supabase com sucesso:', savedLead.email);
     } catch (dbError) {
-      console.error('❌ Erro ao salvar lead no Neon:', dbError);
+      console.error('❌ Erro ao salvar lead no Supabase:', dbError);
     }
 
     return NextResponse.json({ success: true, message: 'Lead processado.' });

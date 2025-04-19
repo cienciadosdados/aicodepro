@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Formulário Hotmart Send</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #0c83fe;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teste de Formulário Hotmart Send</h1>
+    <p>Este é um formulário de teste para verificar o redirecionamento para a página de obrigado.</p>
+
+    <form 
+        klicksend-form-id='RxuyBWA' 
+        autoComplete='off' 
+        method="post" 
+        action="//handler.send.hotmart.com/subscription/RxuyBWA"
+    >
+        <input
+            type="email"
+            autoComplete="off"
+            name="email"
+            id="email"
+            placeholder="Digite seu melhor e-mail"
+            required
+        />
+
+        <input
+            type="text"
+            autoComplete="off"
+            name="phone"
+            id="phone"
+            placeholder="Digite seu WhatsApp (somente números)"
+        />
+
+        <div class="checkbox-container">
+            <input
+                type="checkbox"
+                autoComplete="off"
+                name="gdpr"
+                id="gdpr"
+                value="Concordo em receber os e-mails"
+                required
+            />
+            <label for="gdpr">
+                Concordo em receber os e-mails
+            </label>
+        </div>
+
+        <!-- Campo oculto para o honeypot anti-spam -->
+        <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" autoComplete='new-password' name="b_RxuyBWA" tabIndex="-1" value="" />
+        </div>
+
+        <!-- Campo oculto para o redirecionamento -->
+        <input type="hidden" name="redirect_to" value="https://ai-code-pro.cienciadosdados.com/obrigado" />
+
+        <button
+            klicksend-form-submit-id='RxuyBWA'
+            type="submit"
+        >
+            Quero me inscrever
+        </button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.querySelector('form[klicksend-form-id="RxuyBWA"]');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    var redirectInput = document.querySelector('input[name="redirect_to"]');
+                    if (redirectInput) {
+                        var email = document.getElementById('email').value;
+                        
+                        // Usar o domínio atual para o redirecionamento
+                        // Para teste local, usamos o domínio de produção
+                        var currentDomain = "https://ai-code-pro.cienciadosdados.com";
+                        var redirectPath = '/obrigado';
+                        
+                        redirectInput.value = currentDomain + redirectPath + '?email=' + encodeURIComponent(email);
+                        console.log('Redirecionando para: ' + redirectInput.value);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

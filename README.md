@@ -68,7 +68,7 @@ npm start
 
 ## Armazenamento de Leads Qualificados
 
-O sistema possui duas implementações para armazenamento de leads qualificados no banco de dados Neon PostgreSQL:
+O sistema possui três implementações para armazenamento de leads qualificados:
 
 ### 1. Implementação com módulo pg (lib/simple-lead-storage.js)
 
@@ -76,9 +76,32 @@ Esta implementação usa o módulo `pg` para se conectar ao banco de dados Neon.
 
 ### 2. Implementação com API HTTP (lib/neon-http-storage.js)
 
-Esta implementação usa a API HTTP do Neon para se conectar ao banco de dados, sem depender do módulo `pg`. É mais robusta para ambientes serverless e é a implementação recomendada para produção.
+Esta implementação usa a API HTTP do Neon para se conectar ao banco de dados, sem depender do módulo `pg`. É mais robusta para ambientes serverless.
 
-Para configurar o armazenamento de leads qualificados:
+### 3. Implementação com Google Sheets (lib/google-sheets-storage.js) - RECOMENDADA
+
+Esta implementação usa o Google Sheets como armazenamento de leads qualificados, sem depender de banco de dados. É a solução mais simples e visual, permitindo fácil acompanhamento e qualificação das leads.
+
+Para configurar o armazenamento de leads qualificados com Google Sheets:
+
+1. Execute o script de configuração:
+   ```bash
+   node scripts/setup-google-sheets.js
+   ```
+
+2. Siga as instruções para configurar uma planilha no Google Sheets e obter a URL do webhook.
+
+3. Configure a variável de ambiente `GOOGLE_SHEETS_WEBHOOK_URL` com a URL do webhook:
+   ```
+   GOOGLE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/seu-id-do-script/exec
+   ```
+
+4. Teste a conexão com o Google Sheets:
+   ```bash
+   node scripts/test-google-sheets.js
+   ```
+
+Para configurar o armazenamento de leads qualificados com Neon PostgreSQL (alternativa):
 
 1. Configure a variável de ambiente `DATABASE_URL` com a URL de conexão do seu banco de dados Neon:
    ```
