@@ -7,8 +7,8 @@
 import { NextResponse } from 'next/server';
 
 // Importar serviço simples de armazenamento de leads
-// Esta solução não depende do módulo pg e usa fetch nativo
-import { saveQualifiedLead, testDatabaseConnection } from '@/lib/simple-lead-storage';
+// Esta solução usa o módulo pg de forma robusta
+const { saveQualifiedLead, testDatabaseConnection } = require('@/lib/simple-lead-storage');
 
 // Função para validar email
 function isValidEmail(email) {
