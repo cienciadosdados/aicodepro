@@ -9,9 +9,9 @@ export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
 
-// Importar serviço simples de armazenamento de leads
-// Esta solução usa import dinâmico para o módulo pg
-import { saveQualifiedLead, testDatabaseConnection } from '@/lib/simple-lead-storage';
+// Importar serviço de armazenamento de leads via API HTTP do Neon
+// Esta solução não depende do módulo pg, usando fetch diretamente
+import { saveQualifiedLead, testDatabaseConnection } from '@/lib/neon-http-storage';
 
 // Função para validar email
 function isValidEmail(email) {
