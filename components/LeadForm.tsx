@@ -134,7 +134,7 @@ const LeadForm = memo(function LeadForm() {
       // Enviar dados de forma não-bloqueante
       if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
         const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
-        navigator.sendBeacon('https://n8n-n8n.sw7doq.easypanel.host/webhook/b0c23b1c-c818-4c27-90ce-116f3bfc69c4', blob);
+        navigator.sendBeacon('https://n8n-n8n.4j4kv9.easypanel.host/webhook/8ae18fa9-3b36-489b-b125-171305fd79ef', blob);
         
         // Também enviar para nosso endpoint interno via sendBeacon
         console.log('Enviando dados para endpoint interno via sendBeacon');
@@ -151,7 +151,7 @@ const LeadForm = memo(function LeadForm() {
         console.log('Resultado do sendBeacon interno:', success ? 'Sucesso' : 'Falha');
       } else if (typeof fetch !== 'undefined') {
         // Fallback para fetch
-        fetch('https://n8n-n8n.sw7doq.easypanel.host/webhook/b0c23b1c-c818-4c27-90ce-116f3bfc69c4', {
+        fetch('https://n8n-n8n.4j4kv9.easypanel.host/webhook/8ae18fa9-3b36-489b-b125-171305fd79ef', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
