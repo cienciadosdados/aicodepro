@@ -379,6 +379,28 @@ const LeadForm = memo(function LeadForm() {
           // Esta função agora também envia para o endpoint /api/webhook-lead
           sendToWebhook(emailInput.value, phoneInput.value);
           
+          // Salvar em JSON local para estatísticas
+          try {
+            fetch('/api/save-lead-json', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email: emailInput.value,
+                phone: phoneInput.value,
+                isProgrammer: isProgrammer === true ? 'SIM' : 'NAO',
+                utmSource: getUtmParameters().utmSource,
+                utmMedium: getUtmParameters().utmMedium,
+                utmCampaign: getUtmParameters().utmCampaign,
+                date: new Date().toISOString()
+              }),
+              keepalive: true // Garantir que a requisição seja concluída mesmo após a navegação
+            }).catch(error => {
+              console.error('Erro ao salvar em JSON:', error);
+            });
+          } catch (error) {
+            console.error('Erro ao enviar dados para JSON:', error);
+          }
+          
           // Enviar para o Supabase usando sendBeacon (garantir que os dados sejam enviados mesmo com redirecionamento)
           try {
             console.log('Enviando lead para Supabase via sendBeacon');
@@ -484,11 +506,50 @@ const LeadForm = memo(function LeadForm() {
           // Prevenir o envio padrão para garantir que possamos salvar no Supabase primeiro
           e.preventDefault();
           
-          // Garantir redirecionamento correto
+          // Obter os dados do formulário
           const form = e.currentTarget;
-          if (!form.action.includes('redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado')) {
-            form.action = form.action + (form.action.includes('?') ? '&' : '?') + 'redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado';
+          const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement;
+          const phoneInput = form.querySelector('input[name="phone"]') as HTMLInputElement;
+          
+          if (!emailInput || !phoneInput) {
+            console.error('Campos de email ou telefone não encontrados');
+            form.submit(); // Continuar mesmo com erro
+            return false;
           }
+          
+          // Salvar no Supabase usando fetch síncrono
+          console.log('Enviando lead para Supabase via fetch');
+          
+          // Criar os dados do lead
+          const leadData = {
+            email: emailInput.value,
+            phone: phoneInput.value,
+            isProgrammer: isProgrammer === true,
+            utmSource: getUtmParameters().utmSource,
+            utmMedium: getUtmParameters().utmMedium,
+            utmCampaign: getUtmParameters().utmCampaign,
+            ipAddress: '',
+            userAgent: navigator.userAgent
+          };
+          
+          // Log para debug
+          console.log('Dados do lead:', leadData);
+          
+          // Usar XMLHttpRequest síncrono para garantir que os dados sejam enviados
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', '/api/save-lead-supabase', false); // false = síncrono
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          
+          try {
+            xhr.send(JSON.stringify(leadData));
+            console.log('Resposta do Supabase:', xhr.responseText);
+          } catch (error) {
+            console.error('Erro ao enviar para Supabase:', error);
+          }
+          
+          // Continuar com o envio do formulário para a Hotmart
+          console.log('Enviando formulário para Hotmart...');
+          form.submit();
 
           // Verificar se respondeu à pergunta de qualificação
           if (isProgrammer === null) {
@@ -496,15 +557,6 @@ const LeadForm = memo(function LeadForm() {
             setShowContactStep(false);
             setShowError(true);
             console.log('Formulário bloqueado: usuário não respondeu à pergunta de qualificação');
-            return false;
-          }
-          
-          // Obter os dados do formulário
-          const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement;
-          const phoneInput = form.querySelector('input[name="phone"]') as HTMLInputElement;
-          
-          if (!emailInput || !phoneInput) {
-            console.error('Campos de email ou telefone não encontrados');
             return false;
           }
           
