@@ -149,6 +149,53 @@ const LeadForm = memo(function LeadForm() {
         const internalBlob = new Blob([JSON.stringify(internalData)], {type: 'application/json'});
         const success = navigator.sendBeacon('/api/webhook-lead', internalBlob);
         console.log('Resultado do sendBeacon interno:', success ? 'Sucesso' : 'Falha');
+        
+        // NOVA FUNCIONALIDADE: Enviar lead para o Supabase
+        try {
+          const supabaseBlob = new Blob([JSON.stringify(internalData)], {type: 'application/json'});
+          const supabaseSuccess = navigator.sendBeacon('/api/save-lead-supabase', supabaseBlob);
+          console.log('Resultado do envio para Supabase:', supabaseSuccess ? 'Sucesso' : 'Falha');
+        } catch (error) {
+          console.error('Erro ao enviar para Supabase:', error);
+          // Se falhar, salvar localmente
+          saveLeadLocally(internalData);
+        }
+        
+        // Também tentar enviar para o endpoint de backup do Replit
+        try {
+          const replitBlob = new Blob([JSON.stringify(internalData)], {type: 'application/json'});
+          const replitSuccess = navigator.sendBeacon('/api/save-lead-replit', replitBlob);
+          console.log('Resultado do sendBeacon para Replit:', replitSuccess ? 'Sucesso' : 'Falha');
+        } catch (error) {
+          console.error('Erro ao enviar para Replit:', error);
+        }
+        
+        // NOVA FUNCIONALIDADE: Salvar lead em arquivo no servidor
+        try {
+          const fileData = {
+            email,
+            phone,
+            isProgrammer: isProgrammer === true,
+            utmSource: utmParams.utmSource,
+            utmMedium: utmParams.utmMedium,
+            utmCampaign: utmParams.utmCampaign,
+            timestamp: new Date().toISOString()
+          };
+          const fileBlob = new Blob([JSON.stringify(fileData)], {type: 'application/json'});
+          const fileSuccess = navigator.sendBeacon('/api/save-lead-file', fileBlob);
+          console.log('Resultado do salvamento em arquivo:', fileSuccess ? 'Sucesso' : 'Falha');
+        } catch (error) {
+          console.error('Erro ao salvar lead em arquivo:', error);
+          // Se falhar, salvar localmente
+          saveLeadLocally({
+            email,
+            phone,
+            isProgrammer: isProgrammer === true,
+            utmSource: utmParams.utmSource,
+            utmMedium: utmParams.utmMedium,
+            utmCampaign: utmParams.utmCampaign
+          });
+        }
       } else if (typeof fetch !== 'undefined') {
         // Fallback para fetch
         fetch('https://n8n-n8n.sw7doq.easypanel.host/webhook/b0c23b1c-c818-4c27-90ce-116f3bfc69c4', {
@@ -298,49 +345,24 @@ const LeadForm = memo(function LeadForm() {
         body: JSON.stringify({
           email,
           phone,
-          isProgrammer: isProgrammerValue,
-          utmSource: utmParams.utmSource,
-          utmMedium: utmParams.utmMedium,
-          utmCampaign: utmParams.utmCampaign
-        }),
-        keepalive: true // Importante: garante que a requisição continue mesmo após navegação
-      });
-      
-      // Verificar se a requisição foi bem-sucedida
-      if (response.ok) {
-        console.log('✅ API respondeu com sucesso:', await response.json());
-      } else {
-        console.error('❌ API respondeu com erro:', response.status, response.statusText);
-      }
-    } catch (error) {
-      console.error('Erro ao salvar lead qualificado:', error);
-      
-      // Tentar enviar usando sendBeacon como fallback
-      try {
-        if (navigator.sendBeacon) {
-          console.log('Tentando enviar usando sendBeacon como fallback...');
-          const utmParams = getUtmParameters();
-          const data = {
-            email,
-            phone,
-            isProgrammer: isProgrammer === true,
-            utmSource: utmParams.utmSource,
-            utmMedium: utmParams.utmMedium,
-            utmCampaign: utmParams.utmCampaign
-          };
-          
-          const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
-          const success = navigator.sendBeacon('/api/qualified-lead', blob);
-          console.log('Resultado do sendBeacon:', success ? 'Sucesso' : 'Falha');
-        }
-      } catch (beaconError) {
-        console.error('Erro ao usar sendBeacon:', beaconError);
-      }
-    }
-  };
 
-  // Capturar submissão do formulário
-  useEffect(() => {
+// Também enviar para nosso endpoint interno via fetch com keepalive
+console.log('Enviando dados para endpoint interno via fetch com keepalive');
+fetch('/api/webhook-lead', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({
+email,
+phone,
+isProgrammer: isProgrammer === true,
+utmSource: utmParams.utmSource,
+utmMedium: utmParams.utmMedium,
+utmCampaign: utmParams.utmCampaign
+}),
+keepalive: true
+}).catch((error) => {
+console.error('Erro ao enviar dados para endpoint interno:', error);
+});
     if (typeof document === 'undefined') return;
     
     const form = document.querySelector('form[klicksend-form-id="4puEQny"]') as HTMLFormElement;
@@ -397,15 +419,20 @@ const LeadForm = memo(function LeadForm() {
               utmCampaign: utmParams.utmCampaign
             };
             
-            console.log('Enviando dados diretamente para /api/webhook-lead via sendBeacon');
+            console.log('Enviando dados diretamente para endpoints via sendBeacon');
+            
+            // Enviar para webhook-lead
             const blob = new Blob([JSON.stringify(webhookData)], {type: 'application/json'});
             const success = navigator.sendBeacon('/api/webhook-lead', blob);
-            console.log('Resultado do sendBeacon direto:', success ? 'Sucesso' : 'Falha');
+            console.log('Resultado do sendBeacon para webhook-lead:', success ? 'Sucesso' : 'Falha');
             
-            // Se falhar, salvar localmente
-            if (!success) {
-              saveLeadLocally(webhookData);
-            }
+            // Enviar para o endpoint de backup do Replit
+            const replitBlob = new Blob([JSON.stringify(webhookData)], {type: 'application/json'});
+            const replitSuccess = navigator.sendBeacon('/api/save-lead-replit', replitBlob);
+            console.log('Resultado do sendBeacon para save-lead-replit:', replitSuccess ? 'Sucesso' : 'Falha');
+            
+            // Salvar localmente em todos os casos como garantia
+            saveLeadLocally(webhookData);
           }
         }
         
