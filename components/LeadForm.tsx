@@ -602,11 +602,10 @@ const LeadForm = memo(function LeadForm() {
             <div className="mt-4">
               <input
                 type="tel"
-                autoComplete="tel"
                 name="phone"
                 id="phone"
                 ref={phoneInputRef}
-                placeholder="(00) 00000-0000"
+                placeholder="(99) 99999-9999"
                 required
                 pattern=".*[0-9]{8,}.*"
                 className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
@@ -626,6 +625,14 @@ const LeadForm = memo(function LeadForm() {
               value={isProgrammer === null ? '' : isProgrammer === true ? 'true' : 'false'} 
               data-value-type={typeof isProgrammer}
               data-is-programmer-state={String(isProgrammer)}
+            />
+            
+            {/* Campo personalizado para a Hotmart - será visível no painel */}
+            <input 
+              type="hidden" 
+              name="custom_is_programmer" 
+              id="custom_is_programmer_field"
+              value={isProgrammer === true ? 'SIM' : isProgrammer === false ? 'NAO' : ''}
             />
 
             <button
