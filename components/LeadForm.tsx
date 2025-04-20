@@ -481,6 +481,9 @@ const LeadForm = memo(function LeadForm() {
         className="space-y-4"
         id="lead-form"
         onSubmit={(e) => {
+          // Prevenir o envio padrão para garantir que possamos salvar no Supabase primeiro
+          e.preventDefault();
+          
           // Garantir redirecionamento correto
           const form = e.currentTarget;
           if (!form.action.includes('redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado')) {
@@ -489,7 +492,6 @@ const LeadForm = memo(function LeadForm() {
 
           // Verificar se respondeu à pergunta de qualificação
           if (isProgrammer === null) {
-            e.preventDefault();
             setShowQualificationStep(true);
             setShowContactStep(false);
             setShowError(true);
@@ -497,8 +499,51 @@ const LeadForm = memo(function LeadForm() {
             return false;
           }
           
+          // Obter os dados do formulário
+          const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement;
+          const phoneInput = form.querySelector('input[name="phone"]') as HTMLInputElement;
+          
+          if (!emailInput || !phoneInput) {
+            console.error('Campos de email ou telefone não encontrados');
+            return false;
+          }
+          
+          // Enviar para o Supabase usando fetch com async/await
+          try {
+            const leadData = {
+              email: emailInput.value,
+              phone: phoneInput.value,
+              isProgrammer: isProgrammer === true,
+              utmSource: getUtmParameters().utmSource,
+              utmMedium: getUtmParameters().utmMedium,
+              utmCampaign: getUtmParameters().utmCampaign
+            };
+            
+            // Usar fetch com async/await para garantir que o lead seja salvo
+            fetch('/api/save-lead-supabase', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(leadData)
+            }).then(() => {
+              console.log('Lead enviado para Supabase, redirecionando...');
+              // Após salvar no Supabase, enviar o formulário normalmente
+              form.submit();
+            }).catch(error => {
+              console.error('Erro ao enviar lead para Supabase:', error);
+              // Mesmo com erro, continuar com o envio do formulário
+              form.submit();
+            });
+          } catch (error) {
+            console.error('Erro ao processar lead:', error);
+            // Mesmo com erro, continuar com o envio do formulário
+            form.submit();
+          }
+          
           // Log para debug
           console.log('Formulário submetido com isProgrammer:', isProgrammer);
+          
+          // Retornar false para evitar o envio padrão do formulário
+          return false;
         }}
       >
         {/* Etapa de qualificação */}
