@@ -156,10 +156,20 @@ const LeadForm = memo(function LeadForm() {
       console.log('Salvando lead qualificado com isProgrammer:', isProgrammer, typeof isProgrammer);
       
       // Garantir que o valor seja explicitamente booleano
-      const isProgrammerValue = isProgrammer === true;
+      // Usar uma verificação mais robusta para garantir que o valor seja tratado corretamente
+      let isProgrammerValue = false;
+      
+      if (isProgrammer === true || 
+          String(isProgrammer) === 'true' || 
+          Number(isProgrammer) === 1 || 
+          String(isProgrammer) === '1') {
+        isProgrammerValue = true;
+      }
+      
       console.log('Valor normalizado de isProgrammer:', isProgrammerValue, typeof isProgrammerValue);
       
-      await fetch('/api/qualified-lead', {
+      // Usar o fetch com keepalive para garantir que a requisição seja completada mesmo se a página for redirecionada
+      const response = await fetch('/api/qualified-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -170,9 +180,39 @@ const LeadForm = memo(function LeadForm() {
           utmMedium: utmParams.utmMedium,
           utmCampaign: utmParams.utmCampaign
         }),
+        keepalive: true // Importante: garante que a requisição continue mesmo após navegação
       });
+      
+      // Verificar se a requisição foi bem-sucedida
+      if (response.ok) {
+        console.log('✅ API respondeu com sucesso:', await response.json());
+      } else {
+        console.error('❌ API respondeu com erro:', response.status, response.statusText);
+      }
     } catch (error) {
       console.error('Erro ao salvar lead qualificado:', error);
+      
+      // Tentar enviar usando sendBeacon como fallback
+      try {
+        if (navigator.sendBeacon) {
+          console.log('Tentando enviar usando sendBeacon como fallback...');
+          const utmParams = getUtmParameters();
+          const data = {
+            email,
+            phone,
+            isProgrammer: isProgrammer === true,
+            utmSource: utmParams.utmSource,
+            utmMedium: utmParams.utmMedium,
+            utmCampaign: utmParams.utmCampaign
+          };
+          
+          const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
+          const success = navigator.sendBeacon('/api/qualified-lead', blob);
+          console.log('Resultado do sendBeacon:', success ? 'Sucesso' : 'Falha');
+        }
+      } catch (beaconError) {
+        console.error('Erro ao usar sendBeacon:', beaconError);
+      }
     }
   };
 
@@ -188,10 +228,34 @@ const LeadForm = memo(function LeadForm() {
       form.addEventListener('submit', function(e) {
         const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement;
         const phoneInput = form.querySelector('input[name="phone"]') as HTMLInputElement;
+        const isProgrammerInput = form.querySelector('input[name="isProgrammer"]') as HTMLInputElement;
         
+        // Log para depuração
+        console.log('Submissão do formulário detectada!');
+        console.log('Email:', emailInput?.value);
+        console.log('Telefone:', phoneInput?.value);
+        console.log('Valor de isProgrammer no input hidden:', isProgrammerInput?.value);
+        console.log('Valor de isProgrammer no estado React:', isProgrammer);
+        
+        // Garantir que temos os dados necessários
         if (emailInput && phoneInput) {
+          // Enviar para webhook do Hotmart
           sendToWebhook(emailInput.value, phoneInput.value);
+          
+          // Salvar no banco de dados Neon com valor explícito de isProgrammer
+          // Usar o valor do estado React diretamente, que é mais confiável
+          console.log('Salvando lead com isProgrammer =', isProgrammer);
           saveQualifiedLead(emailInput.value, phoneInput.value);
+          
+          // Tentativa adicional de salvar com um pequeno atraso para garantir
+          setTimeout(() => {
+            try {
+              console.log('Tentativa adicional de salvar lead após 500ms');
+              saveQualifiedLead(emailInput.value, phoneInput.value);
+            } catch (error) {
+              console.error('Erro na tentativa adicional:', error);
+            }
+          }, 500);
         }
         
         if (originalSubmitHandler) {
@@ -206,10 +270,40 @@ const LeadForm = memo(function LeadForm() {
   const handleQualificationSelection = (value: boolean) => {
     // Definir valor booleano explicitamente
     console.log('Seleção de qualificação:', value, typeof value);
-    setIsProgrammer(value);
+    
+    // Garantir que o valor seja um booleano explícito
+    const boolValue = value === true;
+    
+    // Atualizar o estado
+    setIsProgrammer(boolValue);
+    
+    // Atualizar também o campo oculto se ele já existir
+    setTimeout(() => {
+      try {
+        const hiddenField = document.getElementById('isProgrammerField') as HTMLInputElement;
+        if (hiddenField) {
+          hiddenField.value = boolValue ? 'true' : 'false';
+          hiddenField.setAttribute('data-value-type', typeof boolValue);
+          hiddenField.setAttribute('data-is-programmer-state', String(boolValue));
+          console.log('Campo oculto atualizado com:', hiddenField.value);
+        }
+      } catch (error) {
+        console.error('Erro ao atualizar campo oculto:', error);
+      }
+    }, 0);
+    
+    // Atualizar a UI
     setShowQualificationStep(false);
     setShowContactStep(true);
     setShowError(false);
+    
+    // Salvar a seleção em localStorage para persistência
+    try {
+      localStorage.setItem('aicodepro_isProgrammer', String(boolValue));
+      console.log('Valor isProgrammer salvo em localStorage:', boolValue);
+    } catch (error) {
+      console.error('Erro ao salvar em localStorage:', error);
+    }
   };
 
   return (
@@ -318,7 +412,10 @@ const LeadForm = memo(function LeadForm() {
             <input 
               type="hidden" 
               name="isProgrammer" 
+              id="isProgrammerField"
               value={isProgrammer === null ? '' : isProgrammer === true ? 'true' : 'false'} 
+              data-value-type={typeof isProgrammer}
+              data-is-programmer-state={String(isProgrammer)}
             />
 
             <button
