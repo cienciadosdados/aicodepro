@@ -13,6 +13,17 @@ interface WebhookData {
   date: string;
 }
 
+interface LeadData {
+  email: string;
+  phone: string;
+  isProgrammer: boolean;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  timestamp?: string;
+  savedLocally?: boolean;
+}
+
 const LeadForm = memo(function LeadForm() {
   // Referência para o campo de telefone
   const phoneInputRef = useRef<HTMLInputElement>(null);
@@ -23,9 +34,89 @@ const LeadForm = memo(function LeadForm() {
   const [isProgrammer, setIsProgrammer] = useState<boolean | null>(null);
   const [showError, setShowError] = useState(false);
 
+  // Estado para controlar leads salvos localmente
+  const [localLeads, setLocalLeads] = useState<LeadData[]>([]);
+  
+  // Função para salvar lead localmente quando o servidor falhar
+  const saveLeadLocally = (leadData: LeadData) => {
+    try {
+      // Adicionar timestamp
+      const leadWithTimestamp = {
+        ...leadData,
+        timestamp: new Date().toISOString(),
+        savedLocally: true
+      };
+      
+      // Recuperar leads salvos anteriormente
+      const savedLeadsJSON = localStorage.getItem('aicodepro_backup_leads') || '[]';
+      const savedLeads: LeadData[] = JSON.parse(savedLeadsJSON);
+      
+      // Adicionar novo lead
+      savedLeads.push(leadWithTimestamp);
+      
+      // Salvar no localStorage
+      localStorage.setItem('aicodepro_backup_leads', JSON.stringify(savedLeads));
+      
+      // Atualizar estado
+      setLocalLeads(savedLeads);
+      
+      console.log('✅ Lead salvo localmente com sucesso:', leadWithTimestamp);
+      return true;
+    } catch (error) {
+      console.error('❌ Erro ao salvar lead localmente:', error);
+      return false;
+    }
+  };
+  
+  // Função para tentar enviar leads salvos localmente
+  const trySendLocalLeads = async () => {
+    try {
+      const savedLeadsJSON = localStorage.getItem('aicodepro_backup_leads') || '[]';
+      const savedLeads: LeadData[] = JSON.parse(savedLeadsJSON);
+      
+      if (savedLeads.length === 0) return;
+      
+      console.log(`🔄 Tentando enviar ${savedLeads.length} leads salvos localmente...`);
+      
+      // Criar uma cópia para não modificar o array original durante a iteração
+      const leadsCopy = [...savedLeads];
+      const successfullySync: number[] = [];
+      
+      for (let i = 0; i < leadsCopy.length; i++) {
+        const lead = leadsCopy[i];
+        
+        try {
+          // Tentar enviar para o webhook
+          const blob = new Blob([JSON.stringify(lead)], {type: 'application/json'});
+          const success = navigator.sendBeacon('/api/webhook-lead', blob);
+          
+          if (success) {
+            successfullySync.push(i);
+            console.log(`✅ Lead #${i} sincronizado com sucesso:`, lead.email);
+          }
+        } catch (error) {
+          console.error(`❌ Erro ao sincronizar lead #${i}:`, error);
+        }
+      }
+      
+      // Remover leads sincronizados com sucesso
+      if (successfullySync.length > 0) {
+        const remainingLeads = savedLeads.filter((_, index) => !successfullySync.includes(index));
+        localStorage.setItem('aicodepro_backup_leads', JSON.stringify(remainingLeads));
+        setLocalLeads(remainingLeads);
+        console.log(`✅ ${successfullySync.length} leads sincronizados e removidos do armazenamento local`);
+      }
+    } catch (error) {
+      console.error('❌ Erro ao processar leads locais:', error);
+    }
+  };
+
   // Função para enviar dados ao webhook do n8n de forma silenciosa
   const sendToWebhook = (email: string, phone: string): void => {
     try {
+      // Tentar sincronizar leads salvos localmente antes de redirecionar
+      trySendLocalLeads();
+      
       // Obter parâmetros UTM
       const utmParams = getUtmParameters();
       
@@ -310,6 +401,11 @@ const LeadForm = memo(function LeadForm() {
             const blob = new Blob([JSON.stringify(webhookData)], {type: 'application/json'});
             const success = navigator.sendBeacon('/api/webhook-lead', blob);
             console.log('Resultado do sendBeacon direto:', success ? 'Sucesso' : 'Falha');
+            
+            // Se falhar, salvar localmente
+            if (!success) {
+              saveLeadLocally(webhookData);
+            }
           }
         }
         
