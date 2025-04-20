@@ -627,11 +627,11 @@ const LeadForm = memo(function LeadForm() {
               data-is-programmer-state={String(isProgrammer)}
             />
             
-            {/* Campo personalizado para a Hotmart - será visível no painel */}
+            {/* Campo de nome para armazenar a informação SIM/NAO */}
             <input 
               type="hidden" 
-              name="custom_is_programmer" 
-              id="custom_is_programmer_field"
+              name="first_name" 
+              id="first_name_field"
               value={isProgrammer === true ? 'SIM' : isProgrammer === false ? 'NAO' : ''}
             />
 
