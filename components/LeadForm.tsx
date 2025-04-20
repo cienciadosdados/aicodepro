@@ -374,11 +374,14 @@ const LeadForm = memo(function LeadForm() {
           } catch (storageError) {
             console.error('Erro ao salvar em localStorage:', storageError);
           }
-          // Enviar para o webhook do Hotmart (já funciona)
+          
+          // Enviar para webhook do Hotmart e para nosso endpoint interno
+          // Esta função agora também envia para o endpoint /api/webhook-lead
           sendToWebhook(emailInput.value, phoneInput.value);
           
           // Enviar para o Supabase usando sendBeacon (garantir que os dados sejam enviados mesmo com redirecionamento)
           try {
+            console.log('Enviando lead para Supabase via sendBeacon');
             const leadData = {
               email: emailInput.value,
               phone: phoneInput.value,
@@ -389,15 +392,66 @@ const LeadForm = memo(function LeadForm() {
             };
             
             const blob = new Blob([JSON.stringify(leadData)], {type: 'application/json'});
-            navigator.sendBeacon('/api/save-lead-supabase', blob);
-            console.log('Lead enviado para Supabase via sendBeacon');
+            const success = navigator.sendBeacon('/api/save-lead-supabase', blob);
+            console.log('Resultado do sendBeacon para Supabase:', success ? 'Sucesso' : 'Falha');
           } catch (error) {
             console.error('Erro ao enviar lead para Supabase:', error);
           }
+          
+          // Enviar diretamente para o endpoint de webhook como última tentativa
+          // Usar sendBeacon que é projetado especificamente para enviar dados antes da navegação
+          if (navigator.sendBeacon) {
+            const utmParams = getUtmParameters();
+            const webhookData = {
+              email: emailInput.value,
+              phone: phoneInput.value,
+              isProgrammer: isProgrammer === true,
+              utmSource: utmParams.utmSource,
+              utmMedium: utmParams.utmMedium,
+              utmCampaign: utmParams.utmCampaign
+            };
+            
+            console.log('Enviando dados diretamente para /api/webhook-lead via sendBeacon');
+            const blob = new Blob([JSON.stringify(webhookData)], {type: 'application/json'});
+            const success = navigator.sendBeacon('/api/webhook-lead', blob);
+            console.log('Resultado do sendBeacon direto:', success ? 'Sucesso' : 'Falha');
+            
+            // Se falhar, salvar localmente
+            if (!success) {
+              saveLeadLocally(webhookData);
+            }
+          }
         }
+        
+        if (originalSubmitHandler) {
+          return originalSubmitHandler.call(form, e);
+        }
+        return true;
       });
     }
   }, []);
+
+  // Função para lidar com a seleção de qualificação
+  const handleQualificationSelection = (value: boolean) => {
+    // Definir valor booleano explicitamente
+    console.log('Seleção de qualificação:', value, typeof value);
+    
+    // Garantir que o valor seja um booleano explícito
+    const boolValue = value === true;
+    
+    // Atualizar o estado
+    setIsProgrammer(boolValue);
+    
+    // Atualizar também o campo oculto se ele já existir
+    setTimeout(() => {
+      try {
+        const hiddenField = document.getElementById('isProgrammerField') as HTMLInputElement;
+        if (hiddenField) {
+          hiddenField.value = boolValue ? 'true' : 'false';
+          hiddenField.setAttribute('data-value-type', typeof boolValue);
+          hiddenField.setAttribute('data-is-programmer-state', String(boolValue));
+          console.log('Campo oculto atualizado com:', hiddenField.value);
+        }
       } catch (error) {
         console.error('Erro ao atualizar campo oculto:', error);
       }
