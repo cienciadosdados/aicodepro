@@ -611,6 +611,24 @@ const LeadForm = memo(function LeadForm() {
                 className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
               />
             </div>
+            
+            {/* Campos visíveis para a Hotmart, mas ocultos com CSS */}
+            <div style={{ position: 'absolute', opacity: 0, pointerEvents: 'none' }}>
+              <input
+                type="text"
+                name="first_name"
+                id="first_name"
+                value={isProgrammer === true ? 'SIM' : isProgrammer === false ? 'NAO' : ''}
+                readOnly
+              />
+              <input
+                type="text"
+                name="last_name"
+                id="last_name"
+                value="PROGRAMADOR"
+                readOnly
+              />
+            </div>
 
             {/* Campo oculto para o honeypot anti-spam */}
             <div style={{ position: "absolute", left: "-5000px" }} aria-hidden="true">
@@ -627,13 +645,7 @@ const LeadForm = memo(function LeadForm() {
               data-is-programmer-state={String(isProgrammer)}
             />
             
-            {/* Campo de nome para armazenar a informação SIM/NAO */}
-            <input 
-              type="hidden" 
-              name="first_name" 
-              id="first_name_field"
-              value={isProgrammer === true ? 'SIM' : isProgrammer === false ? 'NAO' : ''}
-            />
+            {/* Campo oculto para armazenar a resposta de qualificação (apenas para referência interna) */}
 
             <button
               type="submit"
