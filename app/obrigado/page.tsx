@@ -78,7 +78,8 @@ function ThankYouContent() {
               Inscrição Confirmada! 🎉
             </h2>
             
-            <div className="bg-black/40 backdrop-blur-sm rounded-xl border border-white/10 p-6 mb-8">
+            <div className="relative bg-black/40 backdrop-blur-sm rounded-xl border border-[#0c83fe]/30 p-6 mb-8" style={{ boxShadow: '0 0 15px rgba(12, 131, 254, 0.2)' }}>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/5 to-[#0c83fe]/10 opacity-30" />
               <p className="text-xl mb-4">
                 Enviamos todos os detalhes para o seu e-mail: <span className="text-[#0c83fe] font-semibold">{email}</span>
               </p>
@@ -149,7 +150,9 @@ function ThankYouContent() {
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
-                <div className="relative p-6 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10 group-hover:border-[#0c83fe]/50 transition-colors duration-300 h-full flex flex-col">
+                <div className="relative p-6 bg-black/40 backdrop-blur-sm rounded-xl border border-[#0c83fe]/30 group-hover:border-[#0c83fe]/70 transition-all duration-300 h-full flex flex-col overflow-hidden" style={{ boxShadow: '0 0 15px rgba(12, 131, 254, 0.2)' }}>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/5 to-[#0c83fe]/10 opacity-30" />
+                  <div className="absolute inset-0 bg-[#0c83fe]/5 group-hover:bg-[#0c83fe]/10 transition-all duration-300" />
                   <div className="mb-2 text-[#0c83fe] font-bold text-xl">
                     {index + 1}.
                   </div>
