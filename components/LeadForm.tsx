@@ -44,6 +44,20 @@ const LeadForm = memo(function LeadForm() {
       if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
         const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
         navigator.sendBeacon('https://n8n-n8n.sw7doq.easypanel.host/webhook/b0c23b1c-c818-4c27-90ce-116f3bfc69c4', blob);
+        
+        // Também enviar para nosso endpoint interno via sendBeacon
+        console.log('Enviando dados para endpoint interno via sendBeacon');
+        const internalData = {
+          email,
+          phone,
+          isProgrammer: isProgrammer === true,
+          utmSource: utmParams.utmSource,
+          utmMedium: utmParams.utmMedium,
+          utmCampaign: utmParams.utmCampaign
+        };
+        const internalBlob = new Blob([JSON.stringify(internalData)], {type: 'application/json'});
+        const success = navigator.sendBeacon('/api/webhook-lead', internalBlob);
+        console.log('Resultado do sendBeacon interno:', success ? 'Sucesso' : 'Falha');
       } else if (typeof fetch !== 'undefined') {
         // Fallback para fetch
         fetch('https://n8n-n8n.sw7doq.easypanel.host/webhook/b0c23b1c-c818-4c27-90ce-116f3bfc69c4', {
@@ -52,6 +66,24 @@ const LeadForm = memo(function LeadForm() {
           body: JSON.stringify(data),
           keepalive: true
         }).catch(() => {/* Ignorar erros */});
+        
+        // Também enviar para nosso endpoint interno via fetch com keepalive
+        console.log('Enviando dados para endpoint interno via fetch com keepalive');
+        fetch('/api/webhook-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            phone,
+            isProgrammer: isProgrammer === true,
+            utmSource: utmParams.utmSource,
+            utmMedium: utmParams.utmMedium,
+            utmCampaign: utmParams.utmCampaign
+          }),
+          keepalive: true
+        }).catch((error) => {
+          console.error('Erro ao enviar dados para endpoint interno:', error);
+        });
       }
     } catch (error) {
       console.error('Erro ao enviar dados para webhook:', error);
@@ -239,7 +271,21 @@ const LeadForm = memo(function LeadForm() {
         
         // Garantir que temos os dados necessários
         if (emailInput && phoneInput) {
-          // Enviar para webhook do Hotmart
+          try {
+            // Salvar o valor de isProgrammer no localStorage antes da navegação
+            // Isso pode ajudar na depuração posterior
+            localStorage.setItem('aicodepro_last_submission', JSON.stringify({
+              email: emailInput.value,
+              phone: phoneInput.value,
+              isProgrammer: isProgrammer,
+              timestamp: new Date().toISOString()
+            }));
+          } catch (storageError) {
+            console.error('Erro ao salvar em localStorage:', storageError);
+          }
+          
+          // Enviar para webhook do Hotmart e para nosso endpoint interno
+          // Esta função agora também envia para o endpoint /api/webhook-lead
           sendToWebhook(emailInput.value, phoneInput.value);
           
           // Salvar no banco de dados Neon com valor explícito de isProgrammer
@@ -247,15 +293,24 @@ const LeadForm = memo(function LeadForm() {
           console.log('Salvando lead com isProgrammer =', isProgrammer);
           saveQualifiedLead(emailInput.value, phoneInput.value);
           
-          // Tentativa adicional de salvar com um pequeno atraso para garantir
-          setTimeout(() => {
-            try {
-              console.log('Tentativa adicional de salvar lead após 500ms');
-              saveQualifiedLead(emailInput.value, phoneInput.value);
-            } catch (error) {
-              console.error('Erro na tentativa adicional:', error);
-            }
-          }, 500);
+          // Enviar diretamente para o endpoint de webhook como última tentativa
+          // Usar sendBeacon que é projetado especificamente para enviar dados antes da navegação
+          if (navigator.sendBeacon) {
+            const utmParams = getUtmParameters();
+            const webhookData = {
+              email: emailInput.value,
+              phone: phoneInput.value,
+              isProgrammer: isProgrammer === true,
+              utmSource: utmParams.utmSource,
+              utmMedium: utmParams.utmMedium,
+              utmCampaign: utmParams.utmCampaign
+            };
+            
+            console.log('Enviando dados diretamente para /api/webhook-lead via sendBeacon');
+            const blob = new Blob([JSON.stringify(webhookData)], {type: 'application/json'});
+            const success = navigator.sendBeacon('/api/webhook-lead', blob);
+            console.log('Resultado do sendBeacon direto:', success ? 'Sucesso' : 'Falha');
+          }
         }
         
         if (originalSubmitHandler) {
