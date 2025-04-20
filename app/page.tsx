@@ -212,7 +212,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
             >
               <h3 className="text-2xl font-bold mb-4 text-[#0c83fe]">LLMs e RAG</h3>
               <ul className="space-y-3">
@@ -241,7 +241,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
             >
               <h3 className="text-2xl font-bold mb-4 text-[#0c83fe]">Agentes Autônomos</h3>
               <ul className="space-y-3">
@@ -270,7 +270,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
             >
               <h3 className="text-2xl font-bold mb-4 text-[#0c83fe]">Projetos Práticos</h3>
               <ul className="space-y-3">
@@ -314,7 +314,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
             >
               <div className="mb-6">
                 <p className="italic text-gray-300">"A Ciência dos Dados me deu as ferramentas práticas que eu precisava para implementar soluções de IA no mundo real."</p>
@@ -331,7 +331,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
             >
               <div className="mb-6">
                 <p className="italic text-gray-300">"A abordagem hands-on do curso do Eduardo é fantástica. Consegui implementar um agente de IA logo na primeira semana."</p>
@@ -348,7 +348,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
             >
               <div className="mb-6">
                 <p className="italic text-gray-300">"O conhecimento em RAG e LLMs que adquiri com a Ciência dos Dados transformou a maneira como construir aplicações."</p>
