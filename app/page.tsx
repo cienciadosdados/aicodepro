@@ -62,7 +62,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
 
               <div className="w-full max-w-2xl mx-auto">
                 <div className="relative">
-                  <div className="bg-black/40 rounded-2xl border border-white/10 p-8">
+                  <div className="bg-black/40 rounded-2xl border border-[#0c83fe]/20 p-8">
                     <h3 className="text-2xl font-bold mb-6 text-center">Garanta Sua Vaga Agora! De {EVENT_DATE}</h3>
                     <p className="text-gray-400 mb-8 text-center">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
                     <div className="max-w-md mx-auto">
@@ -135,7 +135,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
               >
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
-                  <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8">
+                  <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8">
                     <h3 className="text-2xl font-bold mb-6 text-center">Garanta Sua Vaga Agora! De {EVENT_DATE}</h3>
                     <p className="text-gray-400 mb-8 text-center">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
                     <div className="max-w-md mx-auto">
