@@ -10,7 +10,7 @@ import { SonarBadge } from "@/components/ui/sonar-badge"
 
 // Constantes para evitar problemas de hidratação
 const MAIN_TITLE_LINE1 = "IA de Verdade.";  
-const MAIN_TITLE_LINE2 = "Para Quem Já Programa.";
+const MAIN_TITLE_LINE2 = "Para Programadores";
 const EVENT_DATE = "5 a 8 de maio";
 const VERSION = Date.now(); // Forçar nova versão
 
@@ -50,7 +50,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
                 <div className="mb-6">
                   <span className="text-sm text-gray-300">Construa o Futuro com IA</span>
                 </div>
-                <h2 className="text-4xl md:text-6xl font-bold flex flex-col">
+                <h2 className="text-4xl md:text-6xl font-bold flex flex-col md:flex-row md:gap-3">
                   <span className="inline-block text-white">{MAIN_TITLE_LINE1}</span>
                   <span className="inline-block text-gray-400">{MAIN_TITLE_LINE2}</span>
                 </h2>
@@ -103,7 +103,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
                   </div>
                 </div>
                 <SonarBadge text="Construa o Futuro com IA" className="mb-6" />
-                <h2 className="text-4xl md:text-6xl font-bold mobile-optimized-text flex flex-col">
+                <h2 className="text-4xl md:text-6xl font-bold mobile-optimized-text flex flex-col md:flex-row md:gap-3">
                   <span className="inline-block text-white">{MAIN_TITLE_LINE1}</span>
                   <span className="inline-block text-gray-400">{MAIN_TITLE_LINE2}</span>
                 </h2>
