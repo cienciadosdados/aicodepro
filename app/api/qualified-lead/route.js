@@ -13,9 +13,10 @@ export const maxDuration = 10;
 
 import { NextResponse } from 'next/server';
 
-// Importar serviço simples de armazenamento de leads
+// Importar serviços de armazenamento de leads
 // Esta solução usa import dinâmico para o módulo pg
 import { saveQualifiedLead, testDatabaseConnection } from '@/lib/simple-lead-storage';
+import { saveLeadToFallback } from '@/lib/fallback-lead-storage';
 
 // Função para validar email
 function isValidEmail(email) {
@@ -122,56 +123,74 @@ export async function POST(request) {
     try {
       console.log('🔍 Salvando lead usando método robusto e otimizado para produção...');
       
-      // Implementar timeout para evitar que a função fique bloqueada indefinidamente
-      const savePromise = saveQualifiedLead({
-        email,
-        phone,
-        isProgrammer: normalizedIsProgrammer,
-        utmSource,
-        utmMedium,
-        utmCampaign,
-        ipAddress,
-        userAgent
-      });
+      let savedLead;
+      let usedFallback = false;
       
-      // Definir um timeout de 8 segundos (dentro do limite de 10s do Vercel Edge Functions)
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Timeout ao salvar lead no banco de dados')), 8000);
-      });
-      
-      // Usar Promise.race para garantir que não exceda o timeout
-      const savedLead = await Promise.race([savePromise, timeoutPromise]);
-      
-      // Verificar se o lead foi salvo como mock (indica problema no banco)
-      if (savedLead._mock) {
-        console.warn('⚠️ Lead salvo como mock devido a:', savedLead._mockReason);
-        
-        // Retornar resposta de sucesso parcial
-        return NextResponse.json({ 
-          success: true, // Manter como true para não bloquear o fluxo do usuário
-          message: 'Lead recebido, mas salvo temporariamente',
-          warning: 'Os dados foram recebidos, mas podem não ter sido armazenados permanentemente',
-          reason: savedLead._mockReason,
-          data: {
-            email: savedLead.email,
-            isProgrammer: savedLead.is_programmer
-          }
+      try {
+        // Implementar timeout para evitar que a função fique bloqueada indefinidamente
+        const savePromise = saveQualifiedLead({
+          email,
+          phone,
+          isProgrammer: normalizedIsProgrammer,
+          utmSource,
+          utmMedium,
+          utmCampaign,
+          ipAddress,
+          userAgent
         });
+        
+        // Definir um timeout de 8 segundos (dentro do limite de 10s do Vercel Edge Functions)
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Timeout ao salvar lead no banco de dados')), 8000);
+        });
+        
+        // Usar Promise.race para garantir que não exceda o timeout
+        savedLead = await Promise.race([savePromise, timeoutPromise]);
+        
+        // Verificar se o lead foi salvo como mock (indica problema no banco)
+        if (savedLead._mock) {
+          throw new Error(savedLead._mockReason || 'Dados salvos como mock');
+        }
+        
+        // Log para depuração
+        console.log('✅ Lead salvo com sucesso no banco de dados principal:', {
+          email: savedLead.email,
+          isProgrammer: savedLead.is_programmer
+        });
+      } catch (primaryDbError) {
+        // Se falhar, usa o sistema de fallback
+        console.error('⚠️ Erro ao salvar no banco principal:', primaryDbError.message);
+        console.log('🔄 Usando sistema de fallback para salvar o lead...');
+        
+        const fallbackResult = await saveLeadToFallback({
+          email,
+          phone,
+          isProgrammer: normalizedIsProgrammer,
+          utmSource,
+          utmMedium,
+          utmCampaign,
+          ipAddress,
+          userAgent,
+          error: primaryDbError.message
+        });
+        
+        if (fallbackResult.success) {
+          console.log('✅ Lead salvo com sucesso no sistema de fallback');
+          savedLead = fallbackResult.data;
+          usedFallback = true;
+        } else {
+          throw new Error(`Falha no sistema principal e no fallback: ${fallbackResult.error}`);
+        }
       }
-      
-      // Log para depuração
-      console.log('✅ Lead salvo com sucesso no banco de dados:', {
-        email: savedLead.email,
-        isProgrammer: savedLead.is_programmer
-      });
       
       // Retornar resposta de sucesso
       return NextResponse.json({ 
         success: true, 
-        message: 'Lead qualificado salvo com sucesso',
+        message: usedFallback ? 'Lead salvo no sistema de fallback' : 'Lead qualificado salvo com sucesso',
+        usedFallback,
         data: {
           email: savedLead.email,
-          isProgrammer: savedLead.is_programmer
+          isProgrammer: typeof savedLead.is_programmer !== 'undefined' ? savedLead.is_programmer : savedLead.isProgrammer
         }
       });
     } catch (dbError) {
@@ -188,12 +207,21 @@ export async function POST(request) {
         }
       }
       
+      // Tentar salvar em localStorage como último recurso
+      try {
+        console.log('🔄 Tentando salvar dados no localStorage como último recurso...');
+        // Não podemos usar localStorage no servidor, mas podemos retornar uma instrução para o cliente fazer isso
+      } catch (localStorageError) {
+        console.error('Erro ao tentar salvar no localStorage:', localStorageError);
+      }
+      
       // Retornar resposta de erro, mas com código 200 para não bloquear o fluxo do usuário
       return NextResponse.json({ 
         success: true, // Mantém como true para não bloquear o fluxo do usuário
         message: 'Lead recebido, mas houve um problema ao salvar no banco de dados',
         warning: 'Os dados foram recebidos, mas podem não ter sido armazenados permanentemente',
-        error: dbError.message
+        error: dbError.message,
+        saveToLocalStorage: true // Instrução para o cliente salvar no localStorage
       });
     }
   } catch (error) {

@@ -12,8 +12,9 @@ export const maxDuration = 10;
 
 import { NextResponse } from 'next/server';
 
-// Importar serviço de armazenamento de leads
+// Importar serviços de armazenamento de leads
 import { saveQualifiedLead } from '@/lib/simple-lead-storage';
+import { saveLeadToFallback } from '@/lib/fallback-lead-storage';
 
 // Handler para método POST
 export async function POST(request) {
@@ -86,25 +87,56 @@ export async function POST(request) {
     try {
       console.log('🔍 Salvando lead via webhook...');
       
-      const savedLead = await saveQualifiedLead({
-        email,
-        phone,
-        isProgrammer: normalizedIsProgrammer,
-        utmSource,
-        utmMedium,
-        utmCampaign,
-        ipAddress,
-        userAgent
-      });
+      let savedLead;
+      let usedFallback = false;
       
-      console.log('✅ Lead salvo com sucesso via webhook:', {
-        email: savedLead.email,
-        isProgrammer: savedLead.is_programmer
-      });
+      try {
+        // Tenta salvar no banco de dados principal (Neon)
+        savedLead = await saveQualifiedLead({
+          email,
+          phone,
+          isProgrammer: normalizedIsProgrammer,
+          utmSource,
+          utmMedium,
+          utmCampaign,
+          ipAddress,
+          userAgent
+        });
+        
+        console.log('✅ Lead salvo com sucesso no banco principal via webhook:', {
+          email: savedLead.email,
+          isProgrammer: savedLead.is_programmer
+        });
+      } catch (primaryDbError) {
+        // Se falhar, usa o sistema de fallback
+        console.error('⚠️ Erro ao salvar no banco principal:', primaryDbError.message);
+        console.log('🔄 Usando sistema de fallback para salvar o lead...');
+        
+        const fallbackResult = await saveLeadToFallback({
+          email,
+          phone,
+          isProgrammer: normalizedIsProgrammer,
+          utmSource,
+          utmMedium,
+          utmCampaign,
+          ipAddress,
+          userAgent,
+          error: primaryDbError.message
+        });
+        
+        if (fallbackResult.success) {
+          console.log('✅ Lead salvo com sucesso no sistema de fallback');
+          savedLead = fallbackResult.data;
+          usedFallback = true;
+        } else {
+          throw new Error(`Falha no sistema principal e no fallback: ${fallbackResult.error}`);
+        }
+      }
       
       return new Response(JSON.stringify({ 
         success: true, 
-        message: 'Lead qualificado salvo com sucesso via webhook'
+        message: usedFallback ? 'Lead salvo no sistema de fallback' : 'Lead salvo com sucesso',
+        usedFallback
       }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
