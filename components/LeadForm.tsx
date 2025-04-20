@@ -152,13 +152,20 @@ const LeadForm = memo(function LeadForm() {
     try {
       const utmParams = getUtmParameters();
       
+      // Log para debug do valor atual de isProgrammer
+      console.log('Salvando lead qualificado com isProgrammer:', isProgrammer, typeof isProgrammer);
+      
+      // Garantir que o valor seja explicitamente booleano
+      const isProgrammerValue = isProgrammer === true;
+      console.log('Valor normalizado de isProgrammer:', isProgrammerValue, typeof isProgrammerValue);
+      
       await fetch('/api/qualified-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
           phone,
-          isProgrammer: isProgrammer === true, // Garantir valor booleano correto (true se true, false em todos os outros casos)
+          isProgrammer: isProgrammerValue,
           utmSource: utmParams.utmSource,
           utmMedium: utmParams.utmMedium,
           utmCampaign: utmParams.utmCampaign
@@ -198,6 +205,7 @@ const LeadForm = memo(function LeadForm() {
   // Função para lidar com a seleção de qualificação
   const handleQualificationSelection = (value: boolean) => {
     // Definir valor booleano explicitamente
+    console.log('Seleção de qualificação:', value, typeof value);
     setIsProgrammer(value);
     setShowQualificationStep(false);
     setShowContactStep(true);
@@ -226,8 +234,12 @@ const LeadForm = memo(function LeadForm() {
             setShowQualificationStep(true);
             setShowContactStep(false);
             setShowError(true);
+            console.log('Formulário bloqueado: usuário não respondeu à pergunta de qualificação');
             return false;
           }
+          
+          // Log para debug
+          console.log('Formulário submetido com isProgrammer:', isProgrammer);
         }}
       >
         {/* Etapa de qualificação */}
@@ -306,7 +318,7 @@ const LeadForm = memo(function LeadForm() {
             <input 
               type="hidden" 
               name="isProgrammer" 
-              value={isProgrammer === null ? '' : isProgrammer ? 'true' : 'false'} 
+              value={isProgrammer === null ? '' : isProgrammer === true ? 'true' : 'false'} 
             />
 
             <button

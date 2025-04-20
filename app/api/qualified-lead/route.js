@@ -41,11 +41,21 @@ function isValidPhone(phone) {
   }
 }
 
-// Função para normalizar valor booleano
+// Função para normalizar valor booleano com melhor tratamento de tipos
 function normalizeBooleanValue(value) {
-  if (value === true || value === 'true' || value === 1 || value === '1') {
+  // Log para depuração do valor recebido
+  console.log('normalizeBooleanValue recebeu:', value, typeof value);
+  
+  // Verificar valores que devem ser considerados como true
+  if (value === true || 
+      value === 'true' || 
+      value === 1 || 
+      value === '1' || 
+      (typeof value === 'string' && value.toLowerCase() === 'true')) {
     return true;
   }
+  
+  // Todos os outros casos são false
   return false;
 }
 
@@ -80,9 +90,10 @@ export async function POST(request) {
     // Normalizar o valor de isProgrammer para garantir que seja um booleano válido
     const normalizedIsProgrammer = normalizeBooleanValue(isProgrammer);
     
-    // Log para depuração
+    // Log detalhado para depuração
     console.log('Valor original de isProgrammer recebido na API:', isProgrammer, typeof isProgrammer);
-    console.log('Valor normalizado de isProgrammer:', normalizedIsProgrammer);
+    console.log('Valor como string:', String(isProgrammer));
+    console.log('Valor normalizado de isProgrammer:', normalizedIsProgrammer, typeof normalizedIsProgrammer);
     
     // Obter informações adicionais da requisição
     const ipAddress = request.headers.get('x-forwarded-for') || 
