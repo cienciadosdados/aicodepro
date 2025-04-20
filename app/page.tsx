@@ -118,7 +118,8 @@ export default function HomePage() { // Nome diferente da função para forçar 
                 Aprenda na prática a desenvolver soluções avançadas com{" "}
                 <span className="text-[#0c83fe]">LLM</span>,{" "}
                 <span className="text-[#0c83fe]">RAG</span> e{" "}
-                <span className="text-[#0c83fe]">Agentes de IA</span> usando ferramentas como{" "}
+                <span className="text-[#0c83fe]">Agentes de IA</span>{" "}
+                <span className="text-[#0c83fe]">usando ferramentas como</span>{" "}
                 <span className="text-[#0c83fe]">CrewAI</span>,{" "}
                 <span className="text-[#0c83fe]">LangGraph</span>,{" "}
                 <span className="text-[#0c83fe]">Composio</span> e{" "}
