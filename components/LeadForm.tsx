@@ -345,24 +345,30 @@ const LeadForm = memo(function LeadForm() {
         body: JSON.stringify({
           email,
           phone,
+          isProgrammer: isProgrammer === true,
+          utmSource: utmParams.utmSource,
+          utmMedium: utmParams.utmMedium,
+          utmCampaign: utmParams.utmCampaign
+        })
+      });
 
-// Também enviar para nosso endpoint interno via fetch com keepalive
-console.log('Enviando dados para endpoint interno via fetch com keepalive');
-fetch('/api/webhook-lead', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({
-email,
-phone,
-isProgrammer: isProgrammer === true,
-utmSource: utmParams.utmSource,
-utmMedium: utmParams.utmMedium,
-utmCampaign: utmParams.utmCampaign
-}),
-keepalive: true
-}).catch((error) => {
-console.error('Erro ao enviar dados para endpoint interno:', error);
-});
+      // Também enviar para nosso endpoint interno via fetch com keepalive
+      console.log('Enviando dados para endpoint interno via fetch com keepalive');
+      fetch('/api/webhook-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          phone,
+          isProgrammer: isProgrammer === true,
+          utmSource: utmParams.utmSource,
+          utmMedium: utmParams.utmMedium,
+          utmCampaign: utmParams.utmCampaign
+        }),
+        keepalive: true
+      }).catch((error) => {
+        console.error('Erro ao enviar dados para endpoint interno:', error);
+      });
     if (typeof document === 'undefined') return;
     
     const form = document.querySelector('form[klicksend-form-id="4puEQny"]') as HTMLFormElement;
