@@ -297,6 +297,31 @@ const LeadForm = memo(function LeadForm() {
           utmCampaign: utmParams.utmCampaign
         };
         
+        // Validação crítica do sessionId
+        if (!sessionId || sessionId.trim() === '') {
+          console.error('🚨 ERRO CRÍTICO: SessionId está vazio!');
+          console.log('🔍 Estado atual do sessionId:', sessionId);
+          console.log('🔍 localStorage sessionId:', localStorage.getItem('aicodepro_sessionId'));
+          
+          sendDebugLog('critical_error', 'SessionId vazio no momento da submissão', {
+            sessionId,
+            localStorageSessionId: localStorage.getItem('aicodepro_sessionId'),
+            isProgrammer
+          });
+          
+          // Tentar recuperar do localStorage
+          const recoveredSessionId = localStorage.getItem('aicodepro_sessionId');
+          if (recoveredSessionId) {
+            console.log('🔄 Recuperando sessionId do localStorage:', recoveredSessionId);
+            setSessionId(recoveredSessionId);
+            // Usar o sessionId recuperado
+            internalData.sessionId = recoveredSessionId;
+          } else {
+            console.error('❌ Não foi possível recuperar sessionId. Enviando sem sessionId.');
+            sendDebugLog('critical_error', 'Impossível recuperar sessionId', {});
+          }
+        }
+
         console.log('📤 Enviando dados para Supabase via sendBeacon:', internalData);
         console.log('🔍 isProgrammer no payload Supabase:', internalData.isProgrammer, typeof internalData.isProgrammer);
         console.log('🆔 SessionId no payload:', internalData.sessionId);
