@@ -42,6 +42,24 @@ const LeadForm = memo(function LeadForm() {
   // Estado para ID da sessão único
   const [sessionId, setSessionId] = useState<string>('');
 
+  // Função para enviar logs para nossa API de debug
+  const sendDebugLog = async (type: string, message: string, data?: any) => {
+    try {
+      await fetch('/api/debug-logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type,
+          message,
+          data,
+          timestamp: new Date().toISOString()
+        })
+      });
+    } catch (error) {
+      // Falha silenciosa para não interferir no fluxo
+    }
+  };
+
   // Gerar ID único da sessão no carregamento
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -56,6 +74,12 @@ const LeadForm = memo(function LeadForm() {
       
       setSessionId(existingSessionId);
       console.log('🆔 Session ID:', existingSessionId);
+      
+      // Enviar log do sessionId
+      sendDebugLog('session', 'SessionId gerado/carregado', {
+        sessionId: existingSessionId,
+        isNew: !localStorage.getItem('aicodepro_sessionId')
+      });
     }
   }, []);
 
@@ -167,6 +191,7 @@ const LeadForm = memo(function LeadForm() {
       
       if (!sessionId) {
         console.error('❌ SessionId não disponível para captura parcial');
+        sendDebugLog('error', 'SessionId não disponível para captura parcial', { sessionId });
         return;
       }
       
@@ -184,6 +209,7 @@ const LeadForm = memo(function LeadForm() {
       };
       
       console.log('📤 Enviando lead parcial:', partialData);
+      sendDebugLog('partial_lead', 'Enviando lead parcial', partialData);
       
       const response = await fetch('/api/partial-lead', {
         method: 'POST',
@@ -197,16 +223,21 @@ const LeadForm = memo(function LeadForm() {
       
       if (response.ok) {
         console.log('✅ Lead parcial capturado com sucesso:', result);
+        sendDebugLog('success', 'Lead parcial capturado com sucesso', result);
         
         // Salvar confirmação no localStorage
         localStorage.setItem('aicodepro_partialCaptured', 'true');
         localStorage.setItem('aicodepro_partialTimestamp', new Date().toISOString());
       } else {
         console.error('❌ Erro ao capturar lead parcial:', result);
+        sendDebugLog('error', 'Erro ao capturar lead parcial', result);
       }
       
     } catch (error) {
       console.error('💥 Erro inesperado ao capturar lead parcial:', error);
+      sendDebugLog('error', 'Erro inesperado ao capturar lead parcial', { 
+        error: error instanceof Error ? error.message : String(error) 
+      });
     }
   };
 
@@ -270,9 +301,20 @@ const LeadForm = memo(function LeadForm() {
         console.log('🔍 isProgrammer no payload Supabase:', internalData.isProgrammer, typeof internalData.isProgrammer);
         console.log('🆔 SessionId no payload:', internalData.sessionId);
         
+        // Enviar log detalhado
+        sendDebugLog('form_submit', 'Enviando dados completos para Supabase', {
+          email: internalData.email,
+          hasSessionId: !!internalData.sessionId,
+          sessionId: internalData.sessionId,
+          isProgrammer: internalData.isProgrammer,
+          isProgrammerType: typeof internalData.isProgrammer
+        });
+        
         const blob = new Blob([JSON.stringify(internalData)], {type: 'application/json'});
         const success = navigator.sendBeacon('/api/webhook-lead', blob);
         console.log('✅ Envio único para Supabase via sendBeacon:', success ? 'Sucesso' : 'Falha');
+        
+        sendDebugLog('beacon_result', 'Resultado do sendBeacon', { success });
         
         // APENAS salvar localmente se o envio falhar
         if (!success) {
