@@ -98,18 +98,18 @@ export async function POST(request) {
         const supabaseResult = await saveLeadToSupabase({
           email,
           phone,
-          isProgrammer: normalizedIsProgrammer,
-          utmSource,
-          utmMedium,
-          utmCampaign,
-          ipAddress,
-          userAgent
+          is_programmer: normalizedIsProgrammer,
+          utm_source: utmSource,
+          utm_medium: utmMedium,
+          utm_campaign: utmCampaign,
+          ip_address: ipAddress,
+          user_agent: userAgent
         });
         
         if (supabaseResult.success) {
           console.log(`✅ [${requestId}] Lead salvo com sucesso no Supabase via webhook:`, {
             email: email,
-            isProgrammer: normalizedIsProgrammer
+            is_programmer: normalizedIsProgrammer
           });
           savedLead = { email, is_programmer: normalizedIsProgrammer };
         } else {
@@ -123,12 +123,12 @@ export async function POST(request) {
         const fallbackResult = await saveLeadToFallback({
           email,
           phone,
-          isProgrammer: normalizedIsProgrammer,
-          utmSource,
-          utmMedium,
-          utmCampaign,
-          ipAddress,
-          userAgent,
+          is_programmer: normalizedIsProgrammer,
+          utm_source: utmSource,
+          utm_medium: utmMedium,
+          utm_campaign: utmCampaign,
+          ip_address: ipAddress,
+          user_agent: userAgent,
           error: primaryDbError.message
         });
         
