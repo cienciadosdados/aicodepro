@@ -91,7 +91,7 @@ export async function POST(request) {
       let usedFallback = false;
       
       try {
-        // Tenta salvar no Supabase
+        // Tenta salvar no banco de dados principal (Supabase)
         const supabaseResult = await saveLeadToSupabase({
           email,
           phone,
