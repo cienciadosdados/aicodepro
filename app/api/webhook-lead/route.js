@@ -62,7 +62,10 @@ export async function POST(request) {
     console.log(`- [${requestId}] Email:`, email);
     console.log(`- [${requestId}] Telefone:`, phone);
     console.log(`- [${requestId}] isProgrammer (fallback):`, isProgrammer, typeof isProgrammer);
-    console.log(`- [${requestId}] sessionId:`, sessionId);
+    console.log(`- [${requestId}] sessionId:`, sessionId, typeof sessionId);
+    console.log(`- [${requestId}] sessionId vazio?`, !sessionId);
+    console.log(`- [${requestId}] sessionId undefined?`, sessionId === undefined);
+    console.log(`- [${requestId}] sessionId null?`, sessionId === null);
     console.log(`- [${requestId}] UTM Source:`, utmSource || 'não definido');
     console.log(`- [${requestId}] UTM Medium:`, utmMedium || 'não definido');
     console.log(`- [${requestId}] UTM Campaign:`, utmCampaign || 'não definido');
