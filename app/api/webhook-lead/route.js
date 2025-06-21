@@ -18,19 +18,22 @@ import { saveLeadToFallback } from '@/lib/fallback-lead-storage';
 
 // Handler para método POST
 export async function POST(request) {
-  console.log('📝 Recebida requisição POST para /api/webhook-lead via sendBeacon');
-  console.log(`🔍 Ambiente: ${process.env.NODE_ENV || 'desenvolvimento'}`);
-  console.log(`🔍 Vercel Env: ${process.env.VERCEL_ENV || 'local'}`);
-  console.log(`🔍 DATABASE_URL configurada: ${!!process.env.DATABASE_URL}`);
+  const requestId = Math.random().toString(36).substr(2, 9);
+  const timestamp = new Date().toISOString();
+  
+  console.log(`📝 [${requestId}] ${timestamp} - Recebida requisição POST para /api/webhook-lead via sendBeacon`);
+  console.log(`🔍 [${requestId}] Ambiente: ${process.env.NODE_ENV || 'desenvolvimento'}`);
+  console.log(`🔍 [${requestId}] Vercel Env: ${process.env.VERCEL_ENV || 'local'}`);
+  console.log(`🔍 [${requestId}] DATABASE_URL configurada: ${!!process.env.DATABASE_URL}`);
   
   try {
     // Obter dados do corpo da requisição com tratamento de erros robusto
     let data;
     try {
       data = await request.json();
-      console.log('Dados recebidos via webhook:', JSON.stringify(data, null, 2));
+      console.log(`📝 [${requestId}] Dados recebidos via webhook:`, JSON.stringify(data, null, 2));
     } catch (parseError) {
-      console.error('❌ Erro ao processar JSON da requisição:', parseError.message);
+      console.error(`❌ [${requestId}] Erro ao processar JSON da requisição:`, parseError.message);
       return new Response(JSON.stringify({
         error: 'Formato de dados inválido',
         details: parseError.message
@@ -44,7 +47,7 @@ export async function POST(request) {
     
     // Validar dados obrigatórios de forma simplificada (sendBeacon não espera resposta)
     if (!email || !phone) {
-      console.error('❌ Dados incompletos recebidos via webhook');
+      console.error(`❌ [${requestId}] Dados incompletos recebidos via webhook`);
       return new Response(JSON.stringify({
         error: 'Dados incompletos',
         details: 'Email e telefone são obrigatórios'
@@ -55,13 +58,13 @@ export async function POST(request) {
     }
     
     // Log detalhado dos dados recebidos
-    console.log('📝 Dados do webhook:');
-    console.log('- Email:', email);
-    console.log('- Telefone:', phone);
-    console.log('- isProgrammer:', isProgrammer, typeof isProgrammer);
-    console.log('- UTM Source:', utmSource || 'não definido');
-    console.log('- UTM Medium:', utmMedium || 'não definido');
-    console.log('- UTM Campaign:', utmCampaign || 'não definido');
+    console.log(`📝 [${requestId}] Dados do webhook:`);
+    console.log(`- [${requestId}] Email:`, email);
+    console.log(`- [${requestId}] Telefone:`, phone);
+    console.log(`- [${requestId}] isProgrammer:`, isProgrammer, typeof isProgrammer);
+    console.log(`- [${requestId}] UTM Source:`, utmSource || 'não definido');
+    console.log(`- [${requestId}] UTM Medium:`, utmMedium || 'não definido');
+    console.log(`- [${requestId}] UTM Campaign:`, utmCampaign || 'não definido');
     
     // Obter informações adicionais da requisição
     const ipAddress = request.headers.get('x-forwarded-for') || 
@@ -80,12 +83,12 @@ export async function POST(request) {
       normalizedIsProgrammer = true;
     }
     
-    console.log('- isProgrammer normalizado:', normalizedIsProgrammer, typeof normalizedIsProgrammer);
+    console.log(`- [${requestId}] isProgrammer normalizado:`, normalizedIsProgrammer, typeof normalizedIsProgrammer);
     
     // Salvar lead no banco de dados com tratamento de erros simplificado
     // Como é chamado via sendBeacon, não precisamos de timeout ou resposta elaborada
     try {
-      console.log('🔍 Salvando lead via webhook...');
+      console.log(`🔍 [${requestId}] Salvando lead via webhook...`);
       
       let savedLead;
       let usedFallback = false;
@@ -104,7 +107,7 @@ export async function POST(request) {
         });
         
         if (supabaseResult.success) {
-          console.log('✅ Lead salvo com sucesso no Supabase via webhook:', {
+          console.log(`✅ [${requestId}] Lead salvo com sucesso no Supabase via webhook:`, {
             email: email,
             isProgrammer: normalizedIsProgrammer
           });
@@ -114,8 +117,8 @@ export async function POST(request) {
         }
       } catch (primaryDbError) {
         // Se falhar, usa o sistema de fallback
-        console.error('⚠️ Erro ao salvar no Supabase:', primaryDbError.message);
-        console.log('🔄 Usando sistema de fallback para salvar o lead...');
+        console.error(`⚠️ [${requestId}] Erro ao salvar no Supabase:`, primaryDbError.message);
+        console.log(`🔄 [${requestId}] Usando sistema de fallback para salvar o lead...`);
         
         const fallbackResult = await saveLeadToFallback({
           email,
@@ -130,7 +133,7 @@ export async function POST(request) {
         });
         
         if (fallbackResult.success) {
-          console.log('✅ Lead salvo com sucesso no sistema de fallback');
+          console.log(`✅ [${requestId}] Lead salvo com sucesso no sistema de fallback`);
           savedLead = fallbackResult.data;
           usedFallback = true;
         } else {
@@ -147,8 +150,8 @@ export async function POST(request) {
         headers: { 'Content-Type': 'application/json' }
       });
     } catch (dbError) {
-      console.error('❌ Erro ao salvar lead via webhook:', dbError.message);
-      console.error('Detalhes do erro:', dbError.stack);
+      console.error(`❌ [${requestId}] Erro ao salvar lead via webhook:`, dbError.message);
+      console.error(`Detalhes do erro:`, dbError.stack);
       
       return new Response(JSON.stringify({ 
         success: false,
@@ -160,8 +163,8 @@ export async function POST(request) {
       });
     }
   } catch (error) {
-    console.error('❌ Erro ao processar requisição webhook:', error);
-    console.error('Stack trace:', error.stack);
+    console.error(`❌ [${requestId}] Erro ao processar requisição webhook:`, error);
+    console.error(`Stack trace:`, error.stack);
     
     return new Response(JSON.stringify({
       error: 'Erro ao processar requisição webhook',

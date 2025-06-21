@@ -37,6 +37,7 @@ const LeadForm = memo(function LeadForm() {
 
   // Estado para controlar leads salvos localmente
   const [localLeads, setLocalLeads] = useState<LeadData[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Função para salvar lead localmente quando o servidor falhar
   const saveLeadLocally = (leadData: LeadData) => {
@@ -120,10 +121,11 @@ const LeadForm = memo(function LeadForm() {
       
       if (savedLeads.length === 0) return;
       
+      // Manter backup flexível - remover apenas leads muito antigos (24 horas)
       const twentyFourHoursAgo = Date.now() - (24 * 60 * 60 * 1000);
       
       const recentLeads = savedLeads.filter(lead => {
-        if (!lead.timestamp) return false;
+        if (!lead.timestamp) return true; // Manter leads sem timestamp
         const leadTime = new Date(lead.timestamp).getTime();
         return leadTime > twentyFourHoursAgo;
       });
@@ -131,7 +133,7 @@ const LeadForm = memo(function LeadForm() {
       if (recentLeads.length !== savedLeads.length) {
         localStorage.setItem('aicodepro_backup_leads', JSON.stringify(recentLeads));
         setLocalLeads(recentLeads);
-        console.log(`🧹 Removidos ${savedLeads.length - recentLeads.length} leads antigos do localStorage`);
+        console.log(`🧹 Removidos ${savedLeads.length - recentLeads.length} leads muito antigos (24h+) do localStorage`);
       }
     } catch (error) {
       console.error('❌ Erro ao limpar leads antigos:', error);
@@ -311,12 +313,26 @@ const LeadForm = memo(function LeadForm() {
       const originalSubmitHandler = form.onsubmit;
       
       form.addEventListener('submit', function(e) {
+        // Prevenir múltiplas submissões
+        if (isSubmitting) {
+          console.log('⚠️ Submissão já em andamento, ignorando...');
+          e.preventDefault();
+          return false;
+        }
+        
+        setIsSubmitting(true);
+        
+        // Reset do estado após 5 segundos (timeout de segurança)
+        setTimeout(() => {
+          setIsSubmitting(false);
+        }, 5000);
+        
         const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement;
         const phoneInput = form.querySelector('input[name="phone"]') as HTMLInputElement;
         const isProgrammerInput = form.querySelector('input[name="isProgrammer"]') as HTMLInputElement;
         
         // Log para depuração
-        console.log('Submissão do formulário detectada!');
+        console.log('✅ Submissão do formulário iniciada!');
         console.log('Email:', emailInput?.value);
         console.log('Telefone:', phoneInput?.value);
         console.log('Valor de isProgrammer no input hidden:', isProgrammerInput?.value);
@@ -508,10 +524,11 @@ const LeadForm = memo(function LeadForm() {
             <button
               type="submit"
               klicksend-form-submit-id='jruEyoV'
-              className="w-full px-8 py-4 mt-4 rounded-xl bg-[#0c83fe] hover:bg-[#0c83fe]/90 text-white font-medium transition-all duration-200 relative overflow-hidden"
+              disabled={isSubmitting}
+              className={`w-full px-8 py-4 mt-4 rounded-xl bg-[#0c83fe] hover:bg-[#0c83fe]/90 text-white font-medium transition-all duration-200 relative overflow-hidden ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
-                Quero me inscrever
+                {isSubmitting ? 'Enviando...' : 'Quero me inscrever'}
               </span>
             </button>
           </div>
