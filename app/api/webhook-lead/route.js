@@ -13,7 +13,7 @@ export const maxDuration = 10;
 import { NextResponse } from 'next/server';
 
 // Importar serviços de armazenamento de leads
-import { saveQualifiedLead } from '@/lib/simple-lead-storage';
+import { saveLeadToSupabase } from '@/lib/supabase-client';
 import { saveLeadToFallback } from '@/lib/fallback-lead-storage';
 
 // Handler para método POST
@@ -91,8 +91,8 @@ export async function POST(request) {
       let usedFallback = false;
       
       try {
-        // Tenta salvar no banco de dados principal (Neon)
-        savedLead = await saveQualifiedLead({
+        // Tenta salvar no Supabase
+        const supabaseResult = await saveLeadToSupabase({
           email,
           phone,
           isProgrammer: normalizedIsProgrammer,
@@ -103,13 +103,18 @@ export async function POST(request) {
           userAgent
         });
         
-        console.log('✅ Lead salvo com sucesso no banco principal via webhook:', {
-          email: savedLead.email,
-          isProgrammer: savedLead.is_programmer
-        });
+        if (supabaseResult.success) {
+          console.log('✅ Lead salvo com sucesso no Supabase via webhook:', {
+            email: email,
+            isProgrammer: normalizedIsProgrammer
+          });
+          savedLead = { email, is_programmer: normalizedIsProgrammer };
+        } else {
+          throw new Error(supabaseResult.error);
+        }
       } catch (primaryDbError) {
         // Se falhar, usa o sistema de fallback
-        console.error('⚠️ Erro ao salvar no banco principal:', primaryDbError.message);
+        console.error('⚠️ Erro ao salvar no Supabase:', primaryDbError.message);
         console.log('🔄 Usando sistema de fallback para salvar o lead...');
         
         const fallbackResult = await saveLeadToFallback({
