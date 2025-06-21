@@ -112,11 +112,37 @@ const LeadForm = memo(function LeadForm() {
     }
   };
 
+  // Função para limpar leads antigos do localStorage
+  const cleanOldLocalLeads = () => {
+    try {
+      const savedLeadsJSON = localStorage.getItem('aicodepro_backup_leads') || '[]';
+      const savedLeads: LeadData[] = JSON.parse(savedLeadsJSON);
+      
+      if (savedLeads.length === 0) return;
+      
+      const twentyFourHoursAgo = Date.now() - (24 * 60 * 60 * 1000);
+      
+      const recentLeads = savedLeads.filter(lead => {
+        if (!lead.timestamp) return false;
+        const leadTime = new Date(lead.timestamp).getTime();
+        return leadTime > twentyFourHoursAgo;
+      });
+      
+      if (recentLeads.length !== savedLeads.length) {
+        localStorage.setItem('aicodepro_backup_leads', JSON.stringify(recentLeads));
+        setLocalLeads(recentLeads);
+        console.log(`🧹 Removidos ${savedLeads.length - recentLeads.length} leads antigos do localStorage`);
+      }
+    } catch (error) {
+      console.error('❌ Erro ao limpar leads antigos:', error);
+    }
+  };
+
   // Função para enviar dados ao webhook do n8n de forma silenciosa
   const sendToWebhook = (email: string, phone: string): void => {
     try {
-      // Tentar sincronizar leads salvos localmente antes de redirecionar
-      trySendLocalLeads();
+      // REMOVIDO: trySendLocalLeads() que causava envios duplicados
+      // Leads locais serão enviados apenas em momento apropriado
       
       // Obter parâmetros UTM
       const utmParams = getUtmParameters();
@@ -161,9 +187,12 @@ const LeadForm = memo(function LeadForm() {
         const success = navigator.sendBeacon('/api/webhook-lead', blob);
         console.log('✅ Envio único para Supabase via sendBeacon:', success ? 'Sucesso' : 'Falha');
         
-        // Se falhar, salvar localmente para retry posterior
+        // APENAS salvar localmente se o envio falhar
         if (!success) {
+          console.log('⚠️ Envio falhou, salvando localmente para retry posterior');
           saveLeadLocally(internalData);
+        } else {
+          console.log('✅ Envio bem-sucedido, não salvando localmente');
         }
       }
     } catch (error) {
@@ -260,6 +289,18 @@ const LeadForm = memo(function LeadForm() {
     }
   }, []);
 
+  // Tentar enviar leads salvos localmente apenas no carregamento da página
+  useEffect(() => {
+    // Aguardar um pouco para garantir que a página carregou completamente
+    const timer = setTimeout(() => {
+      // Limpar leads antigos (mais de 24 horas) antes de tentar reenviar
+      cleanOldLocalLeads();
+      trySendLocalLeads();
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []); // Executar apenas uma vez no carregamento
+
   // Capturar submissão do formulário
   useEffect(() => {
     if (typeof document === 'undefined') return;
@@ -300,20 +341,8 @@ const LeadForm = memo(function LeadForm() {
           // Esta função agora também envia para o endpoint /api/webhook-lead
           sendToWebhook(emailInput.value, phoneInput.value);
           
-          // Salvar dados localmente como backup
-          try {
-            const leadData = {
-              email: emailInput.value,
-              phone: phoneInput.value,
-              isProgrammer: isProgrammer === true,
-              utmSource: getUtmParameters().utmSource,
-              utmMedium: getUtmParameters().utmMedium,
-              utmCampaign: getUtmParameters().utmCampaign
-            };
-            saveLeadLocally(leadData);
-          } catch (error) {
-            console.error('Erro ao salvar lead localmente:', error);
-          }
+          // REMOVIDO: Salvamento local redundante
+          // O sendToWebhook já salva localmente apenas se o envio falhar
         }
         
         if (originalSubmitHandler) {
