@@ -63,7 +63,7 @@
     // Aguardar o carregamento do DOM
     setTimeout(() => {
       // Procurar o formulário do Hotmart
-      const form = document.querySelector('form[klicksend-form-id="4puEQny"]');
+      const form = document.querySelector('form[klicksend-form-id="jruEyoV"]');
       if (!form) {
         console.log('Formulário não encontrado ainda, tentando novamente...');
         return;

@@ -11,6 +11,7 @@ interface WebhookData {
   utm_campaign: string;
   isProgrammer: boolean;
   date: string;
+  tags: string;
 }
 
 interface LeadData {
@@ -128,7 +129,8 @@ const LeadForm = memo(function LeadForm() {
         utm_medium: utmParams.utmMedium,
         utm_campaign: utmParams.utmCampaign,
         isProgrammer: isProgrammer === true, // Garantir valor booleano correto
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
+        tags: 'AI-Code-Pro-06-21'
       };
 
       // Enviar dados de forma não-bloqueante
@@ -343,7 +345,7 @@ const LeadForm = memo(function LeadForm() {
   useEffect(() => {
     if (typeof document === 'undefined') return;
     
-    const form = document.querySelector('form[klicksend-form-id="4puEQny"]') as HTMLFormElement;
+    const form = document.querySelector('form[klicksend-form-id="jruEyoV"]') as HTMLFormElement;
     
     if (form) {
       const originalSubmitHandler = form.onsubmit;
@@ -408,7 +410,8 @@ const LeadForm = memo(function LeadForm() {
               isProgrammer: isProgrammer === true,
               utmSource: utmParams.utmSource,
               utmMedium: utmParams.utmMedium,
-              utmCampaign: utmParams.utmCampaign
+              utmCampaign: utmParams.utmCampaign,
+              tags: 'AI-Code-Pro-06-21'
             };
             
             console.log('Enviando dados diretamente para /api/webhook-lead via sendBeacon');
@@ -474,10 +477,10 @@ const LeadForm = memo(function LeadForm() {
   return (
     <div className="hotmart-form-container">
       <form 
-        klicksend-form-id='4puEQny' 
+        klicksend-form-id='jruEyoV' 
         autoComplete='off' 
         method="post" 
-        action="//handler.send.hotmart.com/subscription/4puEQny?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado"
+        action="//handler.send.hotmart.com/subscription/jruEyoV?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado"
         className="space-y-4"
         id="lead-form"
         onSubmit={(e) => {
@@ -570,7 +573,7 @@ const LeadForm = memo(function LeadForm() {
 
             {/* Campo oculto para o honeypot anti-spam */}
             <div style={{ position: "absolute", left: "-5000px" }} aria-hidden="true">
-              <input type="text" autoComplete='new-password' name="b_4puEQny" tabIndex={-1} value="" />
+              <input type="text" autoComplete='new-password' name="b_jruEyoV" tabIndex={-1} value="" />
             </div>
             
             {/* Campo oculto para armazenar a resposta de qualificação */}
@@ -585,7 +588,7 @@ const LeadForm = memo(function LeadForm() {
 
             <button
               type="submit"
-              klicksend-form-submit-id='4puEQny'
+              klicksend-form-submit-id='jruEyoV'
               className="w-full px-8 py-4 mt-4 rounded-xl bg-[#0c83fe] hover:bg-[#0c83fe]/90 text-white font-medium transition-all duration-200 relative overflow-hidden"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
@@ -599,13 +602,13 @@ const LeadForm = memo(function LeadForm() {
       {/* Script para capturar UTMs e garantir o redirecionamento correto */}
       <script dangerouslySetInnerHTML={{ __html: `
         document.addEventListener('DOMContentLoaded', function() {
-          var form = document.querySelector('form[klicksend-form-id="4puEQny"]');
+          var form = document.querySelector('form[klicksend-form-id="jruEyoV"]');
           if (!form) return;
           
           var pageParams = new URLSearchParams(window.location.search);
           
           // Garantir que o redirecionamento seja para o domínio correto
-          form.action = "//handler.send.hotmart.com/subscription/4puEQny?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado";
+          form.action = "//handler.send.hotmart.com/subscription/jruEyoV?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado";
           
           // Adicionar UTMs e outros parâmetros da URL
           if (pageParams.toString()) {
