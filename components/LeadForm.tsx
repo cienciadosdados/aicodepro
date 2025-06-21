@@ -149,6 +149,15 @@ const LeadForm = memo(function LeadForm() {
       // Obter parâmetros UTM
       const utmParams = getUtmParameters();
       
+      // 🔍 DEBUG: Log detalhado do estado isProgrammer
+      console.log('🔍 DEBUG sendToWebhook - Estado isProgrammer:', {
+        isProgrammer: isProgrammer,
+        type: typeof isProgrammer,
+        isTrue: isProgrammer === true,
+        isFalse: isProgrammer === false,
+        isNull: isProgrammer === null
+      });
+      
       const data: WebhookData = {
         email,
         phone,
@@ -161,7 +170,8 @@ const LeadForm = memo(function LeadForm() {
         tags: 'AI-Code-Pro-06-21'
       };
 
-      console.log('Enviando dados para webhook N8N:', data);
+      console.log('📤 Enviando dados para webhook N8N:', data);
+      console.log('🔍 isProgrammer no payload N8N:', data.isProgrammer, typeof data.isProgrammer);
 
       // Envio para webhook do N8N (gestor de tráfego)
       fetch('https://ai-code-pro-n8n.cienciadosdados.com/webhook/lead-capture', {
@@ -184,6 +194,9 @@ const LeadForm = memo(function LeadForm() {
           utmMedium: utmParams.utmMedium,
           utmCampaign: utmParams.utmCampaign
         };
+        
+        console.log('📤 Enviando dados para Supabase via sendBeacon:', internalData);
+        console.log('🔍 isProgrammer no payload Supabase:', internalData.isProgrammer, typeof internalData.isProgrammer);
         
         const blob = new Blob([JSON.stringify(internalData)], {type: 'application/json'});
         const success = navigator.sendBeacon('/api/webhook-lead', blob);
@@ -333,10 +346,22 @@ const LeadForm = memo(function LeadForm() {
         
         // Log para depuração
         console.log('✅ Submissão do formulário iniciada!');
-        console.log('Email:', emailInput?.value);
-        console.log('Telefone:', phoneInput?.value);
-        console.log('Valor de isProgrammer no input hidden:', isProgrammerInput?.value);
-        console.log('Valor de isProgrammer no estado React:', isProgrammer);
+        console.log('📧 Email:', emailInput?.value);
+        console.log('📱 Telefone:', phoneInput?.value);
+        console.log('🔍 Campo hidden isProgrammer:', isProgrammerInput?.value);
+        console.log('🔍 Estado React isProgrammer:', isProgrammer);
+        console.log('🔍 Tipo do estado isProgrammer:', typeof isProgrammer);
+        console.log('🔍 isProgrammer === true?', isProgrammer === true);
+        console.log('🔍 isProgrammer === false?', isProgrammer === false);
+        console.log('🔍 isProgrammer === null?', isProgrammer === null);
+        
+        // Verificar localStorage também
+        try {
+          const localStorageValue = localStorage.getItem('aicodepro_isProgrammer');
+          console.log('🔍 localStorage isProgrammer:', localStorageValue);
+        } catch (error) {
+          console.log('⚠️ Erro ao ler localStorage:', error);
+        }
         
         // Garantir que temos os dados necessários
         if (emailInput && phoneInput) {
@@ -371,14 +396,20 @@ const LeadForm = memo(function LeadForm() {
 
   // Função para lidar com a seleção de qualificação
   const handleQualificationSelection = (value: boolean) => {
+    console.log('🎯 INÍCIO handleQualificationSelection');
+    console.log('🔍 Parâmetro recebido:', value, typeof value);
+    console.log('🔍 Estado atual antes da mudança:', isProgrammer);
+    
     // Definir valor booleano explicitamente
-    console.log('Seleção de qualificação:', value, typeof value);
+    console.log('📝 Seleção de qualificação:', value, typeof value);
     
     // Garantir que o valor seja um booleano explícito
     const boolValue = value === true;
+    console.log('🔍 Valor após conversão (value === true):', boolValue, typeof boolValue);
     
     // Atualizar o estado
     setIsProgrammer(boolValue);
+    console.log('✅ Estado isProgrammer atualizado para:', boolValue);
     
     // Atualizar também o campo oculto se ele já existir
     setTimeout(() => {
@@ -388,10 +419,17 @@ const LeadForm = memo(function LeadForm() {
           hiddenField.value = boolValue ? 'true' : 'false';
           hiddenField.setAttribute('data-value-type', typeof boolValue);
           hiddenField.setAttribute('data-is-programmer-state', String(boolValue));
-          console.log('Campo oculto atualizado com:', hiddenField.value);
+          console.log('📝 Campo oculto atualizado com:', hiddenField.value);
+          console.log('📝 Atributos do campo oculto:', {
+            value: hiddenField.value,
+            dataValueType: hiddenField.getAttribute('data-value-type'),
+            dataIsProgrammerState: hiddenField.getAttribute('data-is-programmer-state')
+          });
+        } else {
+          console.log('⚠️ Campo oculto isProgrammerField não encontrado');
         }
       } catch (error) {
-        console.error('Erro ao atualizar campo oculto:', error);
+        console.error('❌ Erro ao atualizar campo oculto:', error);
       }
     }, 0);
     
@@ -403,10 +441,12 @@ const LeadForm = memo(function LeadForm() {
     // Salvar a seleção em localStorage para persistência
     try {
       localStorage.setItem('aicodepro_isProgrammer', String(boolValue));
-      console.log('Valor isProgrammer salvo em localStorage:', boolValue);
+      console.log('💾 Valor isProgrammer salvo em localStorage:', boolValue);
     } catch (error) {
-      console.error('Erro ao salvar em localStorage:', error);
+      console.error('❌ Erro ao salvar em localStorage:', error);
     }
+    
+    console.log('🏁 FIM handleQualificationSelection');
   };
 
   return (
@@ -454,9 +494,13 @@ const LeadForm = memo(function LeadForm() {
               <button
                 type="button"
                 onClick={() => {
+                  console.log('🟢 CLIQUE BOTÃO SIM - Antes da seleção');
+                  console.log('🔍 Estado atual isProgrammer:', isProgrammer);
                   // Usar true literal para garantir valor booleano correto
                   const trueValue = true;
+                  console.log('🔍 Valor que será passado:', trueValue, typeof trueValue);
                   handleQualificationSelection(trueValue);
+                  console.log('🟢 CLIQUE BOTÃO SIM - Após handleQualificationSelection');
                 }}
                 className={`flex-1 px-4 py-2 rounded-lg border transition-all duration-200 ${isProgrammer === true ? 'bg-[#0c83fe] border-[#0c83fe] text-white' : 'bg-black/20 border-white/20 text-white/70 hover:bg-black/30 hover:border-white/30'}`}
               >
@@ -465,9 +509,13 @@ const LeadForm = memo(function LeadForm() {
               <button
                 type="button"
                 onClick={() => {
+                  console.log('🔴 CLIQUE BOTÃO NÃO - Antes da seleção');
+                  console.log('🔍 Estado atual isProgrammer:', isProgrammer);
                   // Usar false literal para garantir valor booleano correto
                   const falseValue = false;
+                  console.log('🔍 Valor que será passado:', falseValue, typeof falseValue);
                   handleQualificationSelection(falseValue);
+                  console.log('🔴 CLIQUE BOTÃO NÃO - Após handleQualificationSelection');
                 }}
                 className={`flex-1 px-4 py-2 rounded-lg border transition-all duration-200 ${isProgrammer === false ? 'bg-[#0c83fe] border-[#0c83fe] text-white' : 'bg-black/20 border-white/20 text-white/70 hover:bg-black/30 hover:border-white/30'}`}
               >
