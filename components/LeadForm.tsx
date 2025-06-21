@@ -128,18 +128,26 @@ const LeadForm = memo(function LeadForm() {
         utm_source: utmParams.utmSource,
         utm_medium: utmParams.utmMedium,
         utm_campaign: utmParams.utmCampaign,
-        isProgrammer: isProgrammer === true, // Garantir valor booleano correto
+        isProgrammer: isProgrammer === true,
         date: new Date().toISOString(),
         tags: 'AI-Code-Pro-06-21'
       };
 
-      // Enviar dados de forma não-bloqueante
-      if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
-        const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
-        navigator.sendBeacon('https://n8n-n8n.4j4kv9.easypanel.host/webhook/8ae18fa9-3b36-489b-b125-171305fd79ef', blob);
-        
-        // Também enviar para nosso endpoint interno via sendBeacon
-        console.log('Enviando dados para endpoint interno via sendBeacon');
+      console.log('Enviando dados para webhook N8N:', data);
+
+      // Envio para webhook do N8N (gestor de tráfego)
+      fetch('https://ai-code-pro-n8n.cienciadosdados.com/webhook/lead-capture', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        keepalive: true
+      }).catch((error) => {
+        console.error('Erro ao enviar dados para webhook N8N:', error);
+      });
+
+      // ÚNICO ENVIO para nosso endpoint interno usando sendBeacon
+      // Isso garante que o lead seja salvo no Supabase apenas uma vez
+      if (navigator.sendBeacon) {
         const internalData = {
           email,
           phone,
@@ -148,35 +156,15 @@ const LeadForm = memo(function LeadForm() {
           utmMedium: utmParams.utmMedium,
           utmCampaign: utmParams.utmCampaign
         };
-        const internalBlob = new Blob([JSON.stringify(internalData)], {type: 'application/json'});
-        const success = navigator.sendBeacon('/api/webhook-lead', internalBlob);
-        console.log('Resultado do sendBeacon interno:', success ? 'Sucesso' : 'Falha');
-      } else if (typeof fetch !== 'undefined') {
-        // Fallback para fetch
-        fetch('https://n8n-n8n.4j4kv9.easypanel.host/webhook/8ae18fa9-3b36-489b-b125-171305fd79ef', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-          keepalive: true
-        }).catch(() => {/* Ignorar erros */});
         
-        // Também enviar para nosso endpoint interno via fetch com keepalive
-        console.log('Enviando dados para endpoint interno via fetch com keepalive');
-        fetch('/api/webhook-lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email,
-            phone,
-            isProgrammer: isProgrammer === true,
-            utmSource: utmParams.utmSource,
-            utmMedium: utmParams.utmMedium,
-            utmCampaign: utmParams.utmCampaign
-          }),
-          keepalive: true
-        }).catch((error) => {
-          console.error('Erro ao enviar dados para endpoint interno:', error);
-        });
+        const blob = new Blob([JSON.stringify(internalData)], {type: 'application/json'});
+        const success = navigator.sendBeacon('/api/webhook-lead', blob);
+        console.log('✅ Envio único para Supabase via sendBeacon:', success ? 'Sucesso' : 'Falha');
+        
+        // Se falhar, salvar localmente para retry posterior
+        if (!success) {
+          saveLeadLocally(internalData);
+        }
       }
     } catch (error) {
       console.error('Erro ao enviar dados para webhook:', error);
@@ -272,75 +260,6 @@ const LeadForm = memo(function LeadForm() {
     }
   }, []);
 
-  // Função para salvar lead qualificado na API
-  const saveQualifiedLead = async (email: string, phone: string) => {
-    try {
-      const utmParams = getUtmParameters();
-      
-      // Log para debug do valor atual de isProgrammer
-      console.log('Salvando lead qualificado com isProgrammer:', isProgrammer, typeof isProgrammer);
-      
-      // Garantir que o valor seja explicitamente booleano
-      // Usar uma verificação mais robusta para garantir que o valor seja tratado corretamente
-      let isProgrammerValue = false;
-      
-      if (isProgrammer === true || 
-          String(isProgrammer) === 'true' || 
-          Number(isProgrammer) === 1 || 
-          String(isProgrammer) === '1') {
-        isProgrammerValue = true;
-      }
-      
-      console.log('Valor normalizado de isProgrammer:', isProgrammerValue, typeof isProgrammerValue);
-      
-      // Usar o fetch com keepalive para garantir que a requisição seja completada mesmo se a página for redirecionada
-      const response = await fetch('/api/qualified-lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          phone,
-          isProgrammer: isProgrammerValue,
-          utmSource: utmParams.utmSource,
-          utmMedium: utmParams.utmMedium,
-          utmCampaign: utmParams.utmCampaign
-        }),
-        keepalive: true // Importante: garante que a requisição continue mesmo após navegação
-      });
-      
-      // Verificar se a requisição foi bem-sucedida
-      if (response.ok) {
-        console.log('✅ API respondeu com sucesso:', await response.json());
-      } else {
-        console.error('❌ API respondeu com erro:', response.status, response.statusText);
-      }
-    } catch (error) {
-      console.error('Erro ao salvar lead qualificado:', error);
-      
-      // Tentar enviar usando sendBeacon como fallback
-      try {
-        if (navigator.sendBeacon) {
-          console.log('Tentando enviar usando sendBeacon como fallback...');
-          const utmParams = getUtmParameters();
-          const data = {
-            email,
-            phone,
-            isProgrammer: isProgrammer === true,
-            utmSource: utmParams.utmSource,
-            utmMedium: utmParams.utmMedium,
-            utmCampaign: utmParams.utmCampaign
-          };
-          
-          const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
-          const success = navigator.sendBeacon('/api/qualified-lead', blob);
-          console.log('Resultado do sendBeacon:', success ? 'Sucesso' : 'Falha');
-        }
-      } catch (beaconError) {
-        console.error('Erro ao usar sendBeacon:', beaconError);
-      }
-    }
-  };
-
   // Capturar submissão do formulário
   useEffect(() => {
     if (typeof document === 'undefined') return;
@@ -381,9 +300,8 @@ const LeadForm = memo(function LeadForm() {
           // Esta função agora também envia para o endpoint /api/webhook-lead
           sendToWebhook(emailInput.value, phoneInput.value);
           
-          // Enviar para o Supabase usando sendBeacon (garantir que os dados sejam enviados mesmo com redirecionamento)
+          // Salvar dados localmente como backup
           try {
-            console.log('Enviando lead para Supabase via sendBeacon');
             const leadData = {
               email: emailInput.value,
               phone: phoneInput.value,
@@ -392,37 +310,9 @@ const LeadForm = memo(function LeadForm() {
               utmMedium: getUtmParameters().utmMedium,
               utmCampaign: getUtmParameters().utmCampaign
             };
-            
-            const blob = new Blob([JSON.stringify(leadData)], {type: 'application/json'});
-            const success = navigator.sendBeacon('/api/save-lead-supabase', blob);
-            console.log('Resultado do sendBeacon para Supabase:', success ? 'Sucesso' : 'Falha');
+            saveLeadLocally(leadData);
           } catch (error) {
-            console.error('Erro ao enviar lead para Supabase:', error);
-          }
-          
-          // Enviar diretamente para o endpoint de webhook como última tentativa
-          // Usar sendBeacon que é projetado especificamente para enviar dados antes da navegação
-          if (navigator.sendBeacon) {
-            const utmParams = getUtmParameters();
-            const webhookData = {
-              email: emailInput.value,
-              phone: phoneInput.value,
-              isProgrammer: isProgrammer === true,
-              utmSource: utmParams.utmSource,
-              utmMedium: utmParams.utmMedium,
-              utmCampaign: utmParams.utmCampaign,
-              tags: 'AI-Code-Pro-06-21'
-            };
-            
-            console.log('Enviando dados diretamente para /api/webhook-lead via sendBeacon');
-            const blob = new Blob([JSON.stringify(webhookData)], {type: 'application/json'});
-            const success = navigator.sendBeacon('/api/webhook-lead', blob);
-            console.log('Resultado do sendBeacon direto:', success ? 'Sucesso' : 'Falha');
-            
-            // Se falhar, salvar localmente
-            if (!success) {
-              saveLeadLocally(webhookData);
-            }
+            console.error('Erro ao salvar lead localmente:', error);
           }
         }
         
