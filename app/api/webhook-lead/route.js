@@ -43,7 +43,7 @@ export async function POST(request) {
       });
     }
     
-    const { email, phone, isProgrammer, utmSource, utmMedium, utmCampaign } = data;
+    const { email, phone, isProgrammer, sessionId, utmSource, utmMedium, utmCampaign } = data;
     
     // Validar dados obrigatórios de forma simplificada (sendBeacon não espera resposta)
     if (!email || !phone) {
@@ -61,10 +61,60 @@ export async function POST(request) {
     console.log(`📝 [${requestId}] Dados do webhook:`);
     console.log(`- [${requestId}] Email:`, email);
     console.log(`- [${requestId}] Telefone:`, phone);
-    console.log(`- [${requestId}] isProgrammer:`, isProgrammer, typeof isProgrammer);
+    console.log(`- [${requestId}] isProgrammer (fallback):`, isProgrammer, typeof isProgrammer);
+    console.log(`- [${requestId}] sessionId:`, sessionId);
     console.log(`- [${requestId}] UTM Source:`, utmSource || 'não definido');
     console.log(`- [${requestId}] UTM Medium:`, utmMedium || 'não definido');
     console.log(`- [${requestId}] UTM Campaign:`, utmCampaign || 'não definido');
+    
+    // Buscar dados parciais se sessionId estiver disponível
+    let finalIsProgrammer = false;
+    let dataSource = 'fallback';
+    
+    if (sessionId) {
+      try {
+        console.log(`🔍 [${requestId}] Buscando dados parciais para sessionId: ${sessionId}`);
+        
+        const { createClient } = await import('@supabase/supabase-js');
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        const supabase = createClient(supabaseUrl, supabaseServiceKey);
+        
+        const { data: partialData, error: partialError } = await supabase
+          .from('partial_leads')
+          .select('is_programmer, qualification_timestamp')
+          .eq('session_id', sessionId)
+          .single();
+        
+        if (partialError) {
+          console.log(`⚠️ [${requestId}] Dados parciais não encontrados:`, partialError.message);
+          console.log(`🔄 [${requestId}] Usando isProgrammer do formulário como fallback`);
+        } else {
+          console.log(`✅ [${requestId}] Dados parciais encontrados:`, partialData);
+          finalIsProgrammer = partialData.is_programmer;
+          dataSource = 'partial_leads';
+          console.log(`🎯 [${requestId}] Usando isProgrammer dos dados parciais: ${finalIsProgrammer}`);
+        }
+        
+      } catch (partialSearchError) {
+        console.error(`❌ [${requestId}] Erro ao buscar dados parciais:`, partialSearchError.message);
+        console.log(`🔄 [${requestId}] Usando isProgrammer do formulário como fallback`);
+      }
+    } else {
+      console.log(`⚠️ [${requestId}] SessionId não fornecido, usando isProgrammer do formulário`);
+    }
+    
+    // Se não encontrou dados parciais, usar o valor do formulário como fallback
+    if (dataSource === 'fallback') {
+      if (isProgrammer === true || 
+          String(isProgrammer) === 'true' || 
+          Number(isProgrammer) === 1 || 
+          String(isProgrammer) === '1') {
+        finalIsProgrammer = true;
+      }
+    }
+    
+    console.log(`📊 [${requestId}] isProgrammer FINAL: ${finalIsProgrammer} (fonte: ${dataSource})`);
     
     // Obter informações adicionais da requisição
     const ipAddress = request.headers.get('x-forwarded-for') || 
@@ -72,18 +122,6 @@ export async function POST(request) {
                      'unknown';
                      
     const userAgent = request.headers.get('user-agent') || 'unknown';
-    
-    // Normalizar o valor de isProgrammer para garantir que seja um booleano válido
-    let normalizedIsProgrammer = false;
-    
-    if (isProgrammer === true || 
-        String(isProgrammer) === 'true' || 
-        Number(isProgrammer) === 1 || 
-        String(isProgrammer) === '1') {
-      normalizedIsProgrammer = true;
-    }
-    
-    console.log(`- [${requestId}] isProgrammer normalizado:`, normalizedIsProgrammer, typeof normalizedIsProgrammer);
     
     // Salvar lead no banco de dados com tratamento de erros simplificado
     // Como é chamado via sendBeacon, não precisamos de timeout ou resposta elaborada
@@ -98,7 +136,7 @@ export async function POST(request) {
         const supabaseResult = await saveLeadToSupabase({
           email,
           phone,
-          is_programmer: normalizedIsProgrammer,
+          is_programmer: finalIsProgrammer,
           utm_source: utmSource,
           utm_medium: utmMedium,
           utm_campaign: utmCampaign,
@@ -109,9 +147,9 @@ export async function POST(request) {
         if (supabaseResult.success) {
           console.log(`✅ [${requestId}] Lead salvo com sucesso no Supabase via webhook:`, {
             email: email,
-            is_programmer: normalizedIsProgrammer
+            is_programmer: finalIsProgrammer
           });
-          savedLead = { email, is_programmer: normalizedIsProgrammer };
+          savedLead = { email, is_programmer: finalIsProgrammer };
         } else {
           throw new Error(supabaseResult.error);
         }
@@ -123,7 +161,7 @@ export async function POST(request) {
         const fallbackResult = await saveLeadToFallback({
           email,
           phone,
-          is_programmer: normalizedIsProgrammer,
+          is_programmer: finalIsProgrammer,
           utm_source: utmSource,
           utm_medium: utmMedium,
           utm_campaign: utmCampaign,

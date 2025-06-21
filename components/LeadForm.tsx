@@ -39,6 +39,26 @@ const LeadForm = memo(function LeadForm() {
   const [localLeads, setLocalLeads] = useState<LeadData[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  // Estado para ID da sessão único
+  const [sessionId, setSessionId] = useState<string>('');
+
+  // Gerar ID único da sessão no carregamento
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Verificar se já existe um sessionId no localStorage
+      let existingSessionId = localStorage.getItem('aicodepro_sessionId');
+      
+      if (!existingSessionId) {
+        // Gerar novo sessionId único
+        existingSessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+        localStorage.setItem('aicodepro_sessionId', existingSessionId);
+      }
+      
+      setSessionId(existingSessionId);
+      console.log('🆔 Session ID:', existingSessionId);
+    }
+  }, []);
+
   // Função para salvar lead localmente quando o servidor falhar
   const saveLeadLocally = (leadData: LeadData) => {
     try {
@@ -140,6 +160,56 @@ const LeadForm = memo(function LeadForm() {
     }
   };
 
+  // Função para capturar lead parcial (apenas qualificação)
+  const capturePartialLead = async (isProgrammerValue: boolean) => {
+    try {
+      console.log('🎯 CAPTURANDO LEAD PARCIAL:', isProgrammerValue);
+      
+      if (!sessionId) {
+        console.error('❌ SessionId não disponível para captura parcial');
+        return;
+      }
+      
+      // Obter parâmetros UTM
+      const utmParams = getUtmParameters();
+      
+      const partialData = {
+        sessionId: sessionId,
+        isProgrammer: isProgrammerValue,
+        utmSource: utmParams.utmSource,
+        utmMedium: utmParams.utmMedium,
+        utmCampaign: utmParams.utmCampaign,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
+        ipAddress: 'auto' // Será detectado pelo servidor
+      };
+      
+      console.log('📤 Enviando lead parcial:', partialData);
+      
+      const response = await fetch('/api/partial-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(partialData)
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok) {
+        console.log('✅ Lead parcial capturado com sucesso:', result);
+        
+        // Salvar confirmação no localStorage
+        localStorage.setItem('aicodepro_partialCaptured', 'true');
+        localStorage.setItem('aicodepro_partialTimestamp', new Date().toISOString());
+      } else {
+        console.error('❌ Erro ao capturar lead parcial:', result);
+      }
+      
+    } catch (error) {
+      console.error('💥 Erro inesperado ao capturar lead parcial:', error);
+    }
+  };
+
   // Função para enviar dados ao webhook do n8n de forma silenciosa
   const sendToWebhook = (email: string, phone: string): void => {
     try {
@@ -189,7 +259,8 @@ const LeadForm = memo(function LeadForm() {
         const internalData = {
           email,
           phone,
-          isProgrammer: isProgrammer === true,
+          sessionId: sessionId, // Incluir sessionId para buscar dados parciais
+          isProgrammer: isProgrammer === true, // Fallback caso não encontre dados parciais
           utmSource: utmParams.utmSource,
           utmMedium: utmParams.utmMedium,
           utmCampaign: utmParams.utmCampaign
@@ -197,6 +268,7 @@ const LeadForm = memo(function LeadForm() {
         
         console.log('📤 Enviando dados para Supabase via sendBeacon:', internalData);
         console.log('🔍 isProgrammer no payload Supabase:', internalData.isProgrammer, typeof internalData.isProgrammer);
+        console.log('🆔 SessionId no payload:', internalData.sessionId);
         
         const blob = new Blob([JSON.stringify(internalData)], {type: 'application/json'});
         const success = navigator.sendBeacon('/api/webhook-lead', blob);
@@ -445,6 +517,9 @@ const LeadForm = memo(function LeadForm() {
     } catch (error) {
       console.error('❌ Erro ao salvar em localStorage:', error);
     }
+    
+    // Capturar lead parcial
+    capturePartialLead(boolValue);
     
     console.log('🏁 FIM handleQualificationSelection');
   };
