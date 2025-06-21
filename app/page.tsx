@@ -11,7 +11,7 @@ import { SonarBadge } from "@/components/ui/sonar-badge"
 // Constantes para evitar problemas de hidratação
 const MAIN_TITLE_LINE1 = "IA de Verdade.";  
 const MAIN_TITLE_LINE2 = "Para Quem Já Programa.";
-const EVENT_DATE = "5 a 8 de maio";
+const EVENT_DATE = "7 a 10 de julho";
 const VERSION = Date.now(); // Forçar nova versão
 
 export default function HomePage() { // Nome diferente da função para forçar nova compilação
@@ -117,13 +117,14 @@ export default function HomePage() { // Nome diferente da função para forçar 
               >
                 Aprenda na prática a desenvolver soluções avançadas com{" "}
                 <span className="text-[#0c83fe]">LLM</span>,{" "}
-                <span className="text-[#0c83fe]">RAG</span> e{" "}
+                <span className="text-[#0c83fe]">MCP</span>,{" "}
+                <span className="text-[#0c83fe]">RAG</span>,{" "}
+                <span className="text-[#0c83fe]">VectorDB</span>,{" "}
+                <span className="text-[#0c83fe]">Embedding</span> e{" "}
                 <span className="text-[#0c83fe]">Agentes de IA</span>{" "}
                 <span className="text-[#0c83fe]">usando ferramentas como</span>{" "}
                 <span className="text-[#0c83fe]">CrewAI</span>,{" "}
-                <span className="text-[#0c83fe]">LangGraph</span>,{" "}
-                <span className="text-[#0c83fe]">Composio</span> e{" "}
-                <span className="text-[#0c83fe]">Deep Research</span>.
+                <span className="text-[#0c83fe]">LangGraph</span>.
               </motion.p>
 
               <motion.div
@@ -251,7 +252,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
                 </li>
                 <li className="flex items-start">
                   <span className="text-[#0c83fe] mr-2">•</span>
-                  <span>CrewAI e langgraph</span>
+                  <span>CrewAI e LangGraph</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-[#0c83fe] mr-2">•</span>

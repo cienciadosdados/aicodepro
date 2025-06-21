@@ -15,7 +15,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: 'AI Code Pro - IA de Verdade. Para Quem Já Programa.',
-  description: 'Aprenda a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, LangGraph, Composio e Open Research.',
+  description: 'Aprenda a desenvolver soluções avançadas com LLM, MCP, RAG, VectorDB, Embedding e Agentes de IA usando ferramentas como CrewAI e LangGraph.',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' }
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'AI Code Pro - IA de Verdade. Para Quem Já Programa.',
-    description: 'Aprenda a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, LangGraph, Composio e Open Research.',
+    description: 'Aprenda a desenvolver soluções avançadas com LLM, MCP, RAG, VectorDB, Embedding e Agentes de IA usando ferramentas como CrewAI e LangGraph.',
     url: 'https://aicodepro.com/',
     siteName: 'AI Code Pro',
     locale: 'pt_BR',
