@@ -274,8 +274,8 @@ const LeadForm = memo(function LeadForm() {
       console.log('📤 Enviando dados para webhook N8N:', data);
       console.log('🔍 isProgrammer no payload N8N:', data.isProgrammer, typeof data.isProgrammer);
 
-      // Envio para webhook do N8N (gestor de tráfego)
-      fetch('https://ai-code-pro-n8n.cienciadosdados.com/webhook/lead-capture', {
+      // Envio para webhook N8N específico (automações + Manychat)
+      fetch('https://n8n-n8n.4j4kv9.easypanel.host/webhook/8ae18fa9-3b36-489b-b125-171305fd79ef', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -284,17 +284,7 @@ const LeadForm = memo(function LeadForm() {
         console.error('Erro ao enviar dados para webhook N8N:', error);
       });
 
-      // Envio para webhook N8N específico (automações + Manychat)
-      fetch('https://n8n-n8n.4j4kv9.easypanel.host/webhook/8ae18fa9-3b36-489b-b125-171305fd79ef', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-        keepalive: true
-      }).catch((error) => {
-        console.error('Erro ao enviar dados para webhook N8N automações:', error);
-      });
-
-      console.log('📤 Dados enviados para ambos os webhooks N8N');
+      console.log('📤 Dados enviados para webhook N8N');
 
       // ÚNICO ENVIO para nosso endpoint interno usando sendBeacon
       // Isso garante que o lead seja salvo no Supabase apenas uma vez
