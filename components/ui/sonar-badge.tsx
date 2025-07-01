@@ -34,7 +34,7 @@ export function SonarBadge({ text = "Construa o Futuro com IA", className = "" }
       <div className={`relative inline-flex items-center gap-2 ${className}`}>
         <div className="relative px-4 py-2 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center gap-2">
           <div className="relative">
-            <div className="w-2 h-2 bg-[#0c83fe] rounded-full" />
+            <div className="w-2 h-2 bg-[#a855f7] rounded-full" />
           </div>
           <span className="text-sm text-gray-300">
             {text}
@@ -54,7 +54,7 @@ export function SonarBadge({ text = "Construa o Futuro com IA", className = "" }
     >
       {!isMobile && (
         <motion.div 
-          className="absolute inset-0 bg-[#0c83fe]/5 rounded-full"
+          className="absolute inset-0 bg-[#a855f7]/5 rounded-full"
           initial={{ scale: 1, opacity: 0 }}
           animate={{
             scale: [1, 1.2],
@@ -69,9 +69,9 @@ export function SonarBadge({ text = "Construa o Futuro com IA", className = "" }
       )}
       <div className="relative px-4 py-2 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center gap-2">
         <div className="relative">
-          <div className="w-2 h-2 bg-[#0c83fe] rounded-full" />
+          <div className="w-2 h-2 bg-[#a855f7] rounded-full" />
           <motion.div
-            className="absolute inset-0 bg-[#0c83fe] rounded-full"
+            className="absolute inset-0 bg-[#a855f7] rounded-full"
             initial={{ scale: 1, opacity: 0 }}
             animate={{
               scale: [1, 2],

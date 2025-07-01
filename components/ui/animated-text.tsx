@@ -35,7 +35,7 @@ export function AnimatedText({ text, className = "", style, highlightWords = [] 
           >
             <span 
               style={isHighlighted ? { 
-                color: '#0c83fe',
+                color: '#a855f7',
                 fontWeight: 'inherit'
               } : undefined}
             >

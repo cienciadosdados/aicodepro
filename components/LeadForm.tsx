@@ -646,7 +646,7 @@ const LeadForm = memo(function LeadForm() {
                   handleQualificationSelection(trueValue);
                   console.log('🟢 CLIQUE BOTÃO SIM - Após handleQualificationSelection');
                 }}
-                className={`flex-1 px-4 py-2 rounded-lg border transition-all duration-200 ${isProgrammer === true ? 'bg-[#0c83fe] border-[#0c83fe] text-white' : 'bg-black/20 border-white/20 text-white/70 hover:bg-black/30 hover:border-white/30'}`}
+                className={`flex-1 px-4 py-2 rounded-lg border transition-all duration-200 ${isProgrammer === true ? 'bg-[#a855f7] border-[#a855f7] text-white' : 'bg-black/20 border-white/20 text-white/70 hover:bg-black/30 hover:border-white/30'}`}
               >
                 Sim
               </button>
@@ -661,7 +661,7 @@ const LeadForm = memo(function LeadForm() {
                   handleQualificationSelection(falseValue);
                   console.log('🔴 CLIQUE BOTÃO NÃO - Após handleQualificationSelection');
                 }}
-                className={`flex-1 px-4 py-2 rounded-lg border transition-all duration-200 ${isProgrammer === false ? 'bg-[#0c83fe] border-[#0c83fe] text-white' : 'bg-black/20 border-white/20 text-white/70 hover:bg-black/30 hover:border-white/30'}`}
+                className={`flex-1 px-4 py-2 rounded-lg border transition-all duration-200 ${isProgrammer === false ? 'bg-[#a855f7] border-[#a855f7] text-white' : 'bg-black/20 border-white/20 text-white/70 hover:bg-black/30 hover:border-white/30'}`}
               >
                 Não
               </button>
@@ -680,7 +680,7 @@ const LeadForm = memo(function LeadForm() {
                 id="email"
                 placeholder="Email"
                 required
-                className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
+                className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#a855f7]/50 transition-all duration-200"
               />
             </div>
             
@@ -694,7 +694,7 @@ const LeadForm = memo(function LeadForm() {
                 placeholder="(00) 00000-0000"
                 required
                 pattern=".*[0-9]{8,}.*"
-                className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
+                className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#a855f7]/50 transition-all duration-200"
               />
             </div>
 
@@ -717,7 +717,7 @@ const LeadForm = memo(function LeadForm() {
               type="submit"
               klicksend-form-submit-id='jruEyoV'
               disabled={isSubmitting}
-              className={`w-full px-8 py-4 mt-4 rounded-xl bg-[#0c83fe] hover:bg-[#0c83fe]/90 text-white font-medium transition-all duration-200 relative overflow-hidden ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-full px-8 py-4 mt-4 rounded-xl bg-[#a855f7] hover:bg-[#a855f7]/90 text-white font-medium transition-all duration-200 relative overflow-hidden ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {isSubmitting ? 'Enviando...' : 'Quero me inscrever'}
