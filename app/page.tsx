@@ -41,8 +41,8 @@ export default function HomePage() { // Nome diferente da função para forçar 
             <div className="space-y-8">
               <div>
                 <div className="relative inline-block mb-4">
-                  <div className="px-6 py-3 rounded-xl bg-black/40 border border-[#0c83fe]">
-                    <h1 className="text-4xl md:text-5xl font-bold text-[#0c83fe]">
+                  <div className="px-6 py-3 rounded-xl bg-black/40 border border-[#a855f7]">
+                    <h1 className="text-4xl md:text-5xl font-bold text-[#a855f7]">
                       AI Code Pro
                     </h1>
                   </div>
@@ -62,7 +62,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
 
               <div className="w-full max-w-2xl mx-auto">
                 <div className="relative">
-                  <div className="bg-black/40 rounded-2xl border border-[#0c83fe]/20 p-8">
+                  <div className="bg-black/40 rounded-2xl border border-[#a855f7]/20 p-8">
                     <h3 className="text-2xl font-bold mb-6 text-center">Garanta Sua Vaga Agora! De {EVENT_DATE}</h3>
                     <p className="text-gray-400 mb-8 text-center">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
                     <div className="max-w-md mx-auto">
@@ -95,9 +95,9 @@ export default function HomePage() { // Nome diferente da função para forçar 
             >
               <div>
                 <div className="relative inline-block mb-4">
-                  <div className="absolute inset-0 bg-[#0c83fe]/20 rounded-xl blur-xl"></div>
-                  <div className="relative px-6 py-3 rounded-xl bg-black/40 border border-[#0c83fe] backdrop-blur-sm">
-                    <h1 className="text-4xl md:text-5xl font-bold text-[#0c83fe]">
+                  <div className="absolute inset-0 bg-[#a855f7]/20 rounded-xl blur-xl"></div>
+                  <div className="relative px-6 py-3 rounded-xl bg-black/40 border border-[#a855f7] backdrop-blur-sm">
+                    <h1 className="text-4xl md:text-5xl font-bold text-[#a855f7]">
                       AI Code Pro
                     </h1>
                   </div>
@@ -116,15 +116,15 @@ export default function HomePage() { // Nome diferente da função para forçar 
                 className="text-xl text-gray-300 max-w-2xl mx-auto description-text"
               >
                 Aprenda na prática a desenvolver soluções avançadas com{" "}
-                <span className="text-[#0c83fe]">LLM</span>,{" "}
-                <span className="text-[#0c83fe]">MCP</span>,{" "}
-                <span className="text-[#0c83fe]">RAG</span>,{" "}
-                <span className="text-[#0c83fe]">VectorDB</span>,{" "}
-                <span className="text-[#0c83fe]">Embedding</span> e{" "}
-                <span className="text-[#0c83fe]">Agentes de IA</span>{" "}
-                <span className="text-[#0c83fe]">usando ferramentas como</span>{" "}
-                <span className="text-[#0c83fe]">CrewAI</span>,{" "}
-                <span className="text-[#0c83fe]">LangGraph</span>.
+                <span className="text-[#a855f7]">LLM</span>,{" "}
+                <span className="text-[#a855f7]">MCP</span>,{" "}
+                <span className="text-[#a855f7]">RAG</span>,{" "}
+                <span className="text-[#a855f7]">VectorDB</span>,{" "}
+                <span className="text-[#a855f7]">Embedding</span> e{" "}
+                <span className="text-[#a855f7]">Agentes de IA</span>{" "}
+                <span className="text-[#a855f7]">usando ferramentas como</span>{" "}
+                <span className="text-[#a855f7]">CrewAI</span>,{" "}
+                <span className="text-[#a855f7]">LangGraph</span>.
               </motion.p>
 
               <motion.div
@@ -135,8 +135,8 @@ export default function HomePage() { // Nome diferente da função para forçar 
                 id="lead-form-container"
               >
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
-                  <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#a855f7]/20 to-[#a855f7]/20 rounded-2xl blur-2xl" />
+                  <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-[#a855f7]/20 p-8">
                     <h3 className="text-2xl font-bold mb-6 text-center">Garanta Sua Vaga Agora! De {EVENT_DATE}</h3>
                     <p className="text-gray-400 mb-8 text-center">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
                     <div className="max-w-md mx-auto">
@@ -213,24 +213,24 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#a855f7]/20 p-8 cursor-pointer hover:border-[#a855f7]/50"
             >
-              <h3 className="text-2xl font-bold mb-4 text-[#0c83fe]">LLMs e RAG</h3>
+              <h3 className="text-2xl font-bold mb-4 text-[#a855f7]">LLMs e RAG</h3>
               <ul className="space-y-3">
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>Claude, Openai, DeepSeek e muito mais</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>Implementação de RAG</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>Vector Databases</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>Fine-tuning e Otimização</span>
                 </li>
               </ul>
@@ -242,24 +242,24 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#a855f7]/20 p-8 cursor-pointer hover:border-[#a855f7]/50"
             >
-              <h3 className="text-2xl font-bold mb-4 text-[#0c83fe]">Agentes Autônomos</h3>
+              <h3 className="text-2xl font-bold mb-4 text-[#a855f7]">Agentes Autônomos</h3>
               <ul className="space-y-3">
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>Arquitetura de Agentes</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>CrewAI e LangGraph</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>Integração de Tools</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>Automação de Tarefas</span>
                 </li>
               </ul>
@@ -271,24 +271,24 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#a855f7]/20 p-8 cursor-pointer hover:border-[#a855f7]/50"
             >
-              <h3 className="text-2xl font-bold mb-4 text-[#0c83fe]">Projetos Práticos</h3>
+              <h3 className="text-2xl font-bold mb-4 text-[#a855f7]">Projetos Práticos</h3>
               <ul className="space-y-3">
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>RAG e Deep Search avançado</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>Agentes de Busca</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>Automação com IA</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-[#0c83fe] mr-2">•</span>
+                  <span className="text-[#a855f7] mr-2">•</span>
                   <span>Deploy em Produção</span>
                 </li>
               </ul>
@@ -315,7 +315,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#a855f7]/20 p-8 cursor-pointer hover:border-[#a855f7]/50"
             >
               <div className="mb-6">
                 <p className="italic text-gray-300">"A Ciência dos Dados me deu as ferramentas práticas que eu precisava para implementar soluções de IA no mundo real."</p>
@@ -332,7 +332,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#a855f7]/20 p-8 cursor-pointer hover:border-[#a855f7]/50"
             >
               <div className="mb-6">
                 <p className="italic text-gray-300">"A abordagem hands-on do curso do Eduardo é fantástica. Consegui implementar um agente de IA logo na primeira semana."</p>
@@ -349,7 +349,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
               transition={{ duration: 0.3 }}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 cursor-pointer hover:border-[#0c83fe]/50"
+              className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#a855f7]/20 p-8 cursor-pointer hover:border-[#a855f7]/50"
             >
               <div className="mb-6">
                 <p className="italic text-gray-300">"O conhecimento em RAG e LLMs que adquiri com a Ciência dos Dados transformou a maneira como construir aplicações."</p>
@@ -368,8 +368,8 @@ export default function HomePage() { // Nome diferente da função para forçar 
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
-              <div className="relative bg-black/40 backdrop-blur-sm p-8 rounded-2xl border border-[#0c83fe]/20">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#a855f7]/20 to-[#a855f7]/20 rounded-2xl blur-2xl" />
+              <div className="relative bg-black/40 backdrop-blur-sm p-8 rounded-2xl border border-[#a855f7]/20">
                 <div className="mb-8 text-center">
                   <h2 className="text-2xl font-bold mb-2">Garanta Sua Vaga Agora! De {EVENT_DATE}</h2>
                   <p className="text-gray-400">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
