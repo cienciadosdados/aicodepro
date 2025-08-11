@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS pesquisa_ai_code_pro (
   -- Conhecimento técnico
   usa_rag_llm VARCHAR(20),
   conhece_frameworks_ia VARCHAR(20),
+  ja_e_programador VARCHAR(20),
   ja_programa_python VARCHAR(20),
   usa_ml_dl VARCHAR(20),
   

@@ -40,6 +40,7 @@ export async function POST(request) {
       // Conhecimento técnico
       usa_rag_llm: surveyData.usa_rag_llm || null,
       conhece_frameworks_ia: surveyData.conhece_frameworks_ia || null,
+      ja_e_programador: surveyData.ja_e_programador || null,
       ja_programa_python: surveyData.ja_programa_python || null,
       usa_ml_dl: surveyData.usa_ml_dl || null,
       
@@ -102,6 +103,7 @@ export async function POST(request) {
             genero VARCHAR(20),
             usa_rag_llm VARCHAR(20),
             conhece_frameworks_ia VARCHAR(20),
+            ja_e_programador VARCHAR(20),
             ja_programa_python VARCHAR(20),
             usa_ml_dl VARCHAR(20),
             faixa_salarial VARCHAR(50),

@@ -7,16 +7,25 @@ interface SurveyData {
   email: string;
   phone: string;
   is_programmer: boolean;
+  
+  // Dados demográficos
   idade: string;
   genero: string;
+  faixa_salarial: string;
+  
+  // Conhecimento técnico
   usa_rag_llm: string;
   conhece_frameworks_ia: string;
+  ja_e_programador: string;
   ja_programa_python: string;
   usa_ml_dl: string;
-  faixa_salarial: string;
+  
+  // Profissional
   profissao_atual: string;
   como_conheceu: string;
   tempo_conhece: string;
+  
+  // Motivações e desafios (textos livres)
   o_que_tira_sono: string;
   expectativas_treinamento: string;
   sonho_realizar: string;
@@ -24,6 +33,8 @@ interface SurveyData {
   pergunta_cafe: string;
   impedimento_sonho: string;
   maior_desafio_ia: string;
+  
+  // Comprometimento
   comprometido_projeto: string;
 }
 
@@ -44,7 +55,7 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
     is_programmer: isProgrammer
   });
 
-  const totalSteps = 4;
+  const totalSteps = 5; // Aumentado para 5 etapas para organizar melhor
 
   const handleInputChange = (field: keyof SurveyData, value: string) => {
     setFormData(prev => ({
@@ -145,7 +156,7 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
           <option value="25-34">25 a 34 anos</option>
           <option value="35-44">35 a 44 anos</option>
           <option value="45-54">45 a 54 anos</option>
-          <option value="55+">Mais de 55 anos</option>
+          <option value="55+">Mais de 55 anos.</option>
         </select>
       </div>
 
@@ -168,7 +179,7 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
 
       <div>
         <label className="block text-sm font-medium text-gray-300 mb-2">
-          Qual sua faixa salarial atualmente?
+          Qual a sua faixa salarial atualmente?
         </label>
         <select
           value={formData.faixa_salarial || ''}
@@ -181,7 +192,7 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
           <option value="3000-5000">Entre R$ 3.000,00 a R$ 5.000,00</option>
           <option value="5000-7000">Entre R$ 5.000,00 a R$ 7.000,00</option>
           <option value="7000-9000">Entre R$ 7.000,00 a R$ 9.000,00</option>
-          <option value="9000-11000">Entre R$ 9.000,00 a R$ 11.000,00</option>
+          <option value="9000-11000">Entre R$ 9.000,00 a 11.000,00</option>
           <option value="acima-11000">Acima de R$ 11.000,00</option>
         </select>
       </div>
@@ -214,7 +225,7 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
 
       <div>
         <label className="block text-sm font-medium text-gray-300 mb-2">
-          Você já conhece CrewAI, LangGraph ou outro framework de Agentes de IA?
+          Vc já conhece CrewAI, LangGraph ou outro framework de Agentes de IA?
         </label>
         <select
           value={formData.conhece_frameworks_ia || ''}
@@ -224,7 +235,23 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
           <option value="">Selecione</option>
           <option value="sim">Sim</option>
           <option value="nao">Não</option>
-          <option value="nunca-ouvi">Nunca ouvi falar</option>
+          <option value="nunca-ouvi">Nunca ouvi falar.</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-2">
+          Você já é programador? *
+        </label>
+        <select
+          value={formData.ja_e_programador || ''}
+          onChange={(e) => handleInputChange('ja_e_programador', e.target.value)}
+          className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          required
+        >
+          <option value="">Selecione</option>
+          <option value="sim">Sim</option>
+          <option value="nao">Não</option>
         </select>
       </div>
 
@@ -284,7 +311,7 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
 
       <div>
         <label className="block text-sm font-medium text-gray-300 mb-2">
-          Por onde você me conheceu? *
+          Por onde vc me conheceu? *
         </label>
         <select
           value={formData.como_conheceu || ''}
@@ -329,7 +356,7 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
       animate={{ opacity: 1, x: 0 }}
       className="space-y-6"
     >
-      <h3 className="text-xl font-semibold text-white mb-6">Motivações e Desafios</h3>
+      <h3 className="text-xl font-semibold text-white mb-6">Motivações e Expectativas</h3>
       
       <div>
         <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -385,6 +412,55 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
           required
         />
       </div>
+    </motion.div>
+  );
+
+  const renderStep5 = () => (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="space-y-6"
+    >
+      <h3 className="text-xl font-semibold text-white mb-6">Perguntas Finais</h3>
+      
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-2">
+          Se pudesse tomar um café comigo qual pergunta você faria?
+        </label>
+        <textarea
+          value={formData.pergunta_cafe || ''}
+          onChange={(e) => handleInputChange('pergunta_cafe', e.target.value)}
+          className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          rows={3}
+          placeholder="Sua pergunta..."
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-2">
+          Tirando a falta de dinheiro ou tempo, qual a principal razão que está te impedindo de realizar seu sonho profissional?
+        </label>
+        <textarea
+          value={formData.impedimento_sonho || ''}
+          onChange={(e) => handleInputChange('impedimento_sonho', e.target.value)}
+          className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          rows={3}
+          placeholder="Principal impedimento..."
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-2">
+          O que considera ser o seu maior desafio quando o assunto é IA?
+        </label>
+        <textarea
+          value={formData.maior_desafio_ia || ''}
+          onChange={(e) => handleInputChange('maior_desafio_ia', e.target.value)}
+          className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          rows={3}
+          placeholder="Seu maior desafio com IA..."
+        />
+      </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -408,11 +484,13 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
       case 1:
         return formData.idade && formData.genero;
       case 2:
-        return true; // Campos opcionais
+        return formData.ja_e_programador; // Campo obrigatório
       case 3:
         return formData.profissao_atual && formData.como_conheceu && formData.tempo_conhece;
       case 4:
         return formData.expectativas_treinamento && formData.sonho_realizar && formData.maior_dificuldade;
+      case 5:
+        return true; // Campos opcionais na última etapa
       default:
         return false;
     }
@@ -451,6 +529,7 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
       {currentStep === 2 && renderStep2()}
       {currentStep === 3 && renderStep3()}
       {currentStep === 4 && renderStep4()}
+      {currentStep === 5 && renderStep5()}
 
       {/* Navigation Buttons */}
       <div className="flex justify-between mt-8">
