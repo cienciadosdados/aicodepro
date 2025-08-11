@@ -1,6 +1,10 @@
 'use client';
 
 import { memo, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+
+// Importar SurveyForm dinamicamente para evitar problemas de SSR
+const SurveyForm = dynamic(() => import('./SurveyForm'), { ssr: false });
 
 interface WebhookData {
   email: string;
@@ -41,6 +45,12 @@ const LeadForm = memo(function LeadForm() {
   
   // Estado para ID da sessão único
   const [sessionId, setSessionId] = useState<string>('');
+  
+  // Estados para controlar a pesquisa
+  const [showSurvey, setShowSurvey] = useState(false);
+  const [surveyCompleted, setSurveyCompleted] = useState(false);
+  const [capturedEmail, setCapturedEmail] = useState<string>('');
+  const [capturedPhone, setCapturedPhone] = useState<string>('');
 
   // Função para enviar logs para nossa API de debug
   const sendDebugLog = async (type: string, message: string, data?: any) => {
@@ -593,6 +603,36 @@ const LeadForm = memo(function LeadForm() {
     console.log('🏁 FIM handleQualificationSelection');
   };
 
+  // Função para lidar com a conclusão da pesquisa
+  const handleSurveyComplete = () => {
+    console.log('✅ Pesquisa concluída, redirecionando...');
+    setSurveyCompleted(true);
+    
+    // Redirecionar para a página de obrigado com o email
+    const redirectUrl = `/obrigado?email=${encodeURIComponent(capturedEmail)}`;
+    console.log('🔄 Redirecionando para:', redirectUrl);
+    
+    // Usar timeout para dar tempo de salvar a pesquisa
+    setTimeout(() => {
+      window.location.href = redirectUrl;
+    }, 1000);
+  };
+
+  // Se a pesquisa deve ser exibida, mostrar o componente SurveyForm
+  if (showSurvey && !surveyCompleted) {
+    return (
+      <div className="survey-container">
+        <SurveyForm
+          email={capturedEmail}
+          phone={capturedPhone}
+          isProgrammer={isProgrammer || false}
+          sessionId={sessionId}
+          onComplete={handleSurveyComplete}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="hotmart-form-container">
       <form 
@@ -603,12 +643,6 @@ const LeadForm = memo(function LeadForm() {
         className="space-y-4"
         id="lead-form"
         onSubmit={(e) => {
-          // Garantir redirecionamento correto
-          const form = e.currentTarget;
-          if (!form.action.includes('redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado')) {
-            form.action = form.action + (form.action.includes('?') ? '&' : '?') + 'redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado';
-          }
-
           // Verificar se respondeu à pergunta de qualificação
           if (isProgrammer === null) {
             e.preventDefault();
@@ -618,9 +652,30 @@ const LeadForm = memo(function LeadForm() {
             console.log('Formulário bloqueado: usuário não respondeu à pergunta de qualificação');
             return false;
           }
+
+          // Interceptar submissão para mostrar pesquisa
+          e.preventDefault();
           
-          // Log para debug
-          console.log('Formulário submetido com isProgrammer:', isProgrammer);
+          // Capturar dados do formulário
+          const formData = new FormData(e.currentTarget);
+          const email = formData.get('email') as string;
+          const phone = formData.get('phone') as string;
+          
+          console.log('📝 Dados capturados:', { email, phone, isProgrammer });
+          
+          // Salvar dados capturados
+          setCapturedEmail(email);
+          setCapturedPhone(phone);
+          
+          // Enviar dados para os webhooks existentes
+          sendToWebhook(email, phone);
+          
+          // Mostrar pesquisa
+          setShowSurvey(true);
+          setShowQualificationStep(false);
+          setShowContactStep(false);
+          
+          console.log('📋 Exibindo pesquisa para:', email);
         }}
       >
         {/* Etapa de qualificação */}
