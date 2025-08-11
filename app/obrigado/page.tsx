@@ -103,7 +103,7 @@ function ThankYouContent() {
             <div className="absolute -inset-1 bg-gradient-to-r from-[#22c55e]/30 via-[#22c55e]/10 to-[#22c55e]/30 rounded-lg blur-md"></div>
             <h3 className="relative text-xl md:text-3xl font-bold py-2 px-4 bg-black/60 backdrop-blur-sm rounded-lg border border-[#22c55e]/40">
               <motion.span 
-                className="text-[#4db1ff]"
+                className="text-[#4ade80]"
                 animate={{
                   opacity: [0.7, 1]
                 }}

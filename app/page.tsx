@@ -211,7 +211,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(34, 197, 94, 0.3)" }}
               transition={{ duration: 0.3 }}
               className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#22c55e]/20 p-8 cursor-pointer hover:border-[#22c55e]/50"
             >
@@ -240,7 +240,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(34, 197, 94, 0.3)" }}
               transition={{ duration: 0.3 }}
               className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#22c55e]/20 p-8 cursor-pointer hover:border-[#22c55e]/50"
             >
@@ -269,7 +269,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(34, 197, 94, 0.3)" }}
               transition={{ duration: 0.3 }}
               className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#22c55e]/20 p-8 cursor-pointer hover:border-[#22c55e]/50"
             >
@@ -313,7 +313,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(34, 197, 94, 0.3)" }}
               transition={{ duration: 0.3 }}
               className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#22c55e]/20 p-8 cursor-pointer hover:border-[#22c55e]/50"
             >
@@ -330,7 +330,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(34, 197, 94, 0.3)" }}
               transition={{ duration: 0.3 }}
               className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#22c55e]/20 p-8 cursor-pointer hover:border-[#22c55e]/50"
             >
@@ -347,7 +347,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(12, 131, 254, 0.3)" }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(34, 197, 94, 0.3)" }}
               transition={{ duration: 0.3 }}
               className="bg-black/40 backdrop-blur-sm rounded-2xl border border-[#22c55e]/20 p-8 cursor-pointer hover:border-[#22c55e]/50"
             >

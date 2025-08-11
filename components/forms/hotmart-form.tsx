@@ -69,7 +69,7 @@ export function HotmartForm({ className = '', redirectTo = '/obrigado' }: Hotmar
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]"
+          className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#22c55e]"
           placeholder="Digite seu nome completo"
           required
         />
@@ -84,7 +84,7 @@ export function HotmartForm({ className = '', redirectTo = '/obrigado' }: Hotmar
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]"
+          className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#22c55e]"
           placeholder="Digite seu email"
           required
         />
@@ -97,7 +97,7 @@ export function HotmartForm({ className = '', redirectTo = '/obrigado' }: Hotmar
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-gradient-to-r from-[#0c83fe] to-[#0c83fe]/80 text-white font-medium py-3 px-4 rounded-lg hover:opacity-90 transition-all duration-200 flex items-center justify-center"
+        className="w-full bg-gradient-to-r from-[#22c55e] to-[#22c55e]/80 text-white font-medium py-3 px-4 rounded-lg hover:opacity-90 transition-all duration-200 flex items-center justify-center"
       >
         {loading ? (
           <span className="flex items-center">
