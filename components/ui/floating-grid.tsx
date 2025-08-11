@@ -40,7 +40,7 @@ export function FloatingGrid() {
       {Array.from({ length: particleCount }).map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-2 h-2 bg-purple-500/20 rounded-full"
+          className="absolute w-2 h-2 bg-green-500/20 rounded-full"
           initial={{
             x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
             y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
