@@ -88,8 +88,43 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
         utm_campaign: urlParams.get('utm_campaign') || 'none'
       };
 
+      // Preparar dados com tipos corretos para a API
       const surveyPayload = {
-        ...formData,
+        // Dados de identificação
+        email,
+        phone,
+        is_programmer: isProgrammer,
+        
+        // Dados demográficos (manter como string para ENUMs)
+        idade: formData.idade || null,
+        genero: formData.genero || null,
+        faixa_salarial: formData.faixa_salarial || null,
+        
+        // Conhecimento técnico (converter para tipos apropriados)
+        usa_rag_llm: formData.usa_rag_llm || null,
+        conhece_frameworks_ia: formData.conhece_frameworks_ia || null,
+        ja_e_programador: formData.ja_e_programador || null, // API converte para boolean
+        ja_programa_python: formData.ja_programa_python || null, // API converte para boolean
+        usa_ml_dl: formData.usa_ml_dl || null, // API converte para boolean
+        
+        // Dados profissionais
+        profissao_atual: formData.profissao_atual?.trim() || null,
+        como_conheceu: formData.como_conheceu || null,
+        tempo_conhece: formData.tempo_conhece || null,
+        
+        // Motivações e desafios
+        o_que_tira_sono: formData.o_que_tira_sono?.trim() || null,
+        expectativas_treinamento: formData.expectativas_treinamento?.trim() || null,
+        sonho_realizar: formData.sonho_realizar?.trim() || null,
+        maior_dificuldade: formData.maior_dificuldade?.trim() || null,
+        pergunta_cafe: formData.pergunta_cafe?.trim() || null,
+        impedimento_sonho: formData.impedimento_sonho?.trim() || null,
+        maior_desafio_ia: formData.maior_desafio_ia?.trim() || null,
+        
+        // Comprometimento (API converte para boolean)
+        comprometido_projeto: formData.comprometido_projeto || null,
+        
+        // Metadados
         session_id: sessionId,
         ip_address: await getClientIP(),
         user_agent: navigator.userAgent,

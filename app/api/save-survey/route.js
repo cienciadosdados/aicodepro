@@ -27,45 +27,62 @@ export async function POST(request) {
       );
     }
 
-    // Preparar dados para inserção
+    // Validar dados obrigatórios
+    const requiredFields = ['profissao_atual', 'como_conheceu', 'tempo_conhece', 
+                           'expectativas_treinamento', 'sonho_realizar', 'maior_dificuldade'];
+    
+    for (const field of requiredFields) {
+      if (!surveyData[field] || surveyData[field].trim() === '') {
+        console.log(`[${requestId}] ❌ Campo obrigatório ausente: ${field}`);
+        return NextResponse.json(
+          { error: `Campo obrigatório ausente: ${field}` },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Preparar dados com tipos corretos
     const formattedData = {
+      // Dados de identificação
       email: surveyData.email?.toLowerCase()?.trim(),
       phone: surveyData.phone?.trim() || null,
-      is_programmer: surveyData.is_programmer || false,
+      is_programmer: Boolean(surveyData.is_programmer),
       
-      // Dados demográficos
+      // Dados demográficos (ENUMs)
       idade: surveyData.idade || null,
       genero: surveyData.genero || null,
+      faixa_salarial: surveyData.faixa_salarial || null,
       
-      // Conhecimento técnico
+      // Conhecimento técnico (ENUMs e BOOLEANs)
       usa_rag_llm: surveyData.usa_rag_llm || null,
       conhece_frameworks_ia: surveyData.conhece_frameworks_ia || null,
-      ja_e_programador: surveyData.ja_e_programador || null,
-      ja_programa_python: surveyData.ja_programa_python || null,
-      usa_ml_dl: surveyData.usa_ml_dl || null,
+      ja_e_programador: surveyData.ja_e_programador === 'sim' ? true : 
+                       surveyData.ja_e_programador === 'nao' ? false : null,
+      ja_programa_python: surveyData.ja_programa_python === 'sim' ? true : 
+                         surveyData.ja_programa_python === 'nao' ? false : null,
+      usa_ml_dl: surveyData.usa_ml_dl === 'sim' ? true : 
+                surveyData.usa_ml_dl === 'nao' ? false : null,
       
-      // Dados profissionais
-      faixa_salarial: surveyData.faixa_salarial || null,
-      profissao_atual: surveyData.profissao_atual || null,
-      
-      // Relacionamento e descoberta
-      como_conheceu: surveyData.como_conheceu || null,
-      tempo_conhece: surveyData.tempo_conhece || null,
+      // Dados profissionais (obrigatórios)
+      profissao_atual: surveyData.profissao_atual?.trim(),
+      como_conheceu: surveyData.como_conheceu,
+      tempo_conhece: surveyData.tempo_conhece,
       
       // Motivações e desafios
-      o_que_tira_sono: surveyData.o_que_tira_sono || null,
-      expectativas_treinamento: surveyData.expectativas_treinamento || null,
-      sonho_realizar: surveyData.sonho_realizar || null,
-      maior_dificuldade: surveyData.maior_dificuldade || null,
-      pergunta_cafe: surveyData.pergunta_cafe || null,
-      impedimento_sonho: surveyData.impedimento_sonho || null,
-      maior_desafio_ia: surveyData.maior_desafio_ia || null,
+      o_que_tira_sono: surveyData.o_que_tira_sono?.trim() || null,
+      expectativas_treinamento: surveyData.expectativas_treinamento?.trim(),
+      sonho_realizar: surveyData.sonho_realizar?.trim(),
+      maior_dificuldade: surveyData.maior_dificuldade?.trim(),
+      pergunta_cafe: surveyData.pergunta_cafe?.trim() || null,
+      impedimento_sonho: surveyData.impedimento_sonho?.trim() || null,
+      maior_desafio_ia: surveyData.maior_desafio_ia?.trim() || null,
       
-      // Comprometimento
-      comprometido_projeto: surveyData.comprometido_projeto || null,
+      // Comprometimento (BOOLEAN)
+      comprometido_projeto: surveyData.comprometido_projeto === 'sim' ? true : 
+                           surveyData.comprometido_projeto === 'nao' ? false : null,
       
       // Metadados
-      session_id: surveyData.session_id || null,
+      session_id: surveyData.session_id || `fallback_${Date.now()}`,
       ip_address: surveyData.ip_address || null,
       user_agent: surveyData.user_agent || null,
       utm_source: surveyData.utm_source || 'direct',
