@@ -128,16 +128,16 @@ function ThankYouContent() {
                 buttonText: "PARTICIPAR DO GRUPO EXCLUSIVO"
               },
               {
-                title: "Responda à Pesquisa",
-                description: "O nosso objetivo é fazer com que você aproveite ao máximo esse evento! Queremos ouvir suas principais necessidades para garantir que o evento agregue em seus conhecimentos.",
-                link: "https://forms.gle/7Yk7EMtvcxhRCCQr7",
-                buttonText: "RESPONDER À PESQUISA"
+                title: "Marque na sua Agenda",
+                description: "Adicione o evento AI Code Pro na sua agenda do Google Calendar para não perder nenhum dia! De 01 a 04 de setembro, das 20h às 22h.",
+                link: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=AI+Code+Pro+-+IA+de+Verdade&dates=20250901T230000Z/20250901T250000Z&details=Evento+AI+Code+Pro+-+Aprenda+LLM%2C+RAG%2C+Agentes+de+IA+e+muito+mais%21%0A%0ADias%3A+01+a+04+de+setembro%0AHor%C3%A1rio%3A+20h+%C3%A0s+22h%0A%0ALink+do+evento%3A+https%3A//ai-code-pro.cienciadosdados.com&location=Online+-+Link+ser%C3%A1+enviado+por+email&recur=RRULE:FREQ=DAILY;COUNT=4",
+                buttonText: "ADICIONAR À AGENDA"
               },
               {
-                title: "Verifique seu E-mail",
-                description: "Acesse seu e-mail e responda a pesquisa que te enviamos! Suas respostas são fundamentais para personalizarmos o conteúdo do evento.",
-                link: `https://mail.google.com/mail/u/0/#search/from:cienciadosdados`,
-                buttonText: "VERIFICAR E-MAIL"
+                title: "Kit de Preparação",
+                description: "Baixe o guia completo de preparação com instalação do VS Code, Windsurf, Python, Node.js e todas as ferramentas necessárias para o evento.",
+                link: "/kit-preparacao-ai-code-pro.html",
+                buttonText: "BAIXAR KIT DE PREPARAÇÃO"
               }
             ].map((step, index) => (
               <motion.div

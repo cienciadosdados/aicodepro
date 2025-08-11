@@ -1,0 +1,522 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kit de Preparação - AI Code Pro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 20px;
+            border: 2px solid #22c55e;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #000000;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            font-size: 1.3rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #22c55e;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #22c55e;
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+        
+        .tool-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border: 2px solid #22c55e;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 2rem;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+        }
+        
+        .tool-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #22c55e;
+            text-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
+        }
+        
+        .tool-description {
+            color: #cccccc;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #000000;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+            font-size: 1rem;
+        }
+        
+        .requirements {
+            background: linear-gradient(135deg, #3a3a00, #2a2a00);
+            border: 2px solid #fbbf24;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+        }
+        
+        .requirements h3 {
+            color: #fbbf24;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(251, 191, 36, 0.3);
+        }
+        
+        .requirements ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .requirements li {
+            color: #ffffff;
+            margin-bottom: 8px;
+            padding-left: 25px;
+            position: relative;
+            font-size: 1rem;
+        }
+        
+        .requirements li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .steps {
+            background: linear-gradient(135deg, #0a2a0a, #051a05);
+            border: 2px solid #22c55e;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+        }
+        
+        .steps h3 {
+            color: #22c55e;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .step {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #22c55e;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background: #22c55e;
+            color: #000000;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+        }
+        
+        .step-text {
+            color: #ffffff;
+            flex: 1;
+            padding-top: 2px;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+            border-top: 2px solid #22c55e;
+        }
+        
+        .footer h3 {
+            color: #22c55e;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+        
+        .footer p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .highlight {
+            color: #22c55e;
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
+        }
+        
+        .tips-section {
+            background: linear-gradient(135deg, #1a2a1a, #0a1a0a);
+            border: 2px solid #22c55e;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+        }
+        
+        .tip {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(34, 197, 94, 0.05);
+            border-radius: 8px;
+        }
+        
+        .tip-icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+            margin-top: 2px;
+        }
+        
+        .tip-text {
+            flex: 1;
+            color: #ffffff;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .container {
+                border: 2px solid #22c55e;
+                box-shadow: none;
+            }
+            
+            .header {
+                background: #22c55e;
+                color: black;
+            }
+            
+            .content {
+                background: white;
+            }
+            
+            .tool-card, .requirements, .steps, .tips-section {
+                background: #f8f9fa;
+                border: 1px solid #22c55e;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 AI Code Pro</h1>
+            <p>Kit de Preparação • Setembro 2025</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>🎯 Bem-vindo ao Futuro da IA!</h2>
+                <p style="font-size: 1.2rem; color: #cccccc; margin-bottom: 20px;">
+                    Para dominar <span class="highlight">IA de verdade</span> no nosso evento de <span class="highlight">01 a 04 de setembro (20h às 22h)</span>, 
+                    você precisa preparar seu ambiente de desenvolvimento. Este guia contém tudo que você precisa!
+                </p>
+                
+                <div class="requirements">
+                    <h3>⚡ Requisitos Mínimos do Sistema</h3>
+                    <ul>
+                        <li>Windows 10/11, macOS 10.15+ ou Linux Ubuntu 18.04+</li>
+                        <li>8GB de RAM (recomendado: 16GB para melhor performance)</li>
+                        <li>10GB de espaço livre em disco</li>
+                        <li>Conexão estável com a internet (para downloads e IA)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🛠️ Ferramentas Essenciais</h2>
+                
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">🐍</div>
+                        <div class="tool-name">Python 3.11+</div>
+                    </div>
+                    <div class="tool-description">
+                        Linguagem principal que usaremos para desenvolver aplicações de IA, trabalhar com LLMs, 
+                        criar agentes inteligentes e implementar RAG (Retrieval-Augmented Generation).
+                    </div>
+                    <a href="https://www.python.org/downloads/" class="download-btn">
+                        🔗 Baixar Python
+                    </a>
+                    
+                    <div class="steps">
+                        <h3>📋 Passos de Instalação:</h3>
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <span class="step-text">Baixe a versão mais recente do Python (3.11 ou superior)</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <span class="step-text"><strong>✅ IMPORTANTE:</strong> Marque "Add Python to PATH" durante a instalação</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <span class="step-text">Teste no terminal/prompt: <code>python --version</code></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">📟</div>
+                        <div class="tool-name">Node.js 18+</div>
+                    </div>
+                    <div class="tool-description">
+                        Necessário para ferramentas de desenvolvimento, gerenciadores de pacotes e algumas 
+                        bibliotecas de IA que usaremos durante o evento.
+                    </div>
+                    <a href="https://nodejs.org/" class="download-btn">
+                        🔗 Baixar Node.js
+                    </a>
+                    
+                    <div class="steps">
+                        <h3>📋 Passos de Instalação:</h3>
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <span class="step-text">Baixe a versão LTS (Long Term Support) - mais estável</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <span class="step-text">Execute o instalador com configurações padrão</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <span class="step-text">Teste no terminal: <code>node --version</code> e <code>npm --version</code></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">💻</div>
+                        <div class="tool-name">Visual Studio Code</div>
+                    </div>
+                    <div class="tool-description">
+                        Editor de código principal que usaremos. Leve, poderoso e com excelente suporte 
+                        para Python, IA e desenvolvimento em geral.
+                    </div>
+                    <a href="https://code.visualstudio.com/" class="download-btn">
+                        🔗 Baixar VS Code
+                    </a>
+                    
+                    <div class="steps">
+                        <h3>📋 Extensões Recomendadas:</h3>
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <span class="step-text"><strong>Python (Microsoft)</strong> - Suporte completo para Python</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <span class="step-text"><strong>Pylance</strong> - IntelliSense avançado para Python</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <span class="step-text"><strong>Jupyter</strong> - Para notebooks interativos</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">4</span>
+                            <span class="step-text"><strong>GitHub Copilot</strong> (opcional) - Assistente de IA para código</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">🌊</div>
+                        <div class="tool-name">Windsurf (Codeium)</div>
+                    </div>
+                    <div class="tool-description">
+                        <strong>Nossa arma secreta!</strong> Editor de código revolucionário com IA integrada. 
+                        Ferramenta que usaremos para desenvolvimento assistido por IA de última geração.
+                    </div>
+                    <a href="https://codeium.com/windsurf" class="download-btn">
+                        🔗 Baixar Windsurf
+                    </a>
+                    
+                    <div class="steps">
+                        <h3>📋 Configuração:</h3>
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <span class="step-text">Crie uma conta gratuita no Codeium</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <span class="step-text">Baixe e instale o Windsurf</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <span class="step-text">Configure a integração com IA</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">4</span>
+                            <span class="step-text">Teste o assistente de código - você vai se surpreender!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tips-section">
+                <h2 style="margin-bottom: 20px;">🎯 Dicas Importantes</h2>
+                
+                <div class="tip">
+                    <span class="tip-icon">🔥</span>
+                    <div class="tip-text">
+                        <strong>Teste tudo antes do evento!</strong> Instale e teste cada ferramenta para evitar problemas técnicos durante as aulas.
+                    </div>
+                </div>
+                
+                <div class="tip">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-text">
+                        <strong>Tenha um backup:</strong> Se algo não funcionar no seu computador, tenha o Google Colab como alternativa.
+                    </div>
+                </div>
+                
+                <div class="tip">
+                    <span class="tip-icon">🎮</span>
+                    <div class="tip-text">
+                        <strong>Pratique com Windsurf:</strong> É nossa ferramenta secreta - quanto mais você usar antes do evento, melhor será sua experiência!
+                    </div>
+                </div>
+                
+                <div class="tip">
+                    <span class="tip-icon">📱</span>
+                    <div class="tip-text">
+                        <strong>Entre no grupo do WhatsApp:</strong> Qualquer dúvida sobre instalação, pergunte no grupo exclusivo!
+                    </div>
+                </div>
+                
+                <div class="tip">
+                    <span class="tip-icon">⏰</span>
+                    <div class="tip-text">
+                        <strong>Marque na agenda:</strong> 01 a 04 de setembro, das 20h às 22h. Não perca nenhum dia!
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <h3>🚀 Nos vemos em setembro!</h3>
+            <p>
+                Com essas ferramentas instaladas, você estará pronto para criar<br/>
+                <span class="highlight">aplicações de IA de verdade!</span>
+            </p>
+            <div style="margin-top: 20px; font-size: 0.9rem; opacity: 0.7;">
+                AI Code Pro • Ciência dos Dados • 2025
+            </div>
+        </div>
+    </div>
+</body>
+</html>
