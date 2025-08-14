@@ -278,7 +278,7 @@ const LeadForm = memo(function LeadForm() {
         utm_campaign: utmParams.utmCampaign,
         isProgrammer: isProgrammer === true,
         date: new Date().toISOString(),
-        tags: 'AI-Code-Pro-06-21'
+        tags: 'AI-CODE-PRO-08-14'
       };
 
       console.log('📤 Enviando dados para webhook N8N:', data);
@@ -471,7 +471,7 @@ const LeadForm = memo(function LeadForm() {
   useEffect(() => {
     if (typeof document === 'undefined') return;
     
-    const form = document.querySelector('form[klicksend-form-id="jruEyoV"]') as HTMLFormElement;
+    const form = document.querySelector('form[klicksend-form-id="zwuk82P"]') as HTMLFormElement;
     
     if (form) {
       const originalSubmitHandler = form.onsubmit;
@@ -636,10 +636,10 @@ const LeadForm = memo(function LeadForm() {
   return (
     <div className="hotmart-form-container">
       <form 
-        klicksend-form-id='jruEyoV' 
+        klicksend-form-id='zwuk82P' 
         autoComplete='off' 
         method="post" 
-        action="//handler.send.hotmart.com/subscription/jruEyoV?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado"
+        action="//handler.send.hotmart.com/subscription/zwuk82P?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado"
         className="space-y-4"
         id="lead-form"
         onSubmit={(e) => {
@@ -755,7 +755,7 @@ const LeadForm = memo(function LeadForm() {
 
             {/* Campo oculto para o honeypot anti-spam */}
             <div style={{ position: "absolute", left: "-5000px" }} aria-hidden="true">
-              <input type="text" autoComplete='new-password' name="b_jruEyoV" tabIndex={-1} value="" />
+              <input type="text" autoComplete='new-password' name="b_zwuk82P" tabIndex={-1} value="" />
             </div>
             
             {/* Campo oculto para armazenar a resposta de qualificação */}
@@ -770,7 +770,7 @@ const LeadForm = memo(function LeadForm() {
 
             <button
               type="submit"
-              klicksend-form-submit-id='jruEyoV'
+              klicksend-form-submit-id='zwuk82P'
               disabled={isSubmitting}
               className={`w-full px-8 py-4 mt-4 rounded-xl bg-[#22c55e] hover:bg-[#22c55e]/90 text-white font-medium transition-all duration-200 relative overflow-hidden ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
@@ -785,13 +785,13 @@ const LeadForm = memo(function LeadForm() {
       {/* Script para capturar UTMs e garantir o redirecionamento correto */}
       <script dangerouslySetInnerHTML={{ __html: `
         document.addEventListener('DOMContentLoaded', function() {
-          var form = document.querySelector('form[klicksend-form-id="jruEyoV"]');
+          var form = document.querySelector('form[klicksend-form-id="zwuk82P"]');
           if (!form) return;
           
           var pageParams = new URLSearchParams(window.location.search);
           
           // Garantir que o redirecionamento seja para o domínio correto
-          form.action = "//handler.send.hotmart.com/subscription/jruEyoV?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado";
+          form.action = "//handler.send.hotmart.com/subscription/zwuk82P?redirectTo=https://ai-code-pro.cienciadosdados.com/obrigado";
           
           // Adicionar UTMs e outros parâmetros da URL
           if (pageParams.toString()) {
