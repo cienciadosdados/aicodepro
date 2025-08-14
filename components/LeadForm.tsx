@@ -251,6 +251,48 @@ const LeadForm = memo(function LeadForm() {
     }
   };
 
+  // Função para enviar dados diretamente para o Hotmart
+  const sendToHotmart = (email: string, phone: string): void => {
+    try {
+      console.log('🚀 ENVIANDO PARA HOTMART:', { email, phone, isProgrammer });
+      
+      // Criar FormData para envio ao Hotmart
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('phone', phone);
+      
+      // Adicionar campo isProgrammer como first_name (conforme configuração anterior)
+      const programmerStatus = isProgrammer === true ? 'SIM' : 'NAO';
+      formData.append('first_name', programmerStatus);
+      
+      // Obter UTMs da URL atual
+      const urlParams = new URLSearchParams(window.location.search);
+      
+      // Adicionar UTMs se existirem
+      if (urlParams.get('utm_source')) formData.append('utm_source', urlParams.get('utm_source')!);
+      if (urlParams.get('utm_medium')) formData.append('utm_medium', urlParams.get('utm_medium')!);
+      if (urlParams.get('utm_campaign')) formData.append('utm_campaign', urlParams.get('utm_campaign')!);
+      
+      // Enviar para o endpoint do Hotmart usando fetch
+      fetch('//handler.send.hotmart.com/subscription/zwuk82P', {
+        method: 'POST',
+        body: formData,
+        keepalive: true // Garantir que o envio seja completado mesmo se a página mudar
+      }).then(response => {
+        if (response.ok) {
+          console.log('✅ Dados enviados para Hotmart com sucesso!');
+        } else {
+          console.error('❌ Erro ao enviar para Hotmart:', response.status, response.statusText);
+        }
+      }).catch(error => {
+        console.error('💥 Erro de rede ao enviar para Hotmart:', error);
+      });
+      
+    } catch (error) {
+      console.error('💥 Erro inesperado ao enviar para Hotmart:', error);
+    }
+  };
+
   // Função para enviar dados ao webhook do n8n de forma silenciosa
   const sendToWebhook = (email: string, phone: string): void => {
     try {
@@ -669,6 +711,9 @@ const LeadForm = memo(function LeadForm() {
           
           // Enviar dados para os webhooks existentes
           sendToWebhook(email, phone);
+          
+          // ENVIAR IMEDIATAMENTE PARA O HOTMART
+          sendToHotmart(email, phone);
           
           // Mostrar pesquisa
           setShowSurvey(true);
