@@ -4,6 +4,7 @@ import './mobile-optimizations.css';
 import { inter } from './fonts';
 import Script from 'next/script';
 import { headers } from 'next/headers';
+import { ANALYTICS_CONFIG } from '../lib/analytics-config';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -196,6 +197,31 @@ export default function RootLayout({
           `}
         </Script>
         
+        {/* Umami Analytics - Privacy-focused */}
+        <Script
+          src="https://cloud.umami.is/script.js"
+          data-website-id="4c191d02-dec4-46fb-8b2f-4348179a5706"
+          strategy="afterInteractive"
+          defer
+        />
+
+        {/* Google Analytics 4 */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-K39VWGP4CN"
+          strategy="lazyOnload"
+        />
+        <Script id="google-analytics" strategy="lazyOnload">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-K39VWGP4CN', {
+              page_title: document.title,
+              page_location: window.location.href
+            });
+          `}
+        </Script>
+
         {/* Google Tag Manager - Movido para depois do conteúdo principal */}
         <Script id="google-tag-manager" strategy="lazyOnload">
           {`
@@ -218,7 +244,7 @@ export default function RootLayout({
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', 'XXXXXXXXXXXXXXXXX');
+            fbq('init', '2881836401882483');
             fbq('track', 'PageView');
           `}
         </Script>
@@ -239,7 +265,7 @@ export default function RootLayout({
             height="1" 
             width="1" 
             style={{ display: 'none' }}
-            src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXXXX&ev=PageView&noscript=1"
+            src="https://www.facebook.com/tr?id=2881836401882483&ev=PageView&noscript=1"
             alt="Facebook Pixel"
           />
         </noscript>
