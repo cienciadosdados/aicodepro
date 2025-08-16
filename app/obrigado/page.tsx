@@ -12,6 +12,7 @@ import Head from 'next/head';
 function ThankYouContent() {
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || '';
+  const phone = searchParams.get('phone') || '';
   const [isAILabDomain, setIsAILabDomain] = useState(false);
   
   useEffect(() => {
@@ -130,7 +131,7 @@ function ThankYouContent() {
               {
                 title: "Responder a Pesquisa",
                 description: "Ajude-nos a personalizar o conteúdo do AI Code Pro respondendo nossa pesquisa rápida. Suas respostas nos permitirão focar nos temas mais importantes para você.",
-                link: `/pesquisa?email=${encodeURIComponent(email)}&isProgrammer=true`,
+                link: `/pesquisa?email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&isProgrammer=true`,
                 buttonText: "RESPONDER PESQUISA"
               },
               {
