@@ -4,7 +4,7 @@ import './mobile-optimizations.css';
 import { inter } from './fonts';
 import Script from 'next/script';
 import { headers } from 'next/headers';
-import { ANALYTICS_CONFIG } from '../lib/analytics-config';
+import { ANALYTICS_CONFIG } from '../lib/analytics-config.js';
 
 export const viewport: Viewport = {
   width: 'device-width',
