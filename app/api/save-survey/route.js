@@ -54,24 +54,24 @@ export async function POST(request) {
       // Dados de identificação
       email: surveyData.email?.toLowerCase()?.trim(),
       phone: surveyData.phone?.trim() || null,
-      is_programmer: Boolean(surveyData.is_programmer), // Manter como boolean real
+      is_programmer: Boolean(surveyData.is_programmer),
       
-      // Dados demográficos
+      // Dados demográficos - MAPEAMENTO CORRETO
       idade: surveyData.idade || null,
-      genero: surveyData.genero || null,
-      faixa_salarial: surveyData.faixa_salarial || null,
+      genero: mapGenero(surveyData.genero),
+      faixa_salarial: mapFaixaSalarial(surveyData.faixa_salarial),
       
-      // Conhecimento técnico (tipos corretos conforme schema)
-      usa_rag_llm: surveyData.usa_rag_llm || null,
-      conhece_frameworks_ia: surveyData.conhece_frameworks_ia || null,
-      ja_e_programador: surveyData.ja_e_programador?.toLowerCase() === 'sim' ? true : (surveyData.ja_e_programador?.toLowerCase() === 'não' ? false : null),
-      ja_programa_python: surveyData.ja_programa_python?.toLowerCase() === 'sim' ? true : (surveyData.ja_programa_python?.toLowerCase() === 'não' ? false : null),
-      usa_ml_dl: surveyData.usa_ml_dl?.toLowerCase() === 'sim' ? true : (surveyData.usa_ml_dl?.toLowerCase() === 'não' ? false : null),
+      // Conhecimento técnico - MAPEAMENTO CORRETO
+      usa_rag_llm: mapResposta(surveyData.usa_rag_llm),
+      conhece_frameworks_ia: mapResposta(surveyData.conhece_frameworks_ia),
+      ja_e_programador: mapBoolean(surveyData.ja_e_programador),
+      ja_programa_python: mapBoolean(surveyData.ja_programa_python),
+      usa_ml_dl: mapBoolean(surveyData.usa_ml_dl),
       
-      // Dados profissionais
+      // Dados profissionais - MAPEAMENTO CORRETO
       profissao_atual: surveyData.profissao_atual?.trim() || null,
-      como_conheceu: surveyData.como_conheceu || null,
-      tempo_conhece: surveyData.tempo_conhece || null,
+      como_conheceu: mapComoConheceu(surveyData.como_conheceu),
+      tempo_conhece: mapTempoConhece(surveyData.tempo_conhece),
       
       // Motivações e desafios
       o_que_tira_sono: surveyData.o_que_tira_sono?.trim() || null,
@@ -82,8 +82,8 @@ export async function POST(request) {
       impedimento_sonho: surveyData.impedimento_sonho?.trim() || null,
       maior_desafio_ia: surveyData.maior_desafio_ia?.trim() || null,
       
-      // Comprometimento
-      comprometido_projeto: surveyData.comprometido_projeto?.toLowerCase() === 'sim' ? true : (surveyData.comprometido_projeto?.toLowerCase() === 'não' ? false : null),
+      // Comprometimento - MAPEAMENTO CORRETO
+      comprometido_projeto: mapBoolean(surveyData.comprometido_projeto),
       
       // Metadados
       session_id: surveyData.session_id || `fallback_${Date.now()}`,
@@ -93,6 +93,72 @@ export async function POST(request) {
       utm_medium: surveyData.utm_medium || 'none',
       utm_campaign: surveyData.utm_campaign || 'none'
     };
+
+  // ===== FUNÇÕES DE MAPEAMENTO COMPLETAS =====
+  
+  function mapGenero(valor) {
+    if (!valor) return null;
+    const mapeamento = {
+      'Masculino': 'masculino',
+      'Feminino': 'feminino',
+      'Prefiro não dizer': 'prefiro-nao-dizer'
+    };
+    return mapeamento[valor] || null;
+  }
+
+  function mapFaixaSalarial(valor) {
+    if (!valor) return null;
+    const mapeamento = {
+      'Até R$ 1.500': 'ate-1500',
+      'R$ 1.500 - R$ 3.000': '1500-3000',
+      'R$ 3.000 - R$ 5.000': '3000-5000',
+      'R$ 5.000 - R$ 10.000': '5000-7000',
+      'Acima de R$ 10.000': 'acima-11000'
+    };
+    return mapeamento[valor] || null;
+  }
+
+  function mapResposta(valor) {
+    if (!valor) return null;
+    const mapeamento = {
+      'Sim': 'sim',
+      'Não': 'nao',
+      'Nem sei o que é isso': 'nem-sei',
+      'Nunca ouvi falar': 'nunca-ouvi'
+    };
+    return mapeamento[valor] || null;
+  }
+
+  function mapBoolean(valor) {
+    if (!valor) return null;
+    const valorLower = valor.toString().toLowerCase();
+    return valorLower === 'sim' || valorLower === 'yes' || valorLower === 'true';
+  }
+
+  function mapComoConheceu(valor) {
+    if (!valor) return null;
+    const mapeamento = {
+      'Instagram': 'instagram',
+      'Facebook': 'facebook',
+      'YouTube': 'youtube',
+      'LinkedIn': 'portal',
+      'Google': 'portal',
+      'Indicação de amigo': 'indicacao',
+      'Outro': 'portal'
+    };
+    return mapeamento[valor] || 'portal';
+  }
+
+  function mapTempoConhece(valor) {
+    if (!valor) return null;
+    const mapeamento = {
+      'Menos de 2 meses': 'menos-2-meses',
+      '2-6 meses': '6-meses',
+      '6 meses - 1 ano': '1-ano',
+      'Mais de 1 ano': '2-anos'
+    };
+    return mapeamento[valor] || 'menos-2-meses';
+  }
 
     console.log(`[${requestId}] 🔄 Tentando salvar pesquisa no Supabase...`);
     console.log(`[${requestId}] 💾 Dados formatados para inserção:`, formattedData);
