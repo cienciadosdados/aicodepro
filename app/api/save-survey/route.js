@@ -27,15 +27,29 @@ export async function POST(request) {
       );
     }
 
-    // Validar dados obrigatórios
-    const requiredFields = ['profissao_atual', 'como_conheceu', 'tempo_conhece', 
-                           'expectativas_treinamento', 'sonho_realizar', 'maior_dificuldade'];
+    // Validar dados obrigatórios com logs detalhados
+    const requiredFields = {
+      'profissao_atual': 'Profissão atual',
+      'como_conheceu': 'Como nos conheceu', 
+      'tempo_conhece': 'Há quanto tempo nos conhece',
+      'expectativas_treinamento': 'Expectativas do treinamento',
+      'sonho_realizar': 'Sonho a realizar',
+      'maior_dificuldade': 'Maior dificuldade'
+    };
     
-    for (const field of requiredFields) {
-      if (!surveyData[field] || surveyData[field].trim() === '') {
-        console.log(`[${requestId}] ❌ Campo obrigatório ausente: ${field}`);
+    console.log(`[${requestId}] 🔍 Validando campos obrigatórios...`);
+    for (const [field, label] of Object.entries(requiredFields)) {
+      const value = surveyData[field];
+      console.log(`[${requestId}] 📋 ${label}: ${value ? '✅' : '❌'} (${typeof value})`);
+      
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
+        console.log(`[${requestId}] ❌ Campo obrigatório ausente: ${field} (${label})`);
         return NextResponse.json(
-          { error: `Campo obrigatório ausente: ${field}` },
+          { 
+            success: false,
+            error: `Campo obrigatório não preenchido: ${label}`,
+            field: field
+          },
           { status: 400 }
         );
       }
@@ -178,11 +192,17 @@ export async function POST(request) {
       }
     }
 
-    console.log(`[${requestId}] ✅ Pesquisa salva com sucesso:`, data?.id);
+    console.log(`[${requestId}] ✅ Pesquisa salva com sucesso:`, {
+      id: data?.id,
+      email: data?.email,
+      timestamp: new Date().toISOString()
+    });
+    
     return NextResponse.json({ 
       success: true, 
       id: data?.id,
-      message: 'Pesquisa salva com sucesso'
+      email: data?.email,
+      message: 'Pesquisa salva com sucesso no banco de dados'
     });
 
   } catch (error) {

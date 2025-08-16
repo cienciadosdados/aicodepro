@@ -97,34 +97,66 @@ function PesquisaContent() {
     setIsSubmitting(true);
     
     try {
+      // Validação robusta antes do envio
+      const requiredFields = {
+        profissao_atual: 'Profissão atual',
+        como_conheceu: 'Como nos conheceu',
+        tempo_conhece: 'Há quanto tempo nos conhece',
+        expectativas_treinamento: 'Expectativas do treinamento',
+        sonho_realizar: 'Sonho a realizar',
+        maior_dificuldade: 'Maior dificuldade'
+      };
+
+      for (const [field, label] of Object.entries(requiredFields)) {
+        if (!surveyData[field] || surveyData[field].trim() === '') {
+          alert(`Por favor, preencha o campo: ${label}`);
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      const payload = {
+        ...surveyData,
+        session_id: `survey_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`,
+        ip_address: 'unknown',
+        user_agent: navigator.userAgent,
+        utm_source: 'direct',
+        utm_medium: 'website',
+        utm_campaign: 'ai-code-pro'
+      };
+
+      console.log('📤 Enviando pesquisa:', {
+        email: payload.email,
+        campos_preenchidos: Object.keys(payload).length
+      });
+
       const response = await fetch('/api/save-survey', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...surveyData,
-          session_id: Date.now().toString(), // Gerar ID único
-          ip_address: 'unknown',
-          user_agent: navigator.userAgent
-        }),
+        body: JSON.stringify(payload),
       });
 
-      if (response.ok) {
+      const result = await response.json();
+      console.log('📥 Resposta da API:', result);
+
+      if (response.ok && result.success) {
         setIsCompleted(true);
-        console.log('✅ Pesquisa salva com sucesso!');
+        console.log('✅ Pesquisa salva com sucesso!', result);
         
         // Redirecionar para página de obrigado após 3 segundos
         setTimeout(() => {
           window.location.href = '/obrigado?pesquisa=concluida';
         }, 3000);
       } else {
-        console.error('❌ Erro ao salvar pesquisa');
-        alert('Erro ao salvar pesquisa. Tente novamente.');
+        console.error('❌ Erro na resposta:', result);
+        const errorMsg = result.error || result.details || 'Erro desconhecido';
+        alert(`Erro ao salvar pesquisa: ${errorMsg}`);
       }
     } catch (error) {
       console.error('❌ Erro inesperado:', error);
-      alert('Erro inesperado. Tente novamente.');
+      alert(`Erro de conexão: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
