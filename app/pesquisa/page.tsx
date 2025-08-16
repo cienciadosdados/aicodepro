@@ -6,11 +6,12 @@ import { useSearchParams } from 'next/navigation';
 import { FloatingGrid } from '@/components/ui/floating-grid';
 
 interface SurveyData {
+  // Dados de identificação
   email: string;
   phone: string;
   is_programmer: boolean;
   
-  // Dados demográficos
+  // Demográficos
   idade: string;
   genero: string;
   faixa_salarial: string;
@@ -38,6 +39,9 @@ interface SurveyData {
   
   // Comprometimento
   comprometido_projeto: string;
+  
+  // Index signature para permitir acesso dinâmico
+  [key: string]: string | boolean;
 }
 
 function PesquisaContent() {
@@ -108,7 +112,8 @@ function PesquisaContent() {
       };
 
       for (const [field, label] of Object.entries(requiredFields)) {
-        if (!surveyData[field] || surveyData[field].trim() === '') {
+        const value = surveyData[field];
+        if (!value || (typeof value === 'string' && value.trim() === '')) {
           alert(`Por favor, preencha o campo: ${label}`);
           setIsSubmitting(false);
           return;
