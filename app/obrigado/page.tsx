@@ -128,10 +128,10 @@ function ThankYouContent() {
                 buttonText: "PARTICIPAR DO GRUPO EXCLUSIVO"
               },
               {
-                title: "Marque na sua Agenda",
-                description: "Adicione o evento AI Code Pro na sua agenda do Google Calendar para não perder nenhum dia! De 01 a 04 de setembro, das 20h às 22h.",
-                link: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=AI+Code+Pro+-+IA+de+Verdade&dates=20250901T230000Z/20250901T250000Z&details=Evento+AI+Code+Pro+-+Aprenda+LLM%2C+RAG%2C+Agentes+de+IA+e+muito+mais%21%0A%0ADias%3A+01+a+04+de+setembro%0AHor%C3%A1rio%3A+20h+%C3%A0s+22h%0A%0ALink+do+evento%3A+https%3A//ai-code-pro.cienciadosdados.com&location=Online+-+Link+ser%C3%A1+enviado+por+email&recur=RRULE:FREQ=DAILY;COUNT=4",
-                buttonText: "ADICIONAR À AGENDA"
+                title: "Responder a Pesquisa",
+                description: "Ajude-nos a personalizar o conteúdo do AI Code Pro respondendo nossa pesquisa rápida. Suas respostas nos permitirão focar nos temas mais importantes para você.",
+                link: "https://forms.gle/928BgBYb5qXJJMHE9",
+                buttonText: "RESPONDER PESQUISA"
               },
               {
                 title: "Kit de Preparação",
