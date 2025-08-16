@@ -130,7 +130,7 @@ function ThankYouContent() {
               {
                 title: "Responder a Pesquisa",
                 description: "Ajude-nos a personalizar o conteúdo do AI Code Pro respondendo nossa pesquisa rápida. Suas respostas nos permitirão focar nos temas mais importantes para você.",
-                link: "https://forms.gle/7Yk7EMtvcxhRCCQr7",
+                link: `/pesquisa?email=${encodeURIComponent(email)}&isProgrammer=true`,
                 buttonText: "RESPONDER PESQUISA"
               },
               {

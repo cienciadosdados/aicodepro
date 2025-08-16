@@ -20,13 +20,26 @@ export async function POST(request) {
       campos: Object.keys(surveyData)
     });
 
-    // Validação básica
-    if (!surveyData.email) {
-      console.log(`[${requestId}] ❌ Email obrigatório não fornecido`);
-      return NextResponse.json(
-        { error: 'Email é obrigatório' },
-        { status: 400 }
-      );
+    // Validação de campos obrigatórios (baseado nos erros do banco)
+    const requiredFields = {
+      email: 'Email é obrigatório',
+      profissao_atual: 'Profissão atual é obrigatória',
+      como_conheceu: 'Como conheceu é obrigatório',
+      tempo_conhece: 'Tempo que conhece é obrigatório'
+    };
+
+    for (const [field, message] of Object.entries(requiredFields)) {
+      if (!surveyData[field] || surveyData[field].trim() === '') {
+        console.log(`[${requestId}] ❌ Campo obrigatório não fornecido: ${field}`);
+        return NextResponse.json(
+          { 
+            error: 'Campo obrigatório não fornecido',
+            field: field,
+            message: message
+          },
+          { status: 400 }
+        );
+      }
     }
 
     // Log dos dados recebidos (igual ao SurveyForm original)
@@ -36,24 +49,24 @@ export async function POST(request) {
       total_campos: Object.keys(surveyData).length
     });
 
-    // Preparar dados EXATAMENTE como o SurveyForm original (sem conversões forçadas)
+    // Preparar dados com tipos corretos (todos como STRING para compatibilidade)
     const formattedData = {
       // Dados de identificação
       email: surveyData.email?.toLowerCase()?.trim(),
       phone: surveyData.phone?.trim() || null,
-      is_programmer: surveyData.is_programmer, // Manter como recebido
+      is_programmer: surveyData.is_programmer ? 'true' : 'false', // Converter boolean para string
       
-      // Dados demográficos (manter como string para ENUMs)
+      // Dados demográficos
       idade: surveyData.idade || null,
       genero: surveyData.genero || null,
       faixa_salarial: surveyData.faixa_salarial || null,
       
-      // Conhecimento técnico (manter como recebido, API converte depois)
+      // Conhecimento técnico (todos como string)
       usa_rag_llm: surveyData.usa_rag_llm || null,
       conhece_frameworks_ia: surveyData.conhece_frameworks_ia || null,
-      ja_e_programador: surveyData.ja_e_programador || null, // API converte para boolean
-      ja_programa_python: surveyData.ja_programa_python || null, // API converte para boolean  
-      usa_ml_dl: surveyData.usa_ml_dl || null, // API converte para boolean
+      ja_e_programador: surveyData.ja_e_programador || null,
+      ja_programa_python: surveyData.ja_programa_python || null,
+      usa_ml_dl: surveyData.usa_ml_dl || null,
       
       // Dados profissionais
       profissao_atual: surveyData.profissao_atual?.trim() || null,
@@ -69,7 +82,7 @@ export async function POST(request) {
       impedimento_sonho: surveyData.impedimento_sonho?.trim() || null,
       maior_desafio_ia: surveyData.maior_desafio_ia?.trim() || null,
       
-      // Comprometimento (API converte para boolean)
+      // Comprometimento
       comprometido_projeto: surveyData.comprometido_projeto || null,
       
       // Metadados
