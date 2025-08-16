@@ -64,9 +64,9 @@ export async function POST(request) {
       // Conhecimento técnico (tipos corretos conforme schema)
       usa_rag_llm: surveyData.usa_rag_llm || null,
       conhece_frameworks_ia: surveyData.conhece_frameworks_ia || null,
-      ja_e_programador: surveyData.ja_e_programador === 'sim' ? true : (surveyData.ja_e_programador === 'nao' ? false : null),
-      ja_programa_python: surveyData.ja_programa_python === 'sim' ? true : (surveyData.ja_programa_python === 'nao' ? false : null),
-      usa_ml_dl: surveyData.usa_ml_dl === 'sim' ? true : (surveyData.usa_ml_dl === 'nao' ? false : null),
+      ja_e_programador: surveyData.ja_e_programador?.toLowerCase() === 'sim' ? true : (surveyData.ja_e_programador?.toLowerCase() === 'não' ? false : null),
+      ja_programa_python: surveyData.ja_programa_python?.toLowerCase() === 'sim' ? true : (surveyData.ja_programa_python?.toLowerCase() === 'não' ? false : null),
+      usa_ml_dl: surveyData.usa_ml_dl?.toLowerCase() === 'sim' ? true : (surveyData.usa_ml_dl?.toLowerCase() === 'não' ? false : null),
       
       // Dados profissionais
       profissao_atual: surveyData.profissao_atual?.trim() || null,
@@ -83,7 +83,7 @@ export async function POST(request) {
       maior_desafio_ia: surveyData.maior_desafio_ia?.trim() || null,
       
       // Comprometimento
-      comprometido_projeto: surveyData.comprometido_projeto === 'sim' ? true : (surveyData.comprometido_projeto === 'nao' ? false : null),
+      comprometido_projeto: surveyData.comprometido_projeto?.toLowerCase() === 'sim' ? true : (surveyData.comprometido_projeto?.toLowerCase() === 'não' ? false : null),
       
       // Metadados
       session_id: surveyData.session_id || `fallback_${Date.now()}`,
