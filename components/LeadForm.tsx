@@ -715,12 +715,14 @@ const LeadForm = memo(function LeadForm() {
           // ENVIAR IMEDIATAMENTE PARA O HOTMART
           sendToHotmart(email, phone);
           
-          // Mostrar pesquisa
-          setShowSurvey(true);
-          setShowQualificationStep(false);
-          setShowContactStep(false);
+          // Redirecionar diretamente para página de obrigado
+          console.log('🚀 Redirecionando diretamente para /obrigado com email:', email);
           
-          console.log('📋 Exibindo pesquisa para:', email);
+          // Aguardar um pouco para garantir que os dados foram enviados
+          setTimeout(() => {
+            const redirectUrl = `/obrigado?email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+            window.location.href = redirectUrl;
+          }, 500);
         }}
       >
         {/* Etapa de qualificação */}
