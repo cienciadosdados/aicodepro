@@ -49,24 +49,24 @@ export async function POST(request) {
       total_campos: Object.keys(surveyData).length
     });
 
-    // Preparar dados com tipos corretos (todos como STRING para compatibilidade)
+    // Preparar dados com tipos corretos para o schema
     const formattedData = {
       // Dados de identificação
       email: surveyData.email?.toLowerCase()?.trim(),
       phone: surveyData.phone?.trim() || null,
-      is_programmer: surveyData.is_programmer ? 'true' : 'false', // Converter boolean para string
+      is_programmer: Boolean(surveyData.is_programmer), // Manter como boolean real
       
       // Dados demográficos
       idade: surveyData.idade || null,
       genero: surveyData.genero || null,
       faixa_salarial: surveyData.faixa_salarial || null,
       
-      // Conhecimento técnico (todos como string)
+      // Conhecimento técnico (tipos corretos conforme schema)
       usa_rag_llm: surveyData.usa_rag_llm || null,
       conhece_frameworks_ia: surveyData.conhece_frameworks_ia || null,
-      ja_e_programador: surveyData.ja_e_programador || null,
-      ja_programa_python: surveyData.ja_programa_python || null,
-      usa_ml_dl: surveyData.usa_ml_dl || null,
+      ja_e_programador: surveyData.ja_e_programador === 'sim' ? true : (surveyData.ja_e_programador === 'nao' ? false : null),
+      ja_programa_python: surveyData.ja_programa_python === 'sim' ? true : (surveyData.ja_programa_python === 'nao' ? false : null),
+      usa_ml_dl: surveyData.usa_ml_dl === 'sim' ? true : (surveyData.usa_ml_dl === 'nao' ? false : null),
       
       // Dados profissionais
       profissao_atual: surveyData.profissao_atual?.trim() || null,
@@ -83,7 +83,7 @@ export async function POST(request) {
       maior_desafio_ia: surveyData.maior_desafio_ia?.trim() || null,
       
       // Comprometimento
-      comprometido_projeto: surveyData.comprometido_projeto || null,
+      comprometido_projeto: surveyData.comprometido_projeto === 'sim' ? true : (surveyData.comprometido_projeto === 'nao' ? false : null),
       
       // Metadados
       session_id: surveyData.session_id || `fallback_${Date.now()}`,
