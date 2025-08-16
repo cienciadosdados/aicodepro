@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
 import { FloatingGrid } from '@/components/ui/floating-grid';
@@ -40,7 +40,7 @@ interface SurveyData {
   comprometido_projeto: string;
 }
 
-export default function PesquisaPage() {
+function PesquisaContent() {
   const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -609,5 +609,20 @@ export default function PesquisaPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function PesquisaPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#22c55e] mx-auto mb-4"></div>
+          <p className="text-gray-300">Carregando pesquisa...</p>
+        </div>
+      </div>
+    }>
+      <PesquisaContent />
+    </Suspense>
   );
 }
