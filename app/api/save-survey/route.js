@@ -56,12 +56,12 @@ export async function POST(request) {
       // Conhecimento técnico (ENUMs e BOOLEANs)
       usa_rag_llm: surveyData.usa_rag_llm || null,
       conhece_frameworks_ia: surveyData.conhece_frameworks_ia || null,
-      ja_e_programador: surveyData.ja_e_programador === 'sim' ? true : 
-                       surveyData.ja_e_programador === 'nao' ? false : null,
-      ja_programa_python: surveyData.ja_programa_python === 'sim' ? true : 
-                         surveyData.ja_programa_python === 'nao' ? false : null,
-      usa_ml_dl: surveyData.usa_ml_dl === 'sim' ? true : 
-                surveyData.usa_ml_dl === 'nao' ? false : null,
+      ja_e_programador: (surveyData.ja_e_programador === 'Sim' || surveyData.ja_e_programador === 'sim') ? 'Sim' : 
+                       (surveyData.ja_e_programador === 'Não' || surveyData.ja_e_programador === 'nao') ? 'Não' : null,
+      ja_programa_python: (surveyData.ja_programa_python === 'Sim' || surveyData.ja_programa_python === 'sim') ? 'Sim' : 
+                         (surveyData.ja_programa_python === 'Não' || surveyData.ja_programa_python === 'nao') ? 'Não' : null,
+      usa_ml_dl: (surveyData.usa_ml_dl === 'Sim' || surveyData.usa_ml_dl === 'sim') ? 'Sim' : 
+                (surveyData.usa_ml_dl === 'Não' || surveyData.usa_ml_dl === 'nao') ? 'Não' : null,
       
       // Dados profissionais (obrigatórios)
       profissao_atual: surveyData.profissao_atual?.trim(),
@@ -77,9 +77,8 @@ export async function POST(request) {
       impedimento_sonho: surveyData.impedimento_sonho?.trim() || null,
       maior_desafio_ia: surveyData.maior_desafio_ia?.trim() || null,
       
-      // Comprometimento (BOOLEAN)
-      comprometido_projeto: surveyData.comprometido_projeto === 'sim' ? true : 
-                           surveyData.comprometido_projeto === 'nao' ? false : null,
+      // Comprometimento (STRING)
+      comprometido_projeto: surveyData.comprometido_projeto || null,
       
       // Metadados
       session_id: surveyData.session_id || `fallback_${Date.now()}`,
