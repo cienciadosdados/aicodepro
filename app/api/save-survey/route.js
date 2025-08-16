@@ -84,9 +84,9 @@ export async function POST(request) {
     console.log(`[${requestId}] 🔄 Tentando salvar pesquisa no Supabase...`);
     console.log(`[${requestId}] 💾 Dados formatados para inserção:`, formattedData);
 
-    // Usar UPSERT para evitar duplicatas
+    // Usar UPSERT para evitar duplicatas na tabela correta
     const { data, error } = await supabase
-      .from('pesquisa_ai_code_pro')
+      .from('survey_responses')
       .upsert(formattedData, { 
         onConflict: 'email',
         ignoreDuplicates: false 
@@ -99,78 +99,9 @@ export async function POST(request) {
     if (error) {
       console.log(`[${requestId}] ⚠️ Erro no Supabase:`, error.message);
       
-      // Se a tabela não existir, tentar criar
-      if (error.message && error.message.includes('relation "pesquisa_ai_code_pro" does not exist')) {
-        console.log(`[${requestId}] 📋 Tabela pesquisa_ai_code_pro não existe. Criando...`);
-        
-        // Executar SQL para criar a tabela
-        const createTableSQL = `
-          CREATE TABLE IF NOT EXISTS pesquisa_ai_code_pro (
-            id SERIAL PRIMARY KEY,
-            email VARCHAR(255) NOT NULL,
-            phone VARCHAR(20),
-            is_programmer BOOLEAN,
-            idade VARCHAR(20),
-            genero VARCHAR(20),
-            usa_rag_llm VARCHAR(20),
-            conhece_frameworks_ia VARCHAR(20),
-            ja_e_programador VARCHAR(20),
-            ja_programa_python VARCHAR(20),
-            usa_ml_dl VARCHAR(20),
-            faixa_salarial VARCHAR(50),
-            profissao_atual TEXT,
-            como_conheceu VARCHAR(50),
-            tempo_conhece VARCHAR(20),
-            o_que_tira_sono TEXT,
-            expectativas_treinamento TEXT,
-            sonho_realizar TEXT,
-            maior_dificuldade TEXT,
-            pergunta_cafe TEXT,
-            impedimento_sonho TEXT,
-            maior_desafio_ia TEXT,
-            comprometido_projeto VARCHAR(10),
-            session_id VARCHAR(100),
-            ip_address INET,
-            user_agent TEXT,
-            utm_source VARCHAR(100),
-            utm_medium VARCHAR(100),
-            utm_campaign VARCHAR(100),
-            created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-            UNIQUE(email)
-          );
-        `;
-
-        try {
-          await supabase.rpc('exec_sql', { sql: createTableSQL });
-          console.log(`[${requestId}] ✅ Tabela criada com sucesso`);
-          
-          // Tentar inserir novamente
-          const { data: retryData, error: retryError } = await supabase
-            .from('pesquisa_ai_code_pro')
-            .upsert(formattedData, { 
-              onConflict: 'email',
-              ignoreDuplicates: false 
-            })
-            .select()
-            .single();
-
-          if (retryError) {
-            throw retryError;
-          }
-
-          console.log(`[${requestId}] ✅ Pesquisa salva após criar tabela:`, retryData?.id);
-          return NextResponse.json({ 
-            success: true, 
-            id: retryData?.id,
-            message: 'Pesquisa salva com sucesso (tabela criada)'
-          });
-        } catch (createError) {
-          console.log(`[${requestId}] ❌ Erro ao criar tabela:`, createError.message);
-          throw createError;
-        }
-      } else {
-        throw error;
-      }
+      // Log do erro e continuar com fallback
+      console.log(`[${requestId}] ❌ Erro no Supabase (usando tabela survey_responses):`, error.message);
+      throw error;
     }
 
     console.log(`[${requestId}] ✅ Pesquisa salva com sucesso:`, {
