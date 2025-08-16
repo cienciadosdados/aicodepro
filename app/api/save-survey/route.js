@@ -87,7 +87,7 @@ export async function POST(request) {
       
       // Metadados
       session_id: surveyData.session_id || `fallback_${Date.now()}`,
-      ip_address: surveyData.ip_address || null,
+      ip_address: surveyData.ip_address === 'unknown' ? null : surveyData.ip_address,
       user_agent: surveyData.user_agent || null,
       utm_source: surveyData.utm_source || 'direct',
       utm_medium: surveyData.utm_medium || 'none',
