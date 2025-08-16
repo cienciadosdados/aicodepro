@@ -238,7 +238,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.idade}
                       onChange={(e) => handleInputChange('idade', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/60 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
                     >
                       <option value="">Selecione...</option>
                       <option value="18-24">18-24 anos</option>
@@ -256,7 +256,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.genero}
                       onChange={(e) => handleInputChange('genero', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/60 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
                     >
                       <option value="">Selecione...</option>
                       <option value="Masculino">Masculino</option>
@@ -272,7 +272,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.faixa_salarial}
                       onChange={(e) => handleInputChange('faixa_salarial', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/60 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
                     >
                       <option value="">Selecione...</option>
                       <option value="Até R$ 1.500">Até R$ 1.500</option>
@@ -305,7 +305,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.usa_rag_llm}
                       onChange={(e) => handleInputChange('usa_rag_llm', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/60 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
                     >
                       <option value="">Selecione...</option>
                       <option value="Sim">Sim</option>
@@ -321,7 +321,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.conhece_frameworks_ia}
                       onChange={(e) => handleInputChange('conhece_frameworks_ia', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/60 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
                     >
                       <option value="">Selecione...</option>
                       <option value="Sim">Sim</option>
@@ -337,7 +337,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.ja_e_programador}
                       onChange={(e) => handleInputChange('ja_e_programador', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/60 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
                     >
                       <option value="">Selecione...</option>
                       <option value="Sim">Sim</option>
@@ -352,7 +352,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.ja_programa_python}
                       onChange={(e) => handleInputChange('ja_programa_python', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/60 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
                     >
                       <option value="">Selecione...</option>
                       <option value="Sim">Sim</option>
@@ -367,7 +367,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.usa_ml_dl}
                       onChange={(e) => handleInputChange('usa_ml_dl', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/60 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
                     >
                       <option value="">Selecione...</option>
                       <option value="Sim">Sim</option>
@@ -410,7 +410,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.como_conheceu}
                       onChange={(e) => handleInputChange('como_conheceu', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/60 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
                     >
                       <option value="">Selecione...</option>
                       <option value="Instagram">Instagram</option>
@@ -430,7 +430,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.tempo_conhece}
                       onChange={(e) => handleInputChange('tempo_conhece', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/60 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
                     >
                       <option value="">Selecione...</option>
                       <option value="Menos de 2 meses">Menos de 2 meses</option>
@@ -568,7 +568,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.comprometido_projeto}
                       onChange={(e) => handleInputChange('comprometido_projeto', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/60 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
                     >
                       <option value="">Selecione...</option>
                       <option value="SIM">SIM</option>
