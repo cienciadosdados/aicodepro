@@ -27,33 +27,12 @@ export async function POST(request) {
       );
     }
 
-    // Validar dados obrigatórios com logs detalhados
-    const requiredFields = {
-      'profissao_atual': 'Profissão atual',
-      'como_conheceu': 'Como nos conheceu', 
-      'tempo_conhece': 'Há quanto tempo nos conhece',
-      'expectativas_treinamento': 'Expectativas do treinamento',
-      'sonho_realizar': 'Sonho a realizar',
-      'maior_dificuldade': 'Maior dificuldade'
-    };
-    
-    console.log(`[${requestId}] 🔍 Validando campos obrigatórios...`);
-    for (const [field, label] of Object.entries(requiredFields)) {
-      const value = surveyData[field];
-      console.log(`[${requestId}] 📋 ${label}: ${value ? '✅' : '❌'} (${typeof value})`);
-      
-      if (!value || (typeof value === 'string' && value.trim() === '')) {
-        console.log(`[${requestId}] ❌ Campo obrigatório ausente: ${field} (${label})`);
-        return NextResponse.json(
-          { 
-            success: false,
-            error: `Campo obrigatório não preenchido: ${label}`,
-            field: field
-          },
-          { status: 400 }
-        );
-      }
-    }
+    // Log dos dados recebidos (sem validação obrigatória como no SurveyForm original)
+    console.log(`[${requestId}] 📋 Dados recebidos para processamento:`, {
+      email: surveyData.email,
+      campos_preenchidos: Object.keys(surveyData).filter(key => surveyData[key] && surveyData[key] !== '').length,
+      total_campos: Object.keys(surveyData).length
+    });
 
     // Preparar dados com tipos corretos
     const formattedData = {

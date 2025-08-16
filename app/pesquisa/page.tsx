@@ -110,7 +110,10 @@ function PesquisaContent() {
           ...surveyData,
           session_id: Date.now().toString(),
           ip_address: 'unknown',
-          user_agent: navigator.userAgent
+          user_agent: navigator.userAgent,
+          utm_source: 'direct',
+          utm_medium: 'website',
+          utm_campaign: 'ai-code-pro'
         }),
       });
 
