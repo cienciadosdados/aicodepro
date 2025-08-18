@@ -46,7 +46,7 @@ function ThankYouContent() {
     
     // Redirecionamento para o grupo após 12 segundos
     const timer = setTimeout(() => {
-      window.location.href = 'https://chat.whatsapp.com/KfGiNue8BybEgFFzXk4R3q';
+      window.location.href = 'https://sndflw.com/i/ai-code-pro';
     }, 12000);
     
     return () => clearTimeout(timer);
@@ -125,7 +125,7 @@ function ThankYouContent() {
               {
                 title: "Entre no Grupo do WhatsApp",
                 description: "Para garantir que você receberá todos os scripts dos projetos, é importante que esteja no grupo EXCLUSIVO, pois será nosso REPO oficial.",
-                link: "https://chat.whatsapp.com/KfGiNue8BybEgFFzXk4R3q",
+                link: "https://sndflw.com/i/ai-code-pro",
                 buttonText: "PARTICIPAR DO GRUPO EXCLUSIVO"
               },
               {
