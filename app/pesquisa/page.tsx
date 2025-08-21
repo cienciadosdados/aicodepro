@@ -117,17 +117,20 @@ function PesquisaContent() {
         }),
       });
 
-      if (response.ok) {
+      const result = await response.json();
+      console.log('📥 Resposta da API:', result);
+
+      if (response.ok || result.success || result.backup) {
         setIsCompleted(true);
-        console.log('✅ Pesquisa salva com sucesso!');
+        console.log('✅ Pesquisa salva com sucesso!', result);
         
-        // Redirecionar para página de obrigado após 3 segundos
+        // Redirecionar para página de obrigado após 4 segundos
         setTimeout(() => {
           window.location.href = '/obrigado?pesquisa=concluida';
-        }, 3000);
+        }, 4000);
       } else {
-        console.error('❌ Erro ao salvar pesquisa');
-        alert('Erro ao salvar pesquisa. Tente novamente.');
+        console.error('❌ Erro ao salvar pesquisa:', result);
+        alert(`Erro ao salvar pesquisa: ${result.error || 'Tente novamente'}`);
       }
     } catch (error) {
       console.error('❌ Erro inesperado:', error);
@@ -178,7 +181,7 @@ function PesquisaContent() {
           className="text-center z-10"
         >
           <div className="text-6xl mb-4">🎉</div>
-          <h1 className="text-3xl font-bold mb-4 text-[#22c55e]">
+          <h1 className="text-3xl font-bold mb-4 text-[#0c83fe]">
             Pesquisa Concluída!
           </h1>
           <p className="text-gray-300 mb-4">
@@ -205,7 +208,7 @@ function PesquisaContent() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="text-[#22c55e]">AI Code Pro</span> - Pesquisa
+              <span className="text-[#0c83fe]">AI Code Pro</span> - Pesquisa
             </h1>
             <p className="text-gray-300">
               Ajude-nos a personalizar o conteúdo para você
@@ -214,7 +217,7 @@ function PesquisaContent() {
             {/* Progress Bar */}
             <div className="mt-6 bg-gray-800 rounded-full h-2">
               <div 
-                className="bg-[#22c55e] h-2 rounded-full transition-all duration-300"
+                className="bg-[#0c83fe] h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(currentStep / 5) * 100}%` }}
               />
             </div>
@@ -233,7 +236,7 @@ function PesquisaContent() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
               >
-                <h2 className="text-xl font-semibold mb-6 text-[#22c55e]">
+                <h2 className="text-xl font-semibold mb-6 text-[#0c83fe]">
                   Dados Pessoais
                 </h2>
                 
@@ -245,7 +248,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.idade}
                       onChange={(e) => handleInputChange('idade', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 [&>option]:bg-black [&>option]:text-white"
+                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 [&>option]:bg-black [&>option]:text-white"
                     >
                       <option value="">Selecione...</option>
                       <option value="18-24">18-24 anos</option>
@@ -263,7 +266,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.genero}
                       onChange={(e) => handleInputChange('genero', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 [&>option]:bg-black [&>option]:text-white"
+                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 [&>option]:bg-black [&>option]:text-white"
                     >
                       <option value="">Selecione...</option>
                       <option value="Masculino">Masculino</option>
@@ -279,7 +282,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.faixa_salarial}
                       onChange={(e) => handleInputChange('faixa_salarial', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 [&>option]:bg-black [&>option]:text-white"
+                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 [&>option]:bg-black [&>option]:text-white"
                     >
                       <option value="">Selecione...</option>
                       <option value="Até R$ 1.500">Até R$ 1.500</option>
@@ -300,7 +303,7 @@ function PesquisaContent() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
               >
-                <h2 className="text-xl font-semibold mb-6 text-[#22c55e]">
+                <h2 className="text-xl font-semibold mb-6 text-[#0c83fe]">
                   Conhecimento Técnico
                 </h2>
                 
@@ -312,7 +315,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.usa_rag_llm}
                       onChange={(e) => handleInputChange('usa_rag_llm', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 [&>option]:bg-black [&>option]:text-white"
+                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 [&>option]:bg-black [&>option]:text-white"
                     >
                       <option value="">Selecione...</option>
                       <option value="Sim">Sim</option>
@@ -328,7 +331,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.conhece_frameworks_ia}
                       onChange={(e) => handleInputChange('conhece_frameworks_ia', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 [&>option]:bg-black [&>option]:text-white"
+                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 [&>option]:bg-black [&>option]:text-white"
                     >
                       <option value="">Selecione...</option>
                       <option value="Sim">Sim</option>
@@ -344,7 +347,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.ja_e_programador}
                       onChange={(e) => handleInputChange('ja_e_programador', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 [&>option]:bg-black [&>option]:text-white"
+                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 [&>option]:bg-black [&>option]:text-white"
                     >
                       <option value="">Selecione...</option>
                       <option value="Sim">Sim</option>
@@ -359,7 +362,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.ja_programa_python}
                       onChange={(e) => handleInputChange('ja_programa_python', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 [&>option]:bg-black [&>option]:text-white"
+                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 [&>option]:bg-black [&>option]:text-white"
                     >
                       <option value="">Selecione...</option>
                       <option value="Sim">Sim</option>
@@ -374,7 +377,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.usa_ml_dl}
                       onChange={(e) => handleInputChange('usa_ml_dl', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 [&>option]:bg-black [&>option]:text-white"
+                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 [&>option]:bg-black [&>option]:text-white"
                     >
                       <option value="">Selecione...</option>
                       <option value="Sim">Sim</option>
@@ -392,7 +395,7 @@ function PesquisaContent() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
               >
-                <h2 className="text-xl font-semibold mb-6 text-[#22c55e]">
+                <h2 className="text-xl font-semibold mb-6 text-[#0c83fe]">
                   Profissão e Descoberta
                 </h2>
                 
@@ -406,7 +409,7 @@ function PesquisaContent() {
                       value={surveyData.profissao_atual}
                       onChange={(e) => handleInputChange('profissao_atual', e.target.value)}
                       placeholder="Ex: Desenvolvedor, Analista, Estudante..."
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50"
+                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50"
                     />
                   </div>
 
@@ -417,7 +420,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.como_conheceu}
                       onChange={(e) => handleInputChange('como_conheceu', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 [&>option]:bg-black [&>option]:text-white"
+                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 [&>option]:bg-black [&>option]:text-white"
                     >
                       <option value="">Selecione...</option>
                       <option value="Instagram">Instagram</option>
@@ -437,7 +440,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.tempo_conhece}
                       onChange={(e) => handleInputChange('tempo_conhece', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 [&>option]:bg-black [&>option]:text-white"
+                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 [&>option]:bg-black [&>option]:text-white"
                     >
                       <option value="">Selecione...</option>
                       <option value="Menos de 2 meses">Menos de 2 meses</option>
@@ -457,7 +460,7 @@ function PesquisaContent() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
               >
-                <h2 className="text-xl font-semibold mb-6 text-[#22c55e]">
+                <h2 className="text-xl font-semibold mb-6 text-[#0c83fe]">
                   Motivações e Expectativas
                 </h2>
                 
@@ -471,7 +474,7 @@ function PesquisaContent() {
                       onChange={(e) => handleInputChange('o_que_tira_sono', e.target.value)}
                       placeholder="Conte-nos o que te preocupa..."
                       rows={3}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 resize-none"
+                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 resize-none"
                     />
                   </div>
 
@@ -484,7 +487,7 @@ function PesquisaContent() {
                       onChange={(e) => handleInputChange('expectativas_treinamento', e.target.value)}
                       placeholder="O que você espera aprender?"
                       rows={3}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 resize-none"
+                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 resize-none"
                     />
                   </div>
 
@@ -497,7 +500,7 @@ function PesquisaContent() {
                       onChange={(e) => handleInputChange('sonho_realizar', e.target.value)}
                       placeholder="Compartilhe seu sonho profissional..."
                       rows={3}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 resize-none"
+                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 resize-none"
                     />
                   </div>
 
@@ -510,7 +513,7 @@ function PesquisaContent() {
                       onChange={(e) => handleInputChange('maior_dificuldade', e.target.value)}
                       placeholder="Qual sua maior dificuldade atual?"
                       rows={3}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 resize-none"
+                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 resize-none"
                     />
                   </div>
                 </div>
@@ -524,7 +527,7 @@ function PesquisaContent() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
               >
-                <h2 className="text-xl font-semibold mb-6 text-[#22c55e]">
+                <h2 className="text-xl font-semibold mb-6 text-[#0c83fe]">
                   Perguntas Finais
                 </h2>
                 
@@ -538,7 +541,7 @@ function PesquisaContent() {
                       onChange={(e) => handleInputChange('pergunta_cafe', e.target.value)}
                       placeholder="Que pergunta você faria?"
                       rows={3}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 resize-none"
+                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 resize-none"
                     />
                   </div>
 
@@ -551,7 +554,7 @@ function PesquisaContent() {
                       onChange={(e) => handleInputChange('impedimento_sonho', e.target.value)}
                       placeholder="O que te impede de realizar seu sonho?"
                       rows={3}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 resize-none"
+                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 resize-none"
                     />
                   </div>
 
@@ -564,7 +567,7 @@ function PesquisaContent() {
                       onChange={(e) => handleInputChange('maior_desafio_ia', e.target.value)}
                       placeholder="Qual seu maior desafio com IA?"
                       rows={3}
-                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 resize-none"
+                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 resize-none"
                     />
                   </div>
 
@@ -575,7 +578,7 @@ function PesquisaContent() {
                     <select
                       value={surveyData.comprometido_projeto}
                       onChange={(e) => handleInputChange('comprometido_projeto', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 [&>option]:bg-black [&>option]:text-white"
+                      className="w-full px-4 py-3 rounded-lg bg-black/80 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 [&>option]:bg-black [&>option]:text-white"
                     >
                       <option value="">Selecione...</option>
                       <option value="SIM">SIM</option>
@@ -606,7 +609,7 @@ function PesquisaContent() {
                 className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
                   !isStepValid() || isSubmitting
                     ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                    : 'bg-[#22c55e] text-white hover:bg-[#22c55e]/90'
+                    : 'bg-[#0c83fe] text-white hover:bg-[#0c83fe]/90'
                 }`}
               >
                 {isSubmitting ? 'Enviando...' : currentStep === 5 ? 'Finalizar' : 'Próximo'}
@@ -624,7 +627,7 @@ export default function PesquisaPage() {
     <Suspense fallback={
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#22c55e] mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0c83fe] mx-auto mb-4"></div>
           <p className="text-gray-300">Carregando pesquisa...</p>
         </div>
       </div>
