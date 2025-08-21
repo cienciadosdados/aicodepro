@@ -777,7 +777,7 @@ const LeadForm = memo(function LeadForm() {
             <div>
               <input
                 type="email"
-                autoComplete="off"
+                autoComplete="email"
                 name="email"
                 id="email"
                 placeholder="Email"
