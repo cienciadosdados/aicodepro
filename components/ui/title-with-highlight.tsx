@@ -11,7 +11,7 @@ export function TitleWithHighlight({ className = "" }: TitleWithHighlightProps) 
         <motion.span
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-block bg-gradient-to-r from-[#22c55e] via-[#4ade80] to-[#22c55e] bg-clip-text text-transparent"
+          className="inline-block bg-gradient-to-r from-[#0c83fe] via-[#4ade80] to-[#0c83fe] bg-clip-text text-transparent"
         >
           AI Code Pro:
         </motion.span>

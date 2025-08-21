@@ -34,7 +34,7 @@ export function SonarBadge({ text = "Construa o Futuro com IA", className = "" }
       <div className={`relative inline-flex items-center gap-2 ${className}`}>
         <div className="relative px-4 py-2 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center gap-2">
           <div className="relative">
-            <div className="w-2 h-2 bg-[#22c55e] rounded-full" />
+            <div className="w-2 h-2 bg-[#0c83fe] rounded-full" />
           </div>
           <span className="text-sm text-gray-300">
             {text}
@@ -56,7 +56,7 @@ export function SonarBadge({ text = "Construa o Futuro com IA", className = "" }
         <>
           {/* Primeira onda sonar */}
           <motion.div 
-            className="absolute inset-0 bg-[#22c55e]/20 rounded-full"
+            className="absolute inset-0 bg-[#0c83fe]/20 rounded-full"
             initial={{ scale: 1, opacity: 0 }}
             animate={{
               scale: [1, 2.5],
@@ -70,7 +70,7 @@ export function SonarBadge({ text = "Construa o Futuro com IA", className = "" }
           />
           {/* Segunda onda sonar */}
           <motion.div 
-            className="absolute inset-0 bg-[#22c55e]/15 rounded-full"
+            className="absolute inset-0 bg-[#0c83fe]/15 rounded-full"
             initial={{ scale: 1, opacity: 0 }}
             animate={{
               scale: [1, 3],
@@ -87,10 +87,10 @@ export function SonarBadge({ text = "Construa o Futuro com IA", className = "" }
       )}
       <div className="relative px-4 py-2 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center gap-2">
         <div className="relative">
-          <div className="w-2 h-2 bg-[#22c55e] rounded-full" />
+          <div className="w-2 h-2 bg-[#0c83fe] rounded-full" />
           {/* Pulso principal do ponto */}
           <motion.div
-            className="absolute inset-0 bg-[#22c55e] rounded-full"
+            className="absolute inset-0 bg-[#0c83fe] rounded-full"
             initial={{ scale: 1, opacity: 0 }}
             animate={{
               scale: [1, 3],
@@ -104,7 +104,7 @@ export function SonarBadge({ text = "Construa o Futuro com IA", className = "" }
           />
           {/* Segundo pulso do ponto */}
           <motion.div
-            className="absolute inset-0 bg-[#22c55e] rounded-full"
+            className="absolute inset-0 bg-[#0c83fe] rounded-full"
             initial={{ scale: 1, opacity: 0 }}
             animate={{
               scale: [1, 4],

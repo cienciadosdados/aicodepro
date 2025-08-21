@@ -16,7 +16,7 @@ export function GlowingButton({ children, onClick, className = "", disabled = fa
       className={`
         relative group
         px-8 py-4 rounded-xl
-        bg-gradient-to-r from-green-600 to-green-400
+        bg-gradient-to-r from-blue-600 to-blue-400
         text-white font-medium
         disabled:opacity-50 disabled:cursor-not-allowed
         ${className}
@@ -25,7 +25,7 @@ export function GlowingButton({ children, onClick, className = "", disabled = fa
       disabled={disabled}
     >
       {/* Glow Effect */}
-      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-green-600 to-green-400 blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-300" />
+      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 to-blue-400 blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-300" />
       
       {/* Button Content */}
       <div className="relative flex items-center justify-center gap-2">

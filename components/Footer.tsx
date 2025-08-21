@@ -52,7 +52,7 @@ export function Footer() {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-[#22c55e] transition-colors duration-200"
+                className="text-gray-400 hover:text-[#0c83fe] transition-colors duration-200"
                 aria-label={social.name}
               >
                 {social.icon}
@@ -67,7 +67,7 @@ export function Footer() {
                 href="https://cienciadosdados.com/politica-privacidade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-[#22c55e] transition-colors duration-200"
+                className="text-gray-400 hover:text-[#0c83fe] transition-colors duration-200"
               >
                 Política de Privacidade
               </Link>
