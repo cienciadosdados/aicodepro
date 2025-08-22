@@ -7,6 +7,10 @@ import { FeatureCard } from "@/components/ui/feature-card"
 import { Footer } from "@/components/Footer"
 import { motion } from "framer-motion"
 import { SonarBadge } from "@/components/ui/sonar-badge"
+import { CountdownTimer } from "@/components/ui/countdown-timer"
+import { RecentSignups } from "@/components/ui/recent-signups"
+import { AuthorityBadge } from "@/components/ui/authority-badge"
+import { StickyCTA } from "@/components/ui/sticky-cta"
 
 // Constantes para evitar problemas de hidratação
 const MAIN_TITLE_LINE1 = "IA de Verdade.";  
@@ -83,8 +87,25 @@ export default function HomePage() { // Nome diferente da função para forçar 
     <main className="relative min-h-screen bg-black text-white overflow-hidden" key={`main-${forceUpdate}`}>
       <FloatingGrid />
 
+      {/* Countdown Timer - Linha fina no topo */}
+      <div className="relative bg-red-500/10 border-b border-red-500/30 py-1">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+          >
+            <p className="text-red-400 font-bold text-xs sm:text-sm">
+              <span className="animate-pulse">🔥</span> Últimas 48h para garantir sua vaga GRATUITA! <span className="animate-pulse">🔥</span>
+            </p>
+          </motion.div>
+        </div>
+      </div>
+
+
       {/* Hero Section */}
-      <section className="relative pt-20 md:pt-32 pb-20">
+      <section className="relative pt-4 md:pt-8 pb-20">
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
             <motion.div
@@ -126,6 +147,16 @@ export default function HomePage() { // Nome diferente da função para forçar 
                 <span className="text-[#0c83fe]">CrewAI</span>,{" "}
                 <span className="text-[#0c83fe]">LangGraph</span>.
               </motion.p>
+
+              {/* Authority Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="mb-8"
+              >
+                <AuthorityBadge />
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -192,6 +223,35 @@ export default function HomePage() { // Nome diferente da função para forçar 
               />
             ))}
           </div>
+
+          {/* CTA após cronograma */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-2xl mx-auto mt-16"
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
+              <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 text-center">
+                <h3 className="text-2xl font-bold mb-4">Não Perca Esta Oportunidade!</h3>
+                <p className="text-gray-400 mb-6">Vagas se esgotando rapidamente. Garante já a sua!</p>
+                <motion.button
+                  onClick={() => {
+                    const formElement = document.getElementById('lead-form-container');
+                    if (formElement) {
+                      formElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-gradient-to-r from-[#0c83fe] to-[#0c83fe]/80 text-white font-bold px-8 py-4 rounded-lg hover:shadow-lg hover:shadow-[#0c83fe]/25 transition-all duration-200"
+                >
+                  QUERO GARANTIR MINHA VAGA AGORA
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -360,6 +420,35 @@ export default function HomePage() { // Nome diferente da função para forçar 
               </div>
             </motion.div>
           </div>
+
+          {/* CTA após depoimentos */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-2xl mx-auto mt-16"
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
+              <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 text-center">
+                <h3 className="text-2xl font-bold mb-4">Junte-se a Milhares de Programadores!</h3>
+                <p className="text-gray-400 mb-6">Seja o próximo a transformar sua carreira com IA</p>
+                <motion.button
+                  onClick={() => {
+                    const formElement = document.getElementById('lead-form-container');
+                    if (formElement) {
+                      formElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-gradient-to-r from-[#0c83fe] to-[#0c83fe]/80 text-white font-bold px-8 py-4 rounded-lg hover:shadow-lg hover:shadow-[#0c83fe]/25 transition-all duration-200"
+                >
+                  SIM, EU QUERO PARTICIPAR!
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -382,6 +471,12 @@ export default function HomePage() { // Nome diferente da função para forçar 
       </section>
 
       <Footer />
+      
+      {/* Recent Signups Notification */}
+      <RecentSignups />
+      
+      {/* Sticky Bottom CTA */}
+      <StickyCTA />
     </main>
   )
 }

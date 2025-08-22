@@ -540,7 +540,7 @@ export default function SurveyForm({ email, phone, isProgrammer, sessionId, onCo
         <p className="text-gray-300">
           Obrigado por estar participando desta pesquisa. Através das suas respostas vou compartilhar exatamente o que você quer e precisa.
         </p>
-        <p className="text-green-400 text-sm mt-2">
+        <p className="text-[#0c83fe] text-sm mt-2">
           Não leva nem 1 minuto. Valeu!
         </p>
       </div>
