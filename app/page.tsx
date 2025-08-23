@@ -11,6 +11,7 @@ import { CountdownTimer } from "@/components/ui/countdown-timer"
 import { RecentSignups } from "@/components/ui/recent-signups"
 import { AuthorityBadge } from "@/components/ui/authority-badge"
 import { StickyCTA } from "@/components/ui/sticky-cta"
+import { MouseGradient } from "@/components/ui/mouse-gradient"
 
 // Constantes para evitar problemas de hidratação
 const MAIN_TITLE_LINE1 = "IA de Verdade.";  
@@ -85,6 +86,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
   // Versão completa com animações apenas no cliente
   return (
     <main className="relative min-h-screen bg-black text-white overflow-hidden" key={`main-${forceUpdate}`}>
+      <MouseGradient />
       <FloatingGrid />
 
       {/* Countdown Timer - Linha fina no topo */}
@@ -233,7 +235,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
           >
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
-              <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 text-center">
+              <div className="relative bg-[#0c83fe]/10 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 text-center">
                 <h3 className="text-2xl font-bold mb-4">Não Perca Esta Oportunidade!</h3>
                 <p className="text-gray-400 mb-6">Vagas se esgotando rapidamente. Garante já a sua!</p>
                 <motion.button
@@ -430,7 +432,7 @@ export default function HomePage() { // Nome diferente da função para forçar 
           >
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
-              <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 text-center">
+              <div className="relative bg-[#0c83fe]/10 backdrop-blur-sm rounded-2xl border border-[#0c83fe]/20 p-8 text-center">
                 <h3 className="text-2xl font-bold mb-4">Junte-se a Milhares de Programadores!</h3>
                 <p className="text-gray-400 mb-6">Seja o próximo a transformar sua carreira com IA</p>
                 <motion.button
