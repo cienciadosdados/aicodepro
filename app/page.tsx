@@ -7,10 +7,6 @@ import { FeatureCard } from "@/components/ui/feature-card"
 import { Footer } from "@/components/Footer"
 import { motion } from "framer-motion"
 import { SonarBadge } from "@/components/ui/sonar-badge"
-import { CountdownTimer } from "@/components/ui/countdown-timer"
-import { RecentSignups } from "@/components/ui/recent-signups"
-import { AuthorityBadge } from "@/components/ui/authority-badge"
-import { StickyCTA } from "@/components/ui/sticky-cta"
 import { MouseGradient } from "@/components/ui/mouse-gradient"
 
 // Constantes para evitar problemas de hidratação
@@ -89,22 +85,6 @@ export default function HomePage() { // Nome diferente da função para forçar 
       <MouseGradient />
       <FloatingGrid />
 
-      {/* Countdown Timer - Linha fina no topo */}
-      <div className="relative bg-red-500/10 border-b border-red-500/30 py-1">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            <p className="text-red-400 font-bold text-xs sm:text-sm">
-              <span className="animate-pulse">🔥</span> Últimas 48h para garantir sua vaga GRATUITA! <span className="animate-pulse">🔥</span>
-            </p>
-          </motion.div>
-        </div>
-      </div>
-
 
       {/* Hero Section */}
       <section className="relative pt-4 md:pt-8 pb-20">
@@ -150,15 +130,6 @@ export default function HomePage() { // Nome diferente da função para forçar 
                 <span className="text-[#0c83fe]">LangGraph</span>.
               </motion.p>
 
-              {/* Authority Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="mb-8"
-              >
-                <AuthorityBadge />
-              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -474,11 +445,6 @@ export default function HomePage() { // Nome diferente da função para forçar 
 
       <Footer />
       
-      {/* Recent Signups Notification */}
-      <RecentSignups />
-      
-      {/* Sticky Bottom CTA */}
-      <StickyCTA />
     </main>
   )
 }
