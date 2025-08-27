@@ -41,7 +41,7 @@ interface SurveyData {
   comprometido_projeto: string;
   
   // Index signature para permitir acesso dinâmico
-  [key: string]: string | boolean;
+  [key: string]: string | boolean | any;
 }
 
 function PesquisaContent() {
@@ -90,7 +90,7 @@ function PesquisaContent() {
     comprometido_projeto: ''
   });
 
-  const handleInputChange = (field: keyof SurveyData, value: string) => {
+  const handleInputChange = (field: keyof SurveyData, value: string | boolean) => {
     setSurveyData(prev => ({
       ...prev,
       [field]: value
@@ -99,6 +99,35 @@ function PesquisaContent() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    
+    // Verificar se campos obrigatórios estão preenchidos
+    const missingFields = [];
+    if (!surveyData.email || surveyData.email.trim() === '') {
+      missingFields.push('email');
+    }
+    if (!surveyData.phone || surveyData.phone.trim() === '') {
+      missingFields.push('phone');
+    }
+    if (surveyData.is_programmer === undefined || surveyData.is_programmer === null) {
+      missingFields.push('is_programmer');
+    }
+    if (!surveyData.profissao_atual || surveyData.profissao_atual.trim() === '') {
+      missingFields.push('profissao_atual');
+    }
+    if (!surveyData.como_conheceu || surveyData.como_conheceu.trim() === '') {
+      missingFields.push('como_conheceu');
+    }
+    if (!surveyData.tempo_conhece || surveyData.tempo_conhece.trim() === '') {
+      missingFields.push('tempo_conhece');
+    }
+
+    // Se faltam campos obrigatórios, ir para etapa de identificação
+    if (missingFields.length > 0) {
+      console.log('⚠️ Campos obrigatórios faltando:', missingFields);
+      setCurrentStep(6); // Nova etapa de identificação
+      setIsSubmitting(false);
+      return;
+    }
     
     try {
       const response = await fetch('/api/save-survey', {
@@ -143,6 +172,9 @@ function PesquisaContent() {
   const nextStep = () => {
     if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
+    } else if (currentStep === 6) {
+      // Etapa de identificação, tentar submeter novamente
+      handleSubmit();
     } else {
       handleSubmit();
     }
@@ -166,6 +198,10 @@ function PesquisaContent() {
         return surveyData.expectativas_treinamento && surveyData.sonho_realizar && surveyData.maior_dificuldade;
       case 5:
         return true; // Campos opcionais
+      case 6:
+        return surveyData.email && surveyData.email.trim() !== '' && 
+               surveyData.phone && surveyData.phone.trim() !== '' &&
+               surveyData.is_programmer !== undefined; // Etapa de identificação
       default:
         return false;
     }
@@ -218,11 +254,11 @@ function PesquisaContent() {
             <div className="mt-6 bg-gray-800 rounded-full h-2">
               <div 
                 className="bg-[#0c83fe] h-2 rounded-full transition-all duration-300"
-                style={{ width: `${(currentStep / 5) * 100}%` }}
+                style={{ width: `${(Math.min(currentStep, 5) / 5) * 100}%` }}
               />
             </div>
             <p className="text-sm text-gray-400 mt-2">
-              Etapa {currentStep} de 5
+              {currentStep <= 5 ? `Etapa ${currentStep} de 5` : 'Finalizando cadastro'}
             </p>
           </div>
 
@@ -584,6 +620,98 @@ function PesquisaContent() {
                       <option value="SIM">SIM</option>
                       <option value="Não">Não</option>
                     </select>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Etapa 6 - Identificação (quando dados estão faltando) */}
+            {currentStep === 6 && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+              >
+                <h2 className="text-xl font-semibold mb-6 text-[#0c83fe]">
+                  Dados de Identificação
+                </h2>
+                
+                <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-yellow-500 text-lg">⚠️</span>
+                    <h3 className="text-yellow-500 font-medium">Informações necessárias</h3>
+                  </div>
+                  <p className="text-yellow-100 text-sm">
+                    Para finalizar sua pesquisa, precisamos de algumas informações básicas de identificação.
+                  </p>
+                </div>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Email *
+                    </label>
+                    <input
+                      type="email"
+                      value={surveyData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      placeholder="seu@email.com"
+                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Telefone/WhatsApp *
+                    </label>
+                    <input
+                      type="tel"
+                      value={surveyData.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      placeholder="(11) 99999-9999"
+                      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Você já programa? *
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleInputChange('is_programmer', true);
+                          handleInputChange('ja_e_programador', 'Sim');
+                        }}
+                        className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                          surveyData.is_programmer === true
+                            ? 'border-[#0c83fe] bg-[#0c83fe]/10 text-[#0c83fe]'
+                            : 'border-white/20 bg-black/20 text-gray-300 hover:border-white/40'
+                        }`}
+                      >
+                        <div className="text-2xl mb-2">👨‍💻</div>
+                        <div className="font-medium">Sim</div>
+                        <div className="text-xs opacity-70">Já programo</div>
+                      </button>
+                      
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleInputChange('is_programmer', false);
+                          handleInputChange('ja_e_programador', 'Não');
+                        }}
+                        className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                          surveyData.is_programmer === false
+                            ? 'border-[#0c83fe] bg-[#0c83fe]/10 text-[#0c83fe]'
+                            : 'border-white/20 bg-black/20 text-gray-300 hover:border-white/40'
+                        }`}
+                      >
+                        <div className="text-2xl mb-2">🎯</div>
+                        <div className="font-medium">Não</div>
+                        <div className="text-xs opacity-70">Quero aprender</div>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </motion.div>
