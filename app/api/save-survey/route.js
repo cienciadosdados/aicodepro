@@ -20,27 +20,56 @@ export async function POST(request) {
       campos: Object.keys(surveyData)
     });
 
-    // Validação de campos obrigatórios (baseado nos erros do banco)
+    // Validação de campos obrigatórios CRÍTICOS (dados de identificação + campos obrigatórios do banco)
     const requiredFields = {
-      email: 'Email é obrigatório',
+      // DADOS DE IDENTIFICAÇÃO CRÍTICOS
+      email: 'Email é obrigatório para identificação',
+      phone: 'Telefone é obrigatório para identificação',
+      is_programmer: 'Informação se é programador é obrigatória',
+      
+      // CAMPOS OBRIGATÓRIOS DO BANCO
       profissao_atual: 'Profissão atual é obrigatória',
       como_conheceu: 'Como conheceu é obrigatório',
       tempo_conhece: 'Tempo que conhece é obrigatório'
     };
 
     for (const [field, message] of Object.entries(requiredFields)) {
-      if (!surveyData[field] || surveyData[field].trim() === '') {
-        console.log(`[${requestId}] ❌ Campo obrigatório não fornecido: ${field}`);
-        return NextResponse.json(
-          { 
-            error: 'Campo obrigatório não fornecido',
-            field: field,
-            message: message
-          },
-          { status: 400 }
-        );
+      // Validação especial para is_programmer (pode ser boolean)
+      if (field === 'is_programmer') {
+        if (surveyData[field] === undefined || surveyData[field] === null) {
+          console.log(`[${requestId}] ❌ Campo obrigatório não fornecido: ${field}`);
+          return NextResponse.json(
+            { 
+              error: 'Campo obrigatório não fornecido',
+              field: field,
+              message: message
+            },
+            { status: 400 }
+          );
+        }
+      } else {
+        // Validação normal para campos de texto
+        if (!surveyData[field] || surveyData[field].toString().trim() === '') {
+          console.log(`[${requestId}] ❌ Campo obrigatório não fornecido: ${field}`);
+          return NextResponse.json(
+            { 
+              error: 'Campo obrigatório não fornecido',
+              field: field,
+              message: message
+            },
+            { status: 400 }
+          );
+        }
       }
     }
+
+    // Log dos dados de identificação recebidos
+    console.log(`[${requestId}] 🔍 DADOS DE IDENTIFICAÇÃO:`, {
+      email: surveyData.email,
+      phone: surveyData.phone,
+      is_programmer: surveyData.is_programmer,
+      tem_todos_dados_identificacao: !!(surveyData.email && surveyData.phone && (surveyData.is_programmer !== undefined))
+    });
 
     // Log dos dados recebidos (igual ao SurveyForm original)
     console.log(`[${requestId}] 📋 Dados recebidos para processamento:`, {

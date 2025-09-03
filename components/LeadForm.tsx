@@ -720,7 +720,8 @@ const LeadForm = memo(function LeadForm() {
           
           // Aguardar um pouco para garantir que os dados foram enviados
           setTimeout(() => {
-            const redirectUrl = `/obrigado?email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+            const redirectUrl = `/obrigado?email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&isProgrammer=${isProgrammer}`;
+            console.log('🔗 URL de redirecionamento:', redirectUrl);
             window.location.href = redirectUrl;
           }, 500);
         }}
