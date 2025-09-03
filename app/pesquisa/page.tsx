@@ -49,16 +49,48 @@ function PesquisaContent() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showDataCollection, setShowDataCollection] = useState(false);
+  const [collectedData, setCollectedData] = useState({
+    email: '',
+    phone: '',
+    isProgrammer: null as boolean | null
+  });
   
   // Dados vindos da URL (email e phone)
-  const email = searchParams.get('email') || '';
-  const phone = searchParams.get('phone') || '';
-  const isProgrammer = searchParams.get('isProgrammer') === 'true';
+  const urlEmail = searchParams.get('email') || '';
+  const urlPhone = searchParams.get('phone') || '';
+  const urlIsProgrammer = searchParams.get('isProgrammer');
+  
+  // Verificar se temos todos os dados obrigatórios
+  const hasRequiredData = urlEmail && urlPhone && urlIsProgrammer !== null;
+  
+  // Usar dados da URL ou dados coletados
+  const email = hasRequiredData ? urlEmail : collectedData.email;
+  const phone = hasRequiredData ? urlPhone : collectedData.phone;
+  const isProgrammer = hasRequiredData ? (urlIsProgrammer === 'true') : collectedData.isProgrammer;
+
+  useEffect(() => {
+    // Se não temos dados obrigatórios, mostrar formulário de coleta
+    if (!hasRequiredData) {
+      console.log('⚠️ Dados obrigatórios não encontrados na URL:', {
+        email: urlEmail,
+        phone: urlPhone,
+        isProgrammer: urlIsProgrammer
+      });
+      setShowDataCollection(true);
+    } else {
+      console.log('✅ Dados obrigatórios encontrados na URL:', {
+        email: urlEmail,
+        phone: urlPhone,
+        isProgrammer: urlIsProgrammer
+      });
+    }
+  }, [hasRequiredData, urlEmail, urlPhone, urlIsProgrammer]);
   
   const [surveyData, setSurveyData] = useState<SurveyData>({
     email,
     phone,
-    is_programmer: isProgrammer,
+    is_programmer: isProgrammer || false,
     
     // Dados demográficos
     idade: '',
@@ -95,6 +127,22 @@ function PesquisaContent() {
       ...prev,
       [field]: value
     }));
+  };
+
+  const handleDataCollection = (data: { email: string; phone: string; isProgrammer: boolean }) => {
+    setCollectedData(data);
+    setShowDataCollection(false);
+    
+    // Atualizar surveyData com os dados coletados
+    setSurveyData(prev => ({
+      ...prev,
+      email: data.email,
+      phone: data.phone,
+      is_programmer: data.isProgrammer,
+      ja_e_programador: data.isProgrammer ? 'Sim' : 'Não'
+    }));
+    
+    console.log('✅ Dados obrigatórios coletados:', data);
   };
 
   const handleSubmit = async () => {
@@ -170,6 +218,129 @@ function PesquisaContent() {
         return false;
     }
   };
+
+  // Componente para coletar dados obrigatórios
+  const DataCollectionForm = () => {
+    const [formData, setFormData] = useState({
+      email: '',
+      phone: '',
+      isProgrammer: null as boolean | null
+    });
+    const [errors, setErrors] = useState<string[]>([]);
+
+    const handleSubmitData = (e: React.FormEvent) => {
+      e.preventDefault();
+      const newErrors: string[] = [];
+
+      if (!formData.email) newErrors.push('Email é obrigatório');
+      if (!formData.phone) newErrors.push('Telefone é obrigatório');
+      if (formData.isProgrammer === null) newErrors.push('Responda se você já programa');
+
+      if (newErrors.length > 0) {
+        setErrors(newErrors);
+        return;
+      }
+
+      handleDataCollection({
+        email: formData.email,
+        phone: formData.phone,
+        isProgrammer: formData.isProgrammer!
+      });
+    };
+
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center relative overflow-hidden">
+        <FloatingGrid />
+        <div className="relative z-10 container mx-auto px-4 py-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-md mx-auto"
+          >
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold mb-4">
+                <span className="text-[#0c83fe]">AI Code Pro</span> - Pesquisa
+              </h1>
+              <p className="text-gray-300 mb-4">
+                Para continuar, precisamos de algumas informações básicas:
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmitData} className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-xl p-6 space-y-4">
+              {errors.length > 0 && (
+                <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3">
+                  {errors.map((error, index) => (
+                    <p key={index} className="text-red-300 text-sm">{error}</p>
+                  ))}
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Email *</label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50"
+                  placeholder="seu@email.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Telefone *</label>
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                  className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50"
+                  placeholder="(11) 99999-9999"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Você já programa? *</label>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, isProgrammer: true }))}
+                    className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
+                      formData.isProgrammer === true
+                        ? 'bg-[#0c83fe] text-white'
+                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    }`}
+                  >
+                    Sim
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, isProgrammer: false }))}
+                    className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
+                      formData.isProgrammer === false
+                        ? 'bg-[#0c83fe] text-white'
+                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    }`}
+                  >
+                    Não
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-[#0c83fe] text-white py-3 px-6 rounded-lg font-medium hover:bg-[#0c83fe]/90 transition-colors duration-200"
+              >
+                Continuar para Pesquisa
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      </div>
+    );
+  };
+
+  if (showDataCollection) {
+    return <DataCollectionForm />;
+  }
 
   if (isCompleted) {
     return (
