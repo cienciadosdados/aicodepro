@@ -351,15 +351,40 @@ function PesquisaContent() {
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-center z-10"
+          className="text-center z-10 max-w-2xl mx-auto px-4"
         >
           <div className="text-6xl mb-4">🎉</div>
           <h1 className="text-3xl font-bold mb-4 text-[#0c83fe]">
             Pesquisa Concluída!
           </h1>
-          <p className="text-gray-300 mb-4">
+          <p className="text-gray-300 mb-6">
             Obrigado por suas respostas! Isso nos ajudará muito a personalizar o conteúdo.
           </p>
+          
+          {/* Treinamento de RAG */}
+          <div className="bg-gradient-to-r from-[#0c83fe]/20 to-purple-500/20 border border-[#0c83fe]/30 rounded-xl p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-3 text-[#0c83fe]">
+              🎁 Bônus Especial para Você!
+            </h2>
+            <p className="text-gray-300 mb-4">
+              Como agradecimento, aqui está um <strong>Treinamento Completo de RAG</strong> que preparei especialmente:
+            </p>
+            <a
+              href="https://www.youtube.com/live/Svu5X2I_W08"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              Assistir Treinamento de RAG
+            </a>
+            <p className="text-sm text-gray-400 mt-3">
+              💡 Aprenda na prática como implementar RAG com LLMs
+            </p>
+          </div>
+          
           <p className="text-sm text-gray-400">
             Redirecionando em alguns segundos...
           </p>
