@@ -281,6 +281,7 @@ function PesquisaContent() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  autoComplete="email"
                   className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50"
                   placeholder="seu@email.com"
                 />
@@ -292,6 +293,7 @@ function PesquisaContent() {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                  autoComplete="tel"
                   className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50"
                   placeholder="(11) 99999-9999"
                 />
